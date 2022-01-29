@@ -1,0 +1,6 @@
+.mypy_cache
+__pychace__
+*/__pycache__
+*.exe
+chromedriver
+src/*.egg-info
