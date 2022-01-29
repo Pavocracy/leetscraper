@@ -47,11 +47,11 @@ I would encourage you to look at the function docstrings if you wish to use this
 ***
 # Contributing
 If you would like to contribute, adding support for a new coding challenge website, or fixing current bugs is always appreciated!
-I would encourage you to see [CONTRIBUTING.md](https://github.com/Pavocracy/leetscraper/blob/main/LICENSE.md) for further details.
+I would encourage you to see [CONTRIBUTING.md](https://github.com/Pavocracy/leetscraper/blob/main/CONTRIBUTING.md) for further details.
 If you would like to report bugs or suggest websites to support, please add a card to [Issues](https://github.com/Pavocracy/leetscraper/issues).
 
 ***
 # Licence  
 This project uses the GPL-2.0 License, As generally speaking, I want you to be able to do whatever you want with this project, But still have the ability to add your changes
 to this codebase should you make improvements or extend support.
-For further details on what this licence allows, please see [LICENSE.md](https://github.com/Pavocracy/Coding-Challenges/blob/main/LICENSE)
+For further details on what this licence allows, please see [LICENSE.md](https://github.com/Pavocracy/leetscraper/blob/main/LICENSE.md)
