@@ -1,6 +1,6 @@
 # leetscraper
 leetscraper is a coding challenge webscraper for leetcode, and other websites!  
-It was created as a way to gathering coding problems to solve without having to sign up to a website or submit code to a problem checker.
+It was created as a way to gather coding problems to solve without having to sign up to a website or submit code to a problem checker.
 
 ***
 ## Install
@@ -39,6 +39,18 @@ if __name__ == "__main__":
     Leetscraper(website_name="projecteuler.net", scraped_path="~/SOLVE-ME", scrape_limit=50)
 ```
 
+Example of how to scrape all problems from all supported websites:
+```python
+from leetscraper import Leetscraper
+
+if __name__ == "__main__":
+    websites = ["leetcode.com", "projecteuler.net", "codechef.com"]
+
+    for site in websites:
+        Leetscraper(website_name=site, driver_path="~/chromedriver")
+```
+
+You can pass through different arguments for different websites to control exactly how the scraper behaves.
 You can also disable scraping problems at time of instantiation by using the kwarg `auto_scrape=False`.
 This allows you to call the class functions in different order, or one at a time.
 This will change how the scraper works, as its designed to look in a directory for already scraped problems to avoid duplicates.
