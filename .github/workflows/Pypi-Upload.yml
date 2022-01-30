@@ -23,7 +23,8 @@ jobs:
         pip install twine
 
     - name: Publish
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: pavocracy
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run:
+        twine upload dist/*
