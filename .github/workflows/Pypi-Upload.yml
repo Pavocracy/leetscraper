@@ -1,11 +1,17 @@
 name: Publish package to pypi
+
 on:
   release:
     types: [created]
+
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-    steps:
+    steps:    
+
+    - name: 'Checkout PR' 
+      uses: actions/checkout@v2
+
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
