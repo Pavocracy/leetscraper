@@ -3,9 +3,9 @@ leetscraper is a coding challenge webscraper for leetcode, and other websites!
 It was created as a way to gather coding problems to solve without having to sign up to a website or submit code to a problem checker.
 
 ***
-## Install
+## Install package and dependencies 
 ```python
-pip install leetscraper
+pip install leetscraper tqdm urllib3 beautifulsoup4 selenium
 ```
 
 ***
