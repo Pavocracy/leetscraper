@@ -30,7 +30,7 @@ jobs:
 
     - name: 'Run Checks'
       run: |
-        black ./src/ -t py310 
+        black ./src/ -t py310 --check
         mypy ./src/
         pylint ./src/ --fail-under=9 
 
