@@ -1,4 +1,4 @@
-# [leetscraper](https://pypi.org/project/leetscraper/) &middot; [Downloads](https://static.pepy.tech/personalized-badge/leetscraper?period=total&units=international_system&left_color=grey&right_color=lightgrey&left_text=Downloads)
+# [leetscraper](https://pypi.org/project/leetscraper/) &middot; [![Downloads](https://static.pepy.tech/personalized-badge/leetscraper?period=total&units=international_system&left_color=grey&right_color=lightgrey&left_text=Downloads)](https://pepy.tech/project/leetscraper)
 leetscraper is a coding challenge webscraper for leetcode, and other websites!  
 It was created as a way to gather coding problems to solve without having to sign up to a website or submit code to a problem checker.
 
