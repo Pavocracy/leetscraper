@@ -67,7 +67,7 @@ class Leetscraper:
             self.supported_website = True
             self.website_options = {
                 "difficulty": {1: "SCHOOL", 2: "EASY", 3: "MEDIUM", 4: "HARD"},
-                "api_url": "https://www.codechef.com/problems/",
+                "api_url": "https://www.codechef.com/api/list/problems/",
                 "base_url": "https://www.codechef.com/problems/",
                 "problem_description": {"class": "problem-statement"},
             }
@@ -147,15 +147,13 @@ class Leetscraper:
         elif self.website_name == "codechef.com":
             for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
                 request = http.request(
-                    "GET", self.website_options["api_url"] + value.lower()
+                    "GET",
+                    self.website_options["api_url"] + value.lower() + "?limit=9999",
                 )
-                soup = BeautifulSoup(request.data, "html.parser")
-                for problem in soup.find_all("tr", attrs={"class": "problemrow"}):
-                    code = (
-                        str(problem).split('href="/problems/')[1].split('">')[0].strip()
-                    )
-                    if code not in scraped_problems:
-                        get_problems.append([code, value])  # type: ignore[list-item]
+                data = loads(request.data.decode("utf-8"))
+                for problem in data["data"]:
+                    if problem["code"] not in scraped_problems:
+                        get_problems.append([problem["code"], value])  # type: ignore[list-item]
         return get_problems  # type: ignore[return-value]
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
