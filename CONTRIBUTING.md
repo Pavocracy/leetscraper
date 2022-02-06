@@ -14,7 +14,7 @@ pip install -r ./requirements.txt
 - Also download chromedriver and put it in the root directory of this repo. The unit tests require it to run.
 
 ```python
-black ./src -t py310
+black ./src
 ```
 - Use black to format the code. This is not the be all end all solution to nicely formatted code, but it will atleast be consistent with how I've made this project.
 
