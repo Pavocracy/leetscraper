@@ -11,7 +11,6 @@ If you have added support for a website and would like to put up a PR, that's ap
 pip install -r ./requirements.txt
 ```
 - Make sure to install the requirements, as it contains the versions of librarys needed to pass formatting and linting.
-- Also download chromedriver and put it in the root directory of this repo. The unit tests require it to run.
 
 ```python
 black ./src
