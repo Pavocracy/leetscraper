@@ -5,14 +5,14 @@ It was created as a way to gather coding problems to solve without having to sig
 ***
 ## Install package and dependencies 
 ```python
-pip install leetscraper tqdm urllib3 beautifulsoup4 selenium
+pip install leetscraper tqdm urllib3 beautifulsoup4 selenium webdriver-manager
 ```
 
 ***
 ## Usage
 Import the module and Instantiate the class. The class has some kwargs options to control the behaviour of the scraper.
-However, all it needs is a chromedriver path and the default values will start to scrape all problems from [leetcode.com](https://leetcode.com) to the cwd.
-If you set an environment variable for "CHROMEDRIVER", Leetscraper will grab the path automatically. The most basic usage looks like this:
+However, all the default values will start to scrape all problems from [leetcode.com](https://leetcode.com) to the cwd.
+The most basic usage looks like this:
 ```python
 from leetscraper import Leetscraper
 
@@ -24,7 +24,6 @@ The avaliable kwargs to control the behaviour of the scraper are:
 ```python
 """
 website_name: "leetcode.com", "projecteuler.net", "codechef.com" ("leetcode.com" is set if ignored)
-driver_path: "path/to/chromedriver.exe" (can be ignore if environment variable CHROMEDRIVER is set)
 scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
 scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
 auto_scrape: "True", "False" (True is set if ignored)
@@ -47,7 +46,7 @@ if __name__ == "__main__":
     websites = ["leetcode.com", "projecteuler.net", "codechef.com"]
 
     for site in websites:
-        Leetscraper(website_name=site, driver_path="~/chromedriver")
+        Leetscraper(website_name=site)
 ```
 
 You can pass through different arguments for different websites to control exactly how the scraper behaves.

@@ -10,7 +10,6 @@ class TestLeetscraper(unittest.TestCase):
         cls.leetscraper = Leetscraper(
             website_name="projecteuler.net",
             scraped_path="./projecteuler",
-            driver_path="./chromedriver",
             scrape_limit=3,
             auto_scrape=False,
         )
