@@ -13,6 +13,7 @@ from time import sleep
 from json import loads
 from os import getcwd, walk, path, makedirs
 from re import sub
+from typing import List
 from tqdm import tqdm  # type: ignore[import]
 from urllib3 import PoolManager
 from bs4 import BeautifulSoup
@@ -95,7 +96,7 @@ class Leetscraper:
         print(f"Closing {self.website_name} driver")
         driver.quit()
 
-    def scraped_problems(self) -> list[str]:
+    def scraped_problems(self) -> List[str]:
         """Returns a list of all website problems already scraped in the scraped_path."""
         print(
             f"Checking {self.scraped_path} for exsisting {self.website_name} problems"
@@ -116,7 +117,7 @@ class Leetscraper:
 
     def needed_problems(
         self, http: PoolManager, scraped_problems: list
-    ) -> list[list[str]]:
+    ) -> List[List[str]]:
         """Returns a list of website problems missing from the scraped_path."""
         print(f"Getting the list of {self.website_name} problems to scrape")
         get_problems = []
@@ -157,7 +158,7 @@ class Leetscraper:
                         get_problems.append([code, value])  # type: ignore[list-item]
         return get_problems  # type: ignore[return-value]
 
-    def scrape_problems(self, needed_problems: list[list[str]]) -> None:
+    def scrape_problems(self, needed_problems: List[List[str]]) -> None:
         """Scrapes needed_problems limited by scrape_limit. (All problems if -1)"""
         if len(needed_problems) > 0:
             print(f"Scraping {self.website_name} problems")
@@ -170,7 +171,7 @@ class Leetscraper:
         else:
             print(f"No {self.website_name} problems to scrape")
 
-    def create_problem(self, problem: list[str], driver: webdriver) -> None:  # type: ignore[valid-type]
+    def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
         Creates files in scraped_path/website_name/DIFFICULTY/problem.md
         """
