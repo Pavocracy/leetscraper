@@ -22,28 +22,24 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class Leetscraper:
     """Leetscraper requires the following kwargs to instantiate:
 
     website_name: "leetcode.com", "projecteuler.net", "codechef.com" ("leetcode.com" is set if ignored)
-    driver_path: "path/to/chromedriver.exe" (can be ignore if environment variable CHROMEDRIVER is set)
     scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
     scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
     auto_scrape: "True", "False" (True is set if ignored)
 
-    This means if you have an environment variable set for CHROMEDRIVER, calling this class with no arguments
-    will result in all leetcode problems being scraped automatically and saved to the current working directory.
+    This means calling this class with no arguments will result in all leetcode problems being scraped 
+    automatically and saved to the current working directory.
     """
 
     def __init__(self, **kwargs) -> None:
         self.supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
-        self.driver_path = kwargs.get("driver_path", getenv("CHROMEDRIVER"))
-        self.scraped_path = kwargs.get("scraped_path", getcwd())
-        if not path.isfile(self.driver_path):
-            print(f"{self.driver_path} is not a valid chromedriver path!")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
         self.scrape_limit = kwargs.get("scrape_limit", -1)
         if self.scrape_limit is not type(int):
@@ -91,7 +87,7 @@ class Leetscraper:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--silent")
         options.add_argument("--disable-gpu")
-        service = Service(self.driver_path)
+        service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
         return driver

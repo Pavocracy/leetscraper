@@ -20,14 +20,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ./requirements.txt
 
-    - name: 'Install chrome and chromedriver'
-      run: |
-        curl -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        apt-get install ./chrome.deb -y
-        apt-get install unzip -y
-        curl -o chromedriver.zip https://chromedriver.storage.googleapis.com/98.0.4758.48/chromedriver_linux64.zip
-        unzip chromedriver.zip
-
     - name: 'Run Checks'
       run: |
         black ./src/ -t py310 --check

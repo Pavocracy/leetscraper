@@ -3,6 +3,7 @@ beautifulsoup4==4.10.0
 selenium==4.0.0
 urllib3==1.26.7
 tqdm==4.62.3
+webdriver-manager==3.5.2
 
 # packages for contributing
 black @ git+git://github.com/psf/black.git@022f89625f9bb33ab55c82c45ec0eb8512623fd3
