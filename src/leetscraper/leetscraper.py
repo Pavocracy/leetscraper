@@ -11,7 +11,7 @@ See related docstrings for help.
 
 from time import sleep
 from json import loads
-from os import getenv, getcwd, walk, path, makedirs
+from os import getcwd, walk, path, makedirs
 from re import sub
 from tqdm import tqdm  # type: ignore[import]
 from urllib3 import PoolManager
@@ -22,7 +22,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
 
 
 class Leetscraper:
@@ -33,8 +33,7 @@ class Leetscraper:
     scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
     auto_scrape: "True", "False" (True is set if ignored)
 
-    This means calling this class with no arguments will result in all leetcode problems being scraped 
-    automatically and saved to the current working directory.
+    This means calling this class with no arguments will result in all leetcode problems being scraped automatically and saved to the current working directory.
     """
 
     def __init__(self, **kwargs) -> None:
@@ -45,36 +44,35 @@ class Leetscraper:
         if self.scrape_limit is not type(int):
             self.scrape_limit = int(self.scrape_limit)
         auto_scrape = kwargs.get("auto_scrape", True)
-        match self.website_name:
-            case "leetcode.com":
-                self.supported_website = True
-                self.website_options = {
-                    "difficulty": {1: "EASY", 2: "MEDIUM", 3: "HARD"},
-                    "api_url": "https://leetcode.com/api/problems/all/",
-                    "base_url": "https://leetcode.com/problems/",
-                    "problem_description": {
-                        "class": "content__u3I1 question-content__JfgR"
-                    },
-                }
-            case "projecteuler.net":
-                self.supported_website = True
-                self.website_options = {
-                    "difficulty": {33: "EASY", 66: "MEDIUM", 100: "HARD"},
-                    "api_url": "https://projecteuler.net/recent",
-                    "base_url": "https://projecteuler.net/problem=",
-                    "problem_description": {"id": "content"},
-                }
-            case "codechef.com":
-                self.supported_website = True
-                self.website_options = {
-                    "difficulty": {1: "SCHOOL", 2: "EASY", 3: "MEDIUM", 4: "HARD"},
-                    "api_url": "https://www.codechef.com/problems/",
-                    "base_url": "https://www.codechef.com/problems/",
-                    "problem_description": {"class": "problem-statement"},
-                }
+        if self.website_name == "leetcode.com":
+            self.supported_website = True
+            self.website_options = {
+                "difficulty": {1: "EASY", 2: "MEDIUM", 3: "HARD"},
+                "api_url": "https://leetcode.com/api/problems/all/",
+                "base_url": "https://leetcode.com/problems/",
+                "problem_description": {
+                    "class": "content__u3I1 question-content__JfgR"
+                },
+            }
+        if self.website_name == "projecteuler.net":
+            self.supported_website = True
+            self.website_options = {
+                "difficulty": {33: "EASY", 66: "MEDIUM", 100: "HARD"},
+                "api_url": "https://projecteuler.net/recent",
+                "base_url": "https://projecteuler.net/problem=",
+                "problem_description": {"id": "content"},
+            }
+        if self.website_name == "codechef.com":
+            self.supported_website = True
+            self.website_options = {
+                "difficulty": {1: "SCHOOL", 2: "EASY", 3: "MEDIUM", 4: "HARD"},
+                "api_url": "https://www.codechef.com/problems/",
+                "base_url": "https://www.codechef.com/problems/",
+                "problem_description": {"class": "problem-statement"},
+            }
         if not self.supported_website:
             print(f"{self.website_name} is not supported by this scraper!")
-        if auto_scrape and self.supported_website and path.isfile(self.driver_path):
+        if auto_scrape and self.supported_website:
             http = PoolManager(headers={"Connection": "close"})
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(http, scraped_problems)
@@ -108,13 +106,12 @@ class Leetscraper:
         ):
             for file in filenames:
                 if file:
-                    match self.website_name:
-                        case "leetcode.com":
-                            scraped_problems.append(file.split(".")[0])
-                        case "projecteuler.net":
-                            scraped_problems.append(file.split("-")[0])
-                        case "codechef.com":
-                            scraped_problems.append(file.split("-")[0])
+                    if self.website_name == "leetcode.com":
+                        scraped_problems.append(file.split(".")[0])
+                    elif self.website_name == "projecteuler.net":
+                        scraped_problems.append(file.split("-")[0])
+                    elif self.website_name == "codechef.com":
+                        scraped_problems.append(file.split("-")[0])
         return scraped_problems
 
     def needed_problems(
@@ -123,45 +120,41 @@ class Leetscraper:
         """Returns a list of website problems missing from the scraped_path."""
         print(f"Getting the list of {self.website_name} problems to scrape")
         get_problems = []
-        match self.website_name:
-            case "leetcode.com":
-                request = http.request("GET", self.website_options["api_url"])
-                data = loads(request.data.decode("utf-8"))
-                for problem in data["stat_status_pairs"]:
-                    if (
-                        problem["stat"]["question__title_slug"] not in scraped_problems
-                        and problem["paid_only"] is not True
-                    ):
-                        get_problems.append(
-                            [
-                                problem["stat"]["question__title_slug"],
-                                self.website_options["difficulty"][  # type: ignore[index]
-                                    problem["difficulty"]["level"]
-                                ],
-                            ]
-                        )
-            case "projecteuler.net":
-                request = http.request("GET", self.website_options["api_url"])
-                soup = BeautifulSoup(request.data, "html.parser")
-                data = soup.find("td", {"class": "id_column"}).get_text()  # type: ignore[union-attr]
-                for i in range(1, int(data) + 1):
-                    if str(i) not in scraped_problems:
-                        get_problems.append([str(i), None])  # type: ignore[list-item]
-            case "codechef.com":
-                for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
-                    request = http.request(
-                        "GET", self.website_options["api_url"] + value.lower()
+        if self.website_name == "leetcode.com":
+            request = http.request("GET", self.website_options["api_url"])
+            data = loads(request.data.decode("utf-8"))
+            for problem in data["stat_status_pairs"]:
+                if (
+                    problem["stat"]["question__title_slug"] not in scraped_problems
+                    and problem["paid_only"] is not True
+                ):
+                    get_problems.append(
+                        [
+                            problem["stat"]["question__title_slug"],
+                            self.website_options["difficulty"][  # type: ignore[index]
+                                problem["difficulty"]["level"]
+                            ],
+                        ]
                     )
-                    soup = BeautifulSoup(request.data, "html.parser")
-                    for problem in soup.find_all("tr", attrs={"class": "problemrow"}):
-                        code = (
-                            str(problem)
-                            .split('href="/problems/')[1]
-                            .split('">')[0]
-                            .strip()
-                        )
-                        if code not in scraped_problems:
-                            get_problems.append([code, value])  # type: ignore[list-item]
+        elif self.website_name == "projecteuler.net":
+            request = http.request("GET", self.website_options["api_url"])
+            soup = BeautifulSoup(request.data, "html.parser")
+            data = soup.find("td", {"class": "id_column"}).get_text()  # type: ignore[union-attr]
+            for i in range(1, int(data) + 1):
+                if str(i) not in scraped_problems:
+                    get_problems.append([str(i), None])  # type: ignore[list-item]
+        elif self.website_name == "codechef.com":
+            for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
+                request = http.request(
+                    "GET", self.website_options["api_url"] + value.lower()
+                )
+                soup = BeautifulSoup(request.data, "html.parser")
+                for problem in soup.find_all("tr", attrs={"class": "problemrow"}):
+                    code = (
+                        str(problem).split('href="/problems/')[1].split('">')[0].strip()
+                    )
+                    if code not in scraped_problems:
+                        get_problems.append([code, value])  # type: ignore[list-item]
         return get_problems  # type: ignore[return-value]
 
     def scrape_problems(self, needed_problems: list[list[str]]) -> None:
@@ -190,60 +183,57 @@ class Leetscraper:
             sleep(1)
             html = driver.page_source  # type: ignore[attr-defined]
             soup = BeautifulSoup(html, "html.parser")
-            match self.website_name:
-                case "leetcode.com":
-                    problem_description = (
-                        soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
-                        .get_text()
-                        .strip()
+            if self.website_name == "leetcode.com":
+                problem_description = (
+                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    .get_text()
+                    .strip()
+                )
+                problem_name = problem[0]
+            elif self.website_name == "projecteuler.net":
+                problem_description = (
+                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    .get_text()
+                    .strip()
+                )
+                get_name = (
+                    problem_description.split("Published")[0].strip().replace(" ", "-")
+                )
+                problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
+                problem_name = problem[0] + f"-{problem_name}"
+                try:
+                    difficulty = int(
+                        problem_description.split("Difficulty rating: ")[1].split("%")[
+                            0
+                        ]
                     )
-                    problem_name = problem[0]
-                case "projecteuler.net":
-                    problem_description = (
-                        soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
-                        .get_text()
-                        .strip()
-                    )
-                    get_name = (
-                        problem_description.split("Published")[0]
-                        .strip()
-                        .replace(" ", "-")
-                    )
-                    problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
-                    problem_name = problem[0] + f"-{problem_name}"
-                    try:
-                        difficulty = int(
-                            problem_description.split("Difficulty rating: ")[1].split(
-                                "%"
-                            )[0]
-                        )
-                    except IndexError:
-                        difficulty = 100
-                    for key, value in self.website_options["difficulty"].items():  # type: ignore[attr-defined]
-                        if int(difficulty) <= key:
-                            problem[1] = value
-                            break
-                    problem_description = (
-                        soup.find("div", {"class": "problem_content"})  # type: ignore[union-attr]
-                        .get_text()
-                        .strip()
-                    )
-                case "codechef.com":
-                    problem_description = (
-                        soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
-                        .get_text()
-                        .split("Author:")[0]
-                        .strip()
-                    )
-                    get_name = (
-                        str(soup.find("aside", {"class": "breadcrumbs"}))
-                        .rsplit("»", maxsplit=1)[-1]
-                        .split("</")[0]
-                        .strip()
-                        .replace(" ", "-")
-                    )
-                    problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
-                    problem_name = problem[0] + f"-{problem_name}"
+                except IndexError:
+                    difficulty = 100
+                for key, value in self.website_options["difficulty"].items():  # type: ignore[attr-defined]
+                    if int(difficulty) <= key:
+                        problem[1] = value
+                        break
+                problem_description = (
+                    soup.find("div", {"class": "problem_content"})  # type: ignore[union-attr]
+                    .get_text()
+                    .strip()
+                )
+            elif self.website_name == "codechef.com":
+                problem_description = (
+                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    .get_text()
+                    .split("Author:")[0]
+                    .strip()
+                )
+                get_name = (
+                    str(soup.find("aside", {"class": "breadcrumbs"}))
+                    .rsplit("»", maxsplit=1)[-1]
+                    .split("</")[0]
+                    .strip()
+                    .replace(" ", "-")
+                )
+                problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
+                problem_name = problem[0] + f"-{problem_name}"
             if not path.isdir(
                 f"{self.scraped_path}/PROBLEMS/{self.website_name}/{problem[1]}/"
             ):

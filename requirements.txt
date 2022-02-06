@@ -6,10 +6,10 @@ tqdm==4.62.3
 webdriver-manager==3.5.2
 
 # packages for contributing
-black @ git+git://github.com/psf/black.git@022f89625f9bb33ab55c82c45ec0eb8512623fd3
-mypy @ git+git://github.com/python/mypy.git@6d243321d632c47b9fef5f2ad6a972f9f4b94eff
+black==22.1.0
+mypy==0.931
 mypy-extensions==0.4.3
-pylint @ git+git://github.com/PyCQA/pylint.git@ccd9aee3c0a64c8a9de52be03daa0fcb7a6dd84b
+pylint==2.12.2
 types-beautifulsoup4==4.10.10
 types-selenium==3.141.7
 types-urllib3==1.26.7
