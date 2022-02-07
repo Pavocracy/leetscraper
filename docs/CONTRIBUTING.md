@@ -39,6 +39,6 @@ python -m unittest discover
 
 ## Code of Conduct
 
-Contributing to this project means you are willing to follow the same conduct that others are held to! Please see [Code of Conduct](https://github.com/Pavocracy/leetscraper/blob/main/CODE_OF_CONDUCT.md) for further details.
+Contributing to this project means you are willing to follow the same conduct that others are held to! Please see [Code of Conduct](https://github.com/Pavocracy/leetscraper/blob/main/docs/CODE_OF_CONDUCT.md "Code of conduct doc") for further details.
 
 ### **DO NOT include ANY scraped problems as part of your PR, otherwise the PR will be rejected!**
