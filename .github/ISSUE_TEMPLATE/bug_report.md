@@ -20,7 +20,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Environment (please complete the following information):**
-- operating system (windows, ubuntu ect)
+ - operating system (windows, ubuntu ect)
  - python version used
  - third-party library version used (if relevant) 
  - leetscraper version
