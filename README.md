@@ -3,15 +3,19 @@ leetscraper is a coding challenge webscraper for leetcode, and other websites!
 It was created as a way to gather coding problems to solve without having to sign up to a website or submit code to a problem checker.
 
 ***
-## Install package and dependencies
+ 
+# Usage
+  
+### Install package and dependencies
 ```python
 pip install leetscraper tqdm urllib3 beautifulsoup4 selenium webdriver-manager
 ```
 
-***
-## Usage
+### Examples
+
 Import the module and Instantiate the class. The class has some kwargs options to control the behaviour of the scraper.
 However, all the default values will start to scrape all problems from [leetcode.com](https://leetcode.com) to the cwd.
+  
 The most basic usage looks like this:
 ```python
 from leetscraper import Leetscraper
@@ -19,7 +23,7 @@ from leetscraper import Leetscraper
 if __name__ == "__main__":
     Leetscraper()
 ```
-
+  
 The avaliable kwargs to control the behaviour of the scraper are:
 ```python
 """
@@ -29,7 +33,7 @@ scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ign
 auto_scrape: "True", "False" (True is set if ignored)
 """
 ```
-
+  
 Example of how to automatically scrape the first 50 problems from [projecteuler.net](https://projecteuler.net) to a directory called SOLVE-ME:
 ```python
 from leetscraper import Leetscraper
@@ -37,7 +41,7 @@ from leetscraper import Leetscraper
 if __name__ == "__main__":
     Leetscraper(website_name="projecteuler.net", scraped_path="~/SOLVE-ME", scrape_limit=50)
 ```
-
+  
 Example of how to scrape all problems from all supported websites:
 ```python
 from leetscraper import Leetscraper
@@ -48,7 +52,7 @@ if __name__ == "__main__":
     for site in websites:
         Leetscraper(website_name=site)
 ```
-
+  
 You can pass through different arguments for different websites to control exactly how the scraper behaves.
 You can also disable scraping problems at time of instantiation by using the kwarg `auto_scrape=False`.
 This allows you to call the class functions in different order, or one at a time.
@@ -67,6 +71,13 @@ Thank you to all contributors to this project!
 </a>  
 
 ***
+
+# Code of Conduct
+
+Contributing to this project means you are willing to follow the same conduct that others are held to! Please see [Code of Conduct](https://github.com/Pavocracy/leetscraper/blob/main/CODE_OF_CONDUCT.md) for further details.
+
+***
+
 # Licence  
 This project uses the GPL-2.0 License, As generally speaking, I want you to be able to do whatever you want with this project, But still have the ability to add your changes
 to this codebase should you make improvements or extend support.
