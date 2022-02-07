@@ -39,11 +39,6 @@ python -m unittest discover
 
 ## Code of Conduct
 
-Web scrapers are a touchy subject for some. Others have no moral objections at all. For me its all about context. 
-I built this project for the purpose of being able to solve coding problems at my leisure on my local machine.
-I am not always interested in signing up to a website and submitting my code to a solution checker. I just want a reason to code sometimes :)
-But understanding that these websites do have their own licence and copyright protections is imporant to remember. 
-If you are to use this project to scrape problems, Think VERY CAREFULLY about how and where you use those scraped problems. 
-Most of the websites TOS forbid redistributing their problems and solutions. 
+Contributing to this project means you are willing to follow the same conduct that others are held to! Please see [Code of Conduct](https://github.com/Pavocracy/leetscraper/blob/main/CODE_OF_CONDUCT.md) for further details.
 
 ### **DO NOT include ANY scraped problems as part of your PR, otherwise the PR will be rejected!**
