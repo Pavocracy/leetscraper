@@ -1,6 +1,6 @@
 import unittest
-from src.leetscraper import Leetscraper
 from os import path, walk
+from src.leetscraper import Leetscraper
 from urllib3 import PoolManager
 
 
@@ -13,6 +13,7 @@ class TestLeetscraper(unittest.TestCase):
             scrape_limit=3,
             auto_scrape=False,
         )
+        cls.http = PoolManager()
 
     def test_a_auto_scrape_false(self):
         self.assertFalse(
@@ -25,7 +26,6 @@ class TestLeetscraper(unittest.TestCase):
         self.assertFalse(self.leetscraper.scraped_problems())
 
     def test_c_needed_problems(self):
-        self.http = PoolManager(headers={"Connection": "close"})
         self.scraped_problems = self.leetscraper.scraped_problems()
         self.needed_problems = self.leetscraper.needed_problems(
             self.http, self.scraped_problems
@@ -33,7 +33,6 @@ class TestLeetscraper(unittest.TestCase):
         self.assertGreater(len(self.needed_problems), 0)
 
     def test_d_scrape_problems(self):
-        self.http = PoolManager(headers={"Connection": "close"})
         self.scraped_problems = self.leetscraper.scraped_problems()
         self.needed_problems = self.leetscraper.needed_problems(
             self.http, self.scraped_problems
