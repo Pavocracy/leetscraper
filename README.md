@@ -1,9 +1,9 @@
-# [leetscraper](https://pypi.org/project/leetscraper/) &middot; [![PyPi Downloads per Month](https://pepy.tech/badge/leetscraper/month)](https://pepy.tech/project/leetscraper)
+# [leetscraper](https://pypi.org/project/leetscraper/) &middot; [![Downloads](https://pepy.tech/badge/leetscraper)](https://pepy.tech/project/leetscraper) &middot; [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Average time to resolve an issue") &middot; [![Percentage of issues still open](http://isitmaintained.com/badge/open/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Percentage of issues still open")
 leetscraper is a coding challenge webscraper for leetcode, and other websites!  
 It was created as a way to gather coding problems to solve without having to sign up to a website or submit code to a problem checker.
 
 ***
-## Install package and dependencies 
+## Install package and dependencies
 ```python
 pip install leetscraper tqdm urllib3 beautifulsoup4 selenium webdriver-manager
 ```
@@ -60,6 +60,11 @@ I would encourage you to look at the function docstrings if you wish to use this
 If you would like to contribute, adding support for a new coding challenge website, or fixing current bugs is always appreciated!
 I would encourage you to see [CONTRIBUTING.md](https://github.com/Pavocracy/leetscraper/blob/main/CONTRIBUTING.md) for further details.
 If you would like to report bugs or suggest websites to support, please add a card to [Issues](https://github.com/Pavocracy/leetscraper/issues).
+Thank you to all contributors to this project!  
+  
+<a href="https://github.com/pavocracy/leetscraper/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=pavocracy/leetscraper" />
+</a>  
 
 ***
 # Licence  
