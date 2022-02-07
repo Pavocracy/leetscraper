@@ -27,7 +27,7 @@ jobs:
     - name: 'Setup chrome'
       if: matrix.os == 'windows-latest'
       run:
-        start chrome
+        Start-Process -FilePath 'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
     - name: 'Run Checks'
       run: |
