@@ -5,6 +5,7 @@ __pychace__
 *.exe
 chromedriver
 src/*.egg-info
+PROBLEMS/
 codechef/
 leetcode/
 projecteuler/
