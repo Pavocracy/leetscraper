@@ -86,7 +86,7 @@ class Leetscraper:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--silent")
         options.add_argument("--disable-gpu")
-        service = Service(ChromeDriverManager().install())
+        service = Service(ChromeDriverManager(log_level=0, print_first_line=False).install())
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
         return driver
@@ -158,16 +158,20 @@ class Leetscraper:
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
         """Scrapes needed_problems limited by scrape_limit. (All problems if -1)"""
-        if len(needed_problems) > 0:
-            print(f"Scraping {self.website_name} problems")
+        if self.scrape_limit >= len(needed_problems):
+            self.scrape_limit = -1
+        if self.scrape_limit == 0:
+            print("Exiting due to scrape_limit set to 0!")
+            return
+        if needed_problems:
+            print(f"Scraping {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems")
             driver = self.create_webdriver()
-            if self.scrape_limit >= len(needed_problems):
-                self.scrape_limit = -1
             for problem in tqdm(needed_problems[: self.scrape_limit]):
                 self.create_problem(problem, driver)
             self.webdriver_quit(driver)
         else:
             print(f"No {self.website_name} problems to scrape")
+        print(f"Completed scraping {self.website_name} Problems")
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
