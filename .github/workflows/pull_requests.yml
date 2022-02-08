@@ -9,8 +9,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python: ["3.7", "3.8", "3.9", "3.10"]
-    steps:
     
+    steps:
     - name: 'Checkout PR' 
       uses: actions/checkout@v2
 
@@ -24,10 +24,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ./requirements.txt
         
-    - name: 'Setup chrome'
+    - name: 'Open Chrome'
+    # This is here because the chrome version is missing from the registry until opened for the first time
       if: matrix.os == 'windows-latest'
-      run:
+      run: |
         Start-Process -FilePath 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+        Start-Sleep -Seconds 10
+        (Get-ItemProperty 'HKLM:\Software\Google\Chrome\BLBeacon').VersionInfo
 
     - name: 'Run Checks'
       run: |
