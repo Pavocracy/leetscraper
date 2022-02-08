@@ -30,7 +30,7 @@ jobs:
       run: |
         Start-Process -FilePath 'C:\Program Files\Google\Chrome\Application\chrome.exe'
         Start-Sleep -Seconds 10
-        (Get-ItemProperty 'HKLM:\Software\Google\Chrome\BLBeacon').VersionInfo
+        (Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\Software\Google\Chrome\BLBeacon').VersionInfo
 
     - name: 'Run Checks'
       run: |
