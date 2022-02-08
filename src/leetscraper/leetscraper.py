@@ -86,7 +86,9 @@ class Leetscraper:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--silent")
         options.add_argument("--disable-gpu")
-        service = Service(ChromeDriverManager(log_level=0, print_first_line=False).install())
+        service = Service(
+            ChromeDriverManager(log_level=0, print_first_line=False).install()
+        )
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
         return driver
@@ -164,7 +166,9 @@ class Leetscraper:
             print("Exiting due to scrape_limit set to 0!")
             return
         if needed_problems:
-            print(f"Scraping {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems")
+            print(
+                f"Scraping {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems"
+            )
             driver = self.create_webdriver()
             for problem in tqdm(needed_problems[: self.scrape_limit]):
                 self.create_problem(problem, driver)
