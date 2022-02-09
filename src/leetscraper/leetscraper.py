@@ -41,6 +41,13 @@ class Leetscraper:
         self.supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
+        if not path.isdir(self.scraped_path):
+            try:
+                makedirs(self.scraped_path)
+            except Exception as error:
+                print(f"Could not use path {self.scraped_path}: {error}")
+                print(f"Using {getcwd()} instead!")
+                self.scraped_path = getcwd()
         self.scrape_limit = kwargs.get("scrape_limit", -1)
         if self.scrape_limit is not type(int):
             self.scrape_limit = int(self.scrape_limit)
