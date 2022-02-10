@@ -9,6 +9,7 @@ Calling class functions in different orders will also change the behaviour of th
 See related docstrings for help.
 """
 
+from subprocess import run
 from time import sleep
 from json import loads
 from os import getcwd, walk, path, makedirs
@@ -92,6 +93,8 @@ class Leetscraper:
                 "base_url": "https://www.hackerrank.com/challenges/",
                 "problem_description": {"class": "challenge-body-html"},
             }
+        check_chrome_version = run(["google-chrome", "--version"], capture_output=True)
+        self.chrome_version = str(check_chrome_version.stdout).split(" ")[-2]
         if not self.supported_website:
             print(f"{self.website_name} is not supported by this scraper!")
         if auto_scrape and self.supported_website:
@@ -102,8 +105,6 @@ class Leetscraper:
 
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
         """Instantiates the webdriver with pre-defined options."""
-        chrome = ChromeDriverManager(log_level=0, print_first_line=False).install()
-        self.chrome_version = chrome.split("/")[-2]
         options = Options()
         options.headless = True
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
@@ -111,7 +112,9 @@ class Leetscraper:
         options.add_argument("--disable-gpu")
         if self.website_name == "hackerrank.com":
             options.add_argument(f"user-agent=Chrome/{self.chrome_version}")
-        service = Service(chrome)
+        service = Service(
+            ChromeDriverManager(log_level=0, print_first_line=False).install()
+        )
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
         return driver
@@ -182,6 +185,9 @@ class Leetscraper:
                     if problem["code"] not in scraped_problems:
                         get_problems.append([problem["code"], value])  # type: ignore[list-item]
         if self.website_name == "hackerrank.com":
+            headers = {}
+            chrome_version = f"Chrome/{self.chrome_version}"
+            headers["User-Agent"] = chrome_version
             for category in self.website_options["categories"]:
                 for i in range(0, 1001, 50):
                     request = http.request(
@@ -189,7 +195,7 @@ class Leetscraper:
                         self.website_options["api_url"]  # type: ignore[operator]
                         + category
                         + f"/challenges?offset={i}&limit=50",
-                        headers={f"User-Agent": "Chrome/{self.chrome_version}"},
+                        headers=headers,
                     )
                     data = loads(request.data.decode("utf-8"))
                     if data["models"]:
@@ -312,3 +318,7 @@ class Leetscraper:
             print(
                 f'\nError occurred while scraping {self.website_options["base_url"]}{problem[0]}: {error}'
             )
+
+
+if __name__ == "__main__":
+    Leetscraper(website_name="hackerrank.com", scrape_limit=2)
