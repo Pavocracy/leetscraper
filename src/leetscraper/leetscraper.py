@@ -10,6 +10,7 @@ See related docstrings for help.
 """
 
 from subprocess import run
+from sys import platform
 from time import sleep
 from json import loads
 from os import getcwd, walk, path, makedirs
@@ -93,7 +94,12 @@ class Leetscraper:
                 "base_url": "https://www.hackerrank.com/challenges/",
                 "problem_description": {"class": "challenge-body-html"},
             }
-        check_chrome_version = run(["google-chrome", "--version"], capture_output=True)
+        if platform.startswith("darwin"):
+            check_chrome_version = run(["Chrome", "--version"], capture_output=True)
+        if platform.startswith("linux") or platform.startswith("win32"):
+            check_chrome_version = run(
+                ["google-chrome", "--version"], capture_output=True
+            )
         self.chrome_version = str(check_chrome_version.stdout).split(" ")[-2]
         if not self.supported_website:
             print(f"{self.website_name} is not supported by this scraper!")
@@ -318,7 +324,3 @@ class Leetscraper:
             print(
                 f'\nError occurred while scraping {self.website_options["base_url"]}{problem[0]}: {error}'
             )
-
-
-if __name__ == "__main__":
-    Leetscraper(website_name="hackerrank.com", scrape_limit=2)
