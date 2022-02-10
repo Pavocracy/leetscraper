@@ -95,7 +95,15 @@ class Leetscraper:
                 "problem_description": {"class": "challenge-body-html"},
             }
         if platform.startswith("darwin"):
-            check_chrome_version = run(["Chrome", "--version"], capture_output=True)
+            check_chrome_version = run(
+                [
+                    "/Applications/Google\\",
+                    "Chrome.app/Contents/MacOS/Google\\",
+                    "Chrome",
+                    "--version",
+                ],
+                capture_output=True,
+            )
         if platform.startswith("linux") or platform.startswith("win32"):
             check_chrome_version = run(
                 ["google-chrome", "--version"], capture_output=True
