@@ -103,14 +103,14 @@ class Leetscraper:
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
         """Instantiates the webdriver with pre-defined options."""
         chrome = ChromeDriverManager(log_level=0, print_first_line=False).install()
-        version = chrome.split("/")[-2]
+        self.chrome_version = chrome.split("/")[-2]
         options = Options()
         options.headless = True
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--silent")
         options.add_argument("--disable-gpu")
         if self.website_name == "hackerrank.com":
-            options.add_argument(f"user-agent=Chrome/{version}")
+            options.add_argument(f"user-agent=Chrome/{self.chrome_version}")
         service = Service(chrome)
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
@@ -189,7 +189,7 @@ class Leetscraper:
                         self.website_options["api_url"]  # type: ignore[operator]
                         + category
                         + f"/challenges?offset={i}&limit=50",
-                        headers={"User-Agent": "Chrome/98.0.4758.80"},
+                        headers={f"User-Agent": "Chrome/{self.chrome_version}"},
                     )
                     data = loads(request.data.decode("utf-8"))
                     if data["models"]:
@@ -312,9 +312,3 @@ class Leetscraper:
             print(
                 f'\nError occurred while scraping {self.website_options["base_url"]}{problem[0]}: {error}'
             )
-
-
-if __name__ == "__main__":
-    websites = ["leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com"]
-    for site in websites:
-        Leetscraper(website_name=site, scrape_limit=3)
