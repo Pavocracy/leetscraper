@@ -27,7 +27,7 @@ if __name__ == "__main__":
 The avaliable kwargs to control the behaviour of the scraper are:
 ```python
 """
-website_name: "leetcode.com", "projecteuler.net", "codechef.com" ("leetcode.com" is set if ignored)
+website_name: "leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com" ("leetcode.com" is set if ignored)
 scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
 scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
 auto_scrape: "True", "False" (True is set if ignored)
@@ -47,7 +47,7 @@ Example of how to scrape all problems from all supported websites:
 from leetscraper import Leetscraper
 
 if __name__ == "__main__":
-    websites = ["leetcode.com", "projecteuler.net", "codechef.com"]
+    websites = ["leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com"]
 
     for site in websites:
         Leetscraper(website_name=site)
