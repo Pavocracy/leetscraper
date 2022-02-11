@@ -96,21 +96,20 @@ class Leetscraper:
             }
         if platform.startswith("darwin"):
             check_chrome_version = run(
-                [
-                    "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version"
-                ],
+                "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
                 shell=True,
                 capture_output=True,
                 check=True,
             )
         if platform.startswith("linux") or platform.startswith("win32"):
             check_chrome_version = run(
-                ["google-chrome --version"],
+                "google-chrome --version",
                 capture_output=True,
                 check=True,
                 shell=True,
             )
-        self.chrome_version = str(check_chrome_version.stdout).split(" ")[-2]
+        get_version = str(check_chrome_version.stdout)
+        self.chrome_version = sub("[^0-9.]+", "", get_version)
         if not self.supported_website:
             print(f"{self.website_name} is not supported by this scraper!")
         if auto_scrape and self.supported_website:
