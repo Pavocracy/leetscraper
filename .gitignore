@@ -2,11 +2,4 @@
 __pychace__
 */__pycache__
 */*/__pycache__
-*.exe
-chromedriver
 src/*.egg-info
-PROBLEMS/
-codechef/
-leetcode/
-projecteuler/
-hackerrank/
