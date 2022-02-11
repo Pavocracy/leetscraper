@@ -1,58 +1,47 @@
 import unittest
+from shutil import rmtree
 from os import path, walk
-from src.leetscraper import Leetscraper
 from urllib3 import PoolManager
+from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
 class TestLeetscraper(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.leetscraper = Leetscraper(
+    def test_codechef(self):
+        leetscraper = Leetscraper(
             website_name="projecteuler.net",
-            scraped_path="./projecteuler",
+            scraped_path="./unittesting",
             scrape_limit=3,
             auto_scrape=False,
         )
-        cls.http = PoolManager()
 
-    def test_a_auto_scrape_false(self):
+        # Check auto_scrape=False
         self.assertFalse(
             path.isdir(
-                f"{self.leetscraper.scraped_path}/PROBLEMS/{self.leetscraper.website_name}"
+                f"{leetscraper.scraped_path}/PROBLEMS/{leetscraper.website_name}"
             )
         )
+        self.assertTrue(path.isdir(leetscraper.scraped_path))
 
-    def test_b_scraped_problems_false(self):
-        self.assertFalse(self.leetscraper.scraped_problems())
+        # Check chrome_version
+        self.assertTrue(leetscraper.chrome_version)
 
-    def test_c_needed_problems(self):
-        self.scraped_problems = self.leetscraper.scraped_problems()
-        self.needed_problems = self.leetscraper.needed_problems(
-            self.http, self.scraped_problems
-        )
-        self.assertGreater(len(self.needed_problems), 0)
-
-    def test_d_scrape_problems(self):
-        self.scraped_problems = self.leetscraper.scraped_problems()
-        self.needed_problems = self.leetscraper.needed_problems(
-            self.http, self.scraped_problems
-        )
-        self.leetscraper.scrape_problems(self.needed_problems)
-        self.assertTrue(
-            path.isdir(
-                f"{self.leetscraper.scraped_path}/PROBLEMS/{self.leetscraper.website_name}"
-            )
-        )
-
-    def test_e_scrape_limit(self):
+        # Check needed_problems
         scraped_problems = []
+        http = PoolManager(headers={"Connection": "close"})
+        needed_problems = leetscraper.needed_problems(http, scraped_problems)
+        self.assertGreater(len(needed_problems), 0)
+
+        # Check scrape_problems with scrape_limit
+        leetscraper.scrape_problems(needed_problems)
         for (dirpath, dirnames, filenames) in walk(
-            f"{self.leetscraper.scraped_path}/PROBLEMS/{self.leetscraper.website_name}"
+            f"{leetscraper.scraped_path}/PROBLEMS/{leetscraper.website_name}"
         ):
             for file in filenames:
                 if file:
                     scraped_problems.append(file)
-        self.assertEqual(len(scraped_problems), self.leetscraper.scrape_limit)
+        self.assertEqual(len(scraped_problems), leetscraper.scrape_limit)
+        rmtree(leetscraper.scraped_path)
+        http.clear()
 
 
 if __name__ == "__main__":
