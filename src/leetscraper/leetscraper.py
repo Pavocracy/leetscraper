@@ -1,11 +1,17 @@
+# Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
+# This file is part of leetscraper which is released under GPL-2.0 License.
+
 """Leetscraper, a coding challenge webscraper for leetcode, and other websites!
 
-This moddule contains the Leetscraper class that when given a string of a supported website,
-will set some attributes that will allow coding challenges to be requested, filtered down
-to the problem description, and written to a markdown file.
+This module contains the Leetscraper class that when given the name of a supported
+website, will set some attributes that will allow coding challenges to be requested,
+filtered down to the problem description, and written to a markdown file.
+
+This scraper currently works for leetcode.com, projecteuler.net, codechef.com, hackerrank.com
 
 During class instantiation, kwargs can be accepted to define class behaviour.
 Calling class functions in different orders will also change the behaviour of this scraper.
+It was written with automation in mind. If you wish to use these functions individually,
 See related docstrings for help.
 """
 
@@ -16,6 +22,7 @@ from json import loads
 from os import getcwd, walk, path, makedirs
 from re import sub
 from typing import List
+
 from tqdm import tqdm  # type: ignore[import]
 from urllib3 import PoolManager
 from bs4 import BeautifulSoup
@@ -31,28 +38,20 @@ from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
 class Leetscraper:
     """Leetscraper requires the following kwargs to instantiate:
 
-    website_name: "leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com" ("leetcode.com" is set if ignored)
-    scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
-    scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
-    auto_scrape: "True", "False" (True is set if ignored)
+    website_name: name of a supported website to scrape ("leetcode.com" set if ignored)
+    scraped_path: "path/to/save/scraped_problems" (Current working directory set if ignored)
+    scrape_limit: Integer of how many problems to scrape at a time (no limit set if ignored)
+    auto_scrape: "True", "False" (True set if ignored)
 
-    This means calling this class with no arguments will result in all leetcode problems being scraped automatically and saved to the current working directory.
+    This means calling this class with no arguments will result in all leetcode problems
+    being scraped automatically and saved to the current working directory.
     """
 
     def __init__(self, **kwargs) -> None:
         self.supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
-        if not path.isdir(self.scraped_path):
-            try:
-                makedirs(self.scraped_path)
-            except Exception as error:
-                print(f"Could not use path {self.scraped_path}: {error}")
-                print(f"Using {getcwd()} instead!")
-                self.scraped_path = getcwd()
         self.scrape_limit = kwargs.get("scrape_limit", -1)
-        if self.scrape_limit is not type(int):
-            self.scrape_limit = int(self.scrape_limit)
         auto_scrape = kwargs.get("auto_scrape", True)
         if self.website_name == "leetcode.com":
             self.supported_website = True
@@ -94,32 +93,44 @@ class Leetscraper:
                 "base_url": "https://www.hackerrank.com/challenges/",
                 "problem_description": {"class": "challenge-body-html"},
             }
-        if platform.startswith("darwin"):
-            check_chrome_version = run(
-                "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
-                shell=True,
-                capture_output=True,
-                check=True,
-            )
-        if platform.startswith("linux"):
-            check_chrome_version = run(
-                "google-chrome --version",
-                capture_output=True,
-                check=True,
-                shell=True,
-            )
-        if platform.startswith("win32"):
-            check_chrome_version = run(
-                r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
-                capture_output=True,
-                check=True,
-                shell=True,
-            )
-        get_version = str(check_chrome_version.stdout)
-        self.chrome_version = sub("[^0-9.]+", "", get_version)
         if not self.supported_website:
-            print(f"{self.website_name} is not supported by this scraper!")
-        if auto_scrape and self.supported_website:
+            raise Exception(f"{self.website_name} is not a supported website!")
+        if not path.isdir(self.scraped_path):
+            try:
+                makedirs(self.scraped_path)
+            except Exception as error:
+                print(f"Could not use path {self.scraped_path}: {error}")
+                print(f"Using {getcwd()} instead!")
+                self.scraped_path = getcwd()
+        if self.scrape_limit == 0:
+            raise Exception(f"scrape_limit is set to {self.scrape_limit}!")
+        try:
+            if platform.startswith("darwin"):
+                check_chrome_version = run(
+                    "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
+                    capture_output=True,
+                    check=True,
+                    shell=True,
+                )
+            if platform.startswith("linux"):
+                check_chrome_version = run(
+                    "google-chrome --version",
+                    capture_output=True,
+                    check=True,
+                    shell=True,
+                )
+            if platform.startswith("win32"):
+                check_chrome_version = run(
+                    r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
+                    capture_output=True,
+                    check=True,
+                    shell=True,
+                )
+            get_version = str(check_chrome_version.stdout)
+            self.chrome_version = sub("[^0-9.]+", "", get_version)
+        except Exception as error:
+            raise Exception(f"Could not find chrome version! Error: {error}") from error
+        if auto_scrape:
             http = PoolManager()
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(http, scraped_problems)
