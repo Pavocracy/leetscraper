@@ -110,7 +110,9 @@ class Leetscraper:
             )
         if platform.startswith("win32"):
             check_chrome_version = run(
-                ["google-chrome", "--version"], capture_output=True, check=True
+                ["powershell", "-command", "google-chrome", "--version"],
+                capture_output=True,
+                check=True,
             )
         get_version = str(check_chrome_version.stdout)
         self.chrome_version = sub("[^0-9.]+", "", get_version)
