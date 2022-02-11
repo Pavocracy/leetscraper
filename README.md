@@ -6,9 +6,9 @@ It was created as a way to gather coding problems to solve without having to sig
  
 # Usage
   
-### Install package and dependencies
+### Install package
 ```python
-pip install leetscraper tqdm urllib3 beautifulsoup4 selenium webdriver-manager
+pip install leetscraper
 ```
 
 ### Examples
