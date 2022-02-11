@@ -97,15 +97,15 @@ class Leetscraper:
         if platform.startswith("darwin"):
             check_chrome_version = run(
                 [
-                    "/Applications/Google Chrome.app/",
-                    "Contents/MacOS/Google Chrome",
-                    "--version",
+                    "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version"
                 ],
+                shell=True,
                 capture_output=True,
+                check=True,
             )
         if platform.startswith("linux") or platform.startswith("win32"):
             check_chrome_version = run(
-                ["google-chrome", "--version"], capture_output=True
+                ["google-chrome", "--version"], capture_output=True, check=True
             )
         self.chrome_version = str(check_chrome_version.stdout).split(" ")[-2]
         if not self.supported_website:
