@@ -1,5 +1,3 @@
-# Pull Request Template
-
 ## Description
 
 Please include a summary of the changes made in this pull request.
@@ -8,16 +6,16 @@ Please include a summary of the changes made in this pull request.
 
 Please delete options that are not relevant.
 
-- [ ] Bug fix. Fixes # (issue)
+- [ ] Bug fix. Tag the issue with Fixes #(issue_number)
 - [ ] New feature (non-breaking change which adds functionality or website support)
-- [ ] Code addition (extended unit tests, code cleanup that doesnt change functionality or fixed bugs, ect)
+- [ ] Code addition (extended unit tests, code cleanup ect that doesnt change functionality)
 - [ ] Documentation update
 
 ## Checklist:
 
 - [ ] I have formatted my code with black
-- [ ] I have checked my code with mypy. (If you had to add type ignore comments, explain why)
-- [ ] I have check my code with pylint (please give the score pylint reported)
-- [ ] I have added unit tests for this new feature/supported website (if required)
+- [ ] I have checked my code with mypy.
+- [ ] I have check my code with pylint
 - [ ] I have ran the unit tests and they all pass
+- [ ] I have added unit tests for this new feature/supported website (if required)
 - [ ] I have made corresponding changes to the documentation (if required)
