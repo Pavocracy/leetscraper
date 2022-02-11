@@ -29,8 +29,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         Start-Process -FilePath 'C:\Program Files\Google\Chrome\Application\chrome.exe'
-        Start-Sleep -Seconds 60
-        Dir 'C:\Program Files\Google\Chrome\Application\'
+        Start-Sleep -Seconds 30
 
     - name: 'Run Checks'
       run: |
