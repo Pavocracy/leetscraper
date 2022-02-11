@@ -32,10 +32,10 @@ if __name__ == "__main__":
 The avaliable kwargs to control the behaviour of the scraper are:
 ```python
 """
-website_name: name of a supported website to scrape ("leetcode.com" is set if ignored)
-scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
-scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
-auto_scrape: "True", "False" (True is set if ignored)
+website_name: name of a supported website to scrape ("leetcode.com" set if ignored)
+scraped_path: "path/to/save/scraped_problems" (Current working directory set if ignored)
+scrape_limit: Integer of how many problems to scrape at a time (no limit set if ignored)
+auto_scrape: "True", "False" (True set if ignored)
 """
 ```
 
