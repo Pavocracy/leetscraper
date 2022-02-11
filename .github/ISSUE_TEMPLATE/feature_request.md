@@ -1,3 +1,12 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+title: ''
+labels: enhancement
+assignees: Pavocracy
+
+---
+
 **Feature you would like to see in leetscraper.**
 A clear and concise description of what the functionality is that you want, or an additional website you would like supported
 

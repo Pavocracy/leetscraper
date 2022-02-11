@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report for a bug you have found
+title: ''
+labels: bug
+assignees: Pavocracy
+
+---
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
