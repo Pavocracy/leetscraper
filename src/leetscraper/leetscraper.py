@@ -110,7 +110,7 @@ class Leetscraper:
             )
         if platform.startswith("win32"):
             check_chrome_version = run(
-                'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
+                r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
                 capture_output=True,
                 check=True,
                 shell=True,
