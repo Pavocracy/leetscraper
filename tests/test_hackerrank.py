@@ -1,7 +1,6 @@
 import unittest
 from shutil import rmtree
 from os import path, walk
-from urllib3 import PoolManager
 from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
