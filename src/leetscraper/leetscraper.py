@@ -248,9 +248,6 @@ class Leetscraper:
         """Scrapes needed_problems limited by scrape_limit. (All problems if -1)"""
         if self.scrape_limit >= len(needed_problems):
             self.scrape_limit = -1
-        if self.scrape_limit == 0:
-            print("Exiting due to scrape_limit set to 0!")
-            return
         if needed_problems:
             print(
                 f"Scraping {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems"
