@@ -9,6 +9,8 @@ Calling class functions in different orders will also change the behaviour of th
 See related docstrings for help.
 """
 
+from subprocess import run
+from sys import platform
 from time import sleep
 from json import loads
 from os import getcwd, walk, path, makedirs
@@ -29,7 +31,7 @@ from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
 class Leetscraper:
     """Leetscraper requires the following kwargs to instantiate:
 
-    website_name: "leetcode.com", "projecteuler.net", "codechef.com" ("leetcode.com" is set if ignored)
+    website_name: "leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com" ("leetcode.com" is set if ignored)
     scraped_path: "path/to/save/scraped_problems" (Current working directory is set if ignored)
     scrape_limit: Integer of how many problems to scrape at a time (-1 is set if ignored, which is no limit)
     auto_scrape: "True", "False" (True is set if ignored)
@@ -78,10 +80,47 @@ class Leetscraper:
                 "base_url": "https://www.codechef.com/problems/",
                 "problem_description": {"class": "problem-statement"},
             }
+        if self.website_name == "hackerrank.com":
+            self.supported_website = True
+            self.website_options = {
+                "categories": [
+                    "algorithms",
+                    "data-structures",
+                    "mathematics",
+                    "ai",
+                    "fp",
+                ],
+                "api_url": "https://www.hackerrank.com/rest/contests/master/tracks/",
+                "base_url": "https://www.hackerrank.com/challenges/",
+                "problem_description": {"class": "challenge-body-html"},
+            }
+        if platform.startswith("darwin"):
+            check_chrome_version = run(
+                "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
+                shell=True,
+                capture_output=True,
+                check=True,
+            )
+        if platform.startswith("linux"):
+            check_chrome_version = run(
+                "google-chrome --version",
+                capture_output=True,
+                check=True,
+                shell=True,
+            )
+        if platform.startswith("win32"):
+            check_chrome_version = run(
+                r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
+                capture_output=True,
+                check=True,
+                shell=True,
+            )
+        get_version = str(check_chrome_version.stdout)
+        self.chrome_version = sub("[^0-9.]+", "", get_version)
         if not self.supported_website:
             print(f"{self.website_name} is not supported by this scraper!")
         if auto_scrape and self.supported_website:
-            http = PoolManager(headers={"Connection": "close"})
+            http = PoolManager()
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(http, scraped_problems)
             self.scrape_problems(needed_problems)
@@ -93,6 +132,8 @@ class Leetscraper:
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         options.add_argument("--silent")
         options.add_argument("--disable-gpu")
+        if self.website_name == "hackerrank.com":
+            options.add_argument(f"user-agent=Chrome/{self.chrome_version}")
         service = Service(
             ChromeDriverManager(log_level=0, print_first_line=False).install()
         )
@@ -118,10 +159,12 @@ class Leetscraper:
                 if file:
                     if self.website_name == "leetcode.com":
                         scraped_problems.append(file.split(".")[0])
-                    elif self.website_name == "projecteuler.net":
+                    if self.website_name == "projecteuler.net":
                         scraped_problems.append(file.split("-")[0])
-                    elif self.website_name == "codechef.com":
+                    if self.website_name == "codechef.com":
                         scraped_problems.append(file.split("-")[0])
+                    if self.website_name == "hackerrank.com":
+                        scraped_problems.append(file.split(".")[0])
         return scraped_problems
 
     def needed_problems(
@@ -146,14 +189,14 @@ class Leetscraper:
                             ],
                         ]
                     )
-        elif self.website_name == "projecteuler.net":
+        if self.website_name == "projecteuler.net":
             request = http.request("GET", self.website_options["api_url"])
             soup = BeautifulSoup(request.data, "html.parser")
             data = soup.find("td", {"class": "id_column"}).get_text()  # type: ignore[union-attr]
             for i in range(1, int(data) + 1):
                 if str(i) not in scraped_problems:
                     get_problems.append([str(i), None])  # type: ignore[list-item]
-        elif self.website_name == "codechef.com":
+        if self.website_name == "codechef.com":
             for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
                 request = http.request(
                     "GET",
@@ -163,6 +206,31 @@ class Leetscraper:
                 for problem in data["data"]:
                     if problem["code"] not in scraped_problems:
                         get_problems.append([problem["code"], value])  # type: ignore[list-item]
+        if self.website_name == "hackerrank.com":
+            headers = {}
+            chrome_version = f"Chrome/{self.chrome_version}"
+            headers["User-Agent"] = chrome_version
+            for category in self.website_options["categories"]:
+                for i in range(0, 1001, 50):
+                    request = http.request(
+                        "GET",
+                        self.website_options["api_url"]  # type: ignore[operator]
+                        + category
+                        + f"/challenges?offset={i}&limit=50",
+                        headers=headers,
+                    )
+                    data = loads(request.data.decode("utf-8"))
+                    if data["models"]:
+                        for problem in data["models"]:
+                            if problem["slug"] not in scraped_problems:
+                                get_problems.append(
+                                    [
+                                        problem["slug"] + "/problem",
+                                        problem["difficulty_name"].upper(),
+                                    ]
+                                )
+                    else:
+                        break
         return get_problems  # type: ignore[return-value]
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
@@ -204,7 +272,7 @@ class Leetscraper:
                     .strip()
                 )
                 problem_name = problem[0]
-            elif self.website_name == "projecteuler.net":
+            if self.website_name == "projecteuler.net":
                 problem_description = (
                     soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
                     .get_text()
@@ -232,7 +300,7 @@ class Leetscraper:
                     .get_text()
                     .strip()
                 )
-            elif self.website_name == "codechef.com":
+            if self.website_name == "codechef.com":
                 problem_description = (
                     soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
                     .get_text()
@@ -248,6 +316,13 @@ class Leetscraper:
                 )
                 problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
                 problem_name = problem[0] + f"-{problem_name}"
+            if self.website_name == "hackerrank.com":
+                problem_description = (
+                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    .get_text()
+                    .strip()
+                )
+                problem_name = problem[0].split("/")[0]
             if not path.isdir(
                 f"{self.scraped_path}/PROBLEMS/{self.website_name}/{problem[1]}/"
             ):
