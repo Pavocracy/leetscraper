@@ -121,7 +121,7 @@ class Leetscraper:
                 )
             if platform.startswith("win32"):
                 check_chrome_version = run(
-                    r'reg query "HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon" /v version',
+                    'reg query "HKEY_CURRENT_USER\\Software\\Google\\Chrome\\BLBeacon" /v version',
                     capture_output=True,
                     check=True,
                     shell=True,
@@ -130,10 +130,10 @@ class Leetscraper:
             self.chrome_version = sub("[^0-9.]+", "", get_version)
         except Exception as error:
             raise Exception(f"Could not find chrome version! Error: {error}") from error
+        self.errors = 0
         if auto_scrape:
-            http = PoolManager()
             scraped_problems = self.scraped_problems()
-            needed_problems = self.needed_problems(http, scraped_problems)
+            needed_problems = self.needed_problems(scraped_problems)
             self.scrape_problems(needed_problems)
 
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
@@ -178,11 +178,10 @@ class Leetscraper:
                         scraped_problems.append(file.split(".")[0])
         return scraped_problems
 
-    def needed_problems(
-        self, http: PoolManager, scraped_problems: list
-    ) -> List[List[str]]:
+    def needed_problems(self, scraped_problems: list) -> List[List[str]]:
         """Returns a list of website problems missing from the scraped_path."""
         print(f"Getting the list of {self.website_name} problems to scrape")
+        http = PoolManager()
         get_problems = []
         if self.website_name == "leetcode.com":
             request = http.request("GET", self.website_options["api_url"])
@@ -242,6 +241,7 @@ class Leetscraper:
                                 )
                     else:
                         break
+        http.clear()
         return get_problems  # type: ignore[return-value]
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
@@ -250,7 +250,7 @@ class Leetscraper:
             self.scrape_limit = -1
         if needed_problems:
             print(
-                f"Scraping {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems"
+                f"Attempting to scrape {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems"
             )
             driver = self.create_webdriver()
             for problem in tqdm(needed_problems[: self.scrape_limit]):
@@ -258,7 +258,9 @@ class Leetscraper:
             self.webdriver_quit(driver)
         else:
             print(f"No {self.website_name} problems to scrape")
-        print(f"Completed scraping {self.website_name} Problems")
+        print(
+            f"Successfully scraped {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems) - self.errors} {self.website_name} Problems"
+        )
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
@@ -348,3 +350,4 @@ class Leetscraper:
             print(
                 f'\nError occurred while scraping {self.website_options["base_url"]}{problem[0]}: {error}'
             )
+            self.errors += 1
