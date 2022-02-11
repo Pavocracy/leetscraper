@@ -6,7 +6,7 @@ from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
 class TestLeetscraper(unittest.TestCase):
-    def test_codechef(self):
+    def test_leetcode(self):
         leetscraper = Leetscraper(
             website_name="leetcode.com",
             scraped_path="./unittesting",
