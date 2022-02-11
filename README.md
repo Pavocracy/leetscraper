@@ -79,7 +79,7 @@ Contributing to this project means you are willing to follow the same conduct th
 
 ***
 
-# Licence  
+# License  
 This project uses the GPL-2.0 License, As generally speaking, I want you to be able to do whatever you want with this project, But still have the ability to add your changes
 to this codebase should you make improvements or extend support.
 For further details on what this licence allows, please see [LICENSE.md](https://github.com/Pavocracy/leetscraper/blob/main/LICENSE.md "GPL v2 Licence")
