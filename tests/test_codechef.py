@@ -27,8 +27,7 @@ class TestLeetscraper(unittest.TestCase):
 
         # Check needed_problems
         scraped_problems = []
-        http = PoolManager(headers={"Connection": "close"})
-        needed_problems = leetscraper.needed_problems(http, scraped_problems)
+        needed_problems = leetscraper.needed_problems(scraped_problems)
         self.assertGreater(len(needed_problems), 0)
 
         # Check scrape_problems with scrape_limit
@@ -39,9 +38,10 @@ class TestLeetscraper(unittest.TestCase):
             for file in filenames:
                 if file:
                     scraped_problems.append(file)
-        self.assertEqual(len(scraped_problems), leetscraper.scrape_limit)
+        self.assertEqual(
+            len(scraped_problems), (leetscraper.scrape_limit - leetscraper.errors)
+        )
         rmtree(leetscraper.scraped_path)
-        http.clear()
 
 
 if __name__ == "__main__":
