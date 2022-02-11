@@ -105,7 +105,10 @@ class Leetscraper:
             )
         if platform.startswith("linux") or platform.startswith("win32"):
             check_chrome_version = run(
-                ["google-chrome", "--version"], capture_output=True, check=True
+                ["google-chrome --version"],
+                capture_output=True,
+                check=True,
+                shell=True,
             )
         self.chrome_version = str(check_chrome_version.stdout).split(" ")[-2]
         if not self.supported_website:
