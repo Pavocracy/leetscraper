@@ -118,7 +118,7 @@ class Leetscraper:
         self.logger = self.create_logger()
         if not supported_website:
             message = f"{self.website_name} is not a supported website!"
-            self.logger.exception(message)
+            self.logger.debug(message)
             raise Exception(message)
         if not path.isdir(self.scraped_path):
             try:
@@ -133,7 +133,7 @@ class Leetscraper:
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
             message = "scrape_limit is set to 0!"
-            self.logger.exception(message)
+            self.logger.debug(message)
             raise Exception(message)
         try:
             if platform.startswith("darwin"):
@@ -161,7 +161,7 @@ class Leetscraper:
             self.chrome_version = sub("[^0-9.]+", "", get_version)
         except Exception as error:
             message = f"Could not find chrome version! Error: {error}"
-            self.logger.exception(message)
+            self.logger.debug(message)
             raise Exception(message) from error
         self.errors = 0
         if auto_scrape:
@@ -176,7 +176,7 @@ class Leetscraper:
         formatting = logging.Formatter(
             "%(asctime)s [%(levelname)s]: %(message)s", datefmt="%d/%m/%Y %I:%M:%S %p"
         )
-        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log")
+        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log", "a")
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatting)
         stream_handler = logging.StreamHandler()
