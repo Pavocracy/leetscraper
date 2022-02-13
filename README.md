@@ -6,13 +6,15 @@ This scraper currently works for
 [codechef.com](https://codechef.com "codechef website"), 
 [hackerrank.com](https://hackerrank.com "hackerrank website"),
 [codewars.com](https://codewars.com "codewars website").  
-It was created as a way to gather coding problems to solve without having to sign up to a website and submit your code.
+It was created as a way to gather coding problems to solve without having to sign up to a website or submit your code to a checker.
 
 ***
 
 # Usage
   
 ### Install package
+
+Installing leetscraper with pip will also install python dependencies needed. Google Chrome is also needed for this scraper.
 ```python
 pip install leetscraper
 ```

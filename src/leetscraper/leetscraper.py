@@ -10,6 +10,8 @@ filtered down to the problem description, and written to a markdown file.
 This scraper currently works for:
 leetcode.com, projecteuler.net, codechef.com, hackerrank.com, codewars.com
 
+It uses ChromeDriver with Selenium to scrape problems. If Chrome is not installed
+on your machine this scraper will raise an Exception and exit without scraping.
 During class instantiation, kwargs can be accepted to define class behaviour.
 Calling class functions in different orders will also change the behaviour of this scraper.
 It was written with automation in mind. If you wish to use these functions individually,
@@ -92,7 +94,7 @@ class Leetscraper:
                 ],
                 "api_url": "https://www.hackerrank.com/rest/contests/master/tracks/",
                 "base_url": "https://www.hackerrank.com/challenges/",
-                "problem_description": {"class": "challenge-body-html"},
+                "problem_description": {"class": "problem-statement"},
             }
         if self.website_name == "codewars.com":
             self.supported_website = True
@@ -121,7 +123,7 @@ class Leetscraper:
                 print(f"Using {getcwd()} instead!")
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
-            raise Exception(f"scrape_limit is set to {self.scrape_limit}!")
+            raise Exception(f"scrape_limit is set to 0!")
         try:
             if platform.startswith("darwin"):
                 check_chrome_version = run(
