@@ -7,7 +7,8 @@ This module contains the Leetscraper class that when given the name of a support
 website, will set some attributes that will allow coding challenges to be requested,
 filtered down to the problem description, and written to a markdown file.
 
-This scraper currently works for leetcode.com, projecteuler.net, codechef.com, hackerrank.com
+This scraper currently works for:
+leetcode.com, projecteuler.net, codechef.com, hackerrank.com, codewars.com
 
 During class instantiation, kwargs can be accepted to define class behaviour.
 Calling class functions in different orders will also change the behaviour of this scraper.

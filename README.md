@@ -4,7 +4,8 @@ This scraper currently works for
 [leetcode.com](https://leetcode.com "leetcode website"), 
 [projecteuler.net](https://projecteuler.net "projecteuler website"), 
 [codechef.com](https://codechef.com "codechef website"), 
-[hackerrank.com](https://hackerrank.com "hackerrank website").  
+[hackerrank.com](https://hackerrank.com "hackerrank website"),
+[codewars.com](https://codewars.com "codewars website").  
 It was created as a way to gather coding problems to solve without having to sign up to a website and submit your code.
 
 ***
@@ -52,7 +53,7 @@ Example of how to scrape all problems from all supported websites:
 from leetscraper import Leetscraper
 
 if __name__ == "__main__":
-    websites = ["leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com"]
+    websites = ["leetcode.com", "projecteuler.net", "codechef.com", "hackerrank.com", "codewars.com"]
 
     for site in websites:
         Leetscraper(website_name=site)
