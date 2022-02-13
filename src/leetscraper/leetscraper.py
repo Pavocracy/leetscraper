@@ -51,7 +51,7 @@ class Leetscraper:
         self.supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
-        self.scrape_limit = kwargs.get("scrape_limit", -1)
+        self.scrape_limit = kwargs.get("scrape_limit", None)
         auto_scrape = kwargs.get("auto_scrape", True)
         if self.website_name == "leetcode.com":
             self.supported_website = True
@@ -92,6 +92,23 @@ class Leetscraper:
                 "api_url": "https://www.hackerrank.com/rest/contests/master/tracks/",
                 "base_url": "https://www.hackerrank.com/challenges/",
                 "problem_description": {"class": "challenge-body-html"},
+            }
+        if self.website_name == "codewars.com":
+            self.supported_website = True
+            self.website_options = {
+                "difficulty": {
+                    8: "EASY",
+                    7: "EASY",
+                    6: "MEDIUM",
+                    5: "MEDIUM",
+                    4: "HARD",
+                    3: "HARD",
+                    2: "EXPERT",
+                    1: "EXPERT",
+                },
+                "api_url": "https://www.codewars.com/api/v1/code-challenges/",
+                "base_url": "https://www.codewars.com/kata/",
+                "problem_description": {"id": "description"},
             }
         if not self.supported_website:
             raise Exception(f"{self.website_name} is not a supported website!")
@@ -176,6 +193,8 @@ class Leetscraper:
                         scraped_problems.append(file.split("-")[0])
                     if self.website_name == "hackerrank.com":
                         scraped_problems.append(file.split(".")[0])
+                    if self.website_name == "codewars.com":
+                        scraped_problems.append(file.split(".")[0])
         return scraped_problems
 
     def needed_problems(self, scraped_problems: list) -> List[List[str]]:
@@ -210,7 +229,7 @@ class Leetscraper:
             for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
                 request = http.request(
                     "GET",
-                    self.website_options["api_url"] + value.lower() + "?limit=9999",
+                    self.website_options["api_url"] + value.lower() + "?limit=999",
                 )
                 data = loads(request.data.decode("utf-8"))
                 for problem in data["data"]:
@@ -241,16 +260,33 @@ class Leetscraper:
                                 )
                     else:
                         break
+        if self.website_name == "codewars.com":
+            print(
+                "***INFO*** codewars can take up to 5 minutes to search all problems!"
+            )
+            for i in range(0, 999):
+                request = http.request(
+                    "GET", self.website_options["base_url"] + f"?page={i}"  # type: ignore[operator]
+                )
+                soup = BeautifulSoup(request.data, "html.parser")
+                data = soup.find_all("div", {"class": "list-item-kata"})
+                if data:
+                    for problem in data:
+                        if problem["id"] not in scraped_problems:
+                            get_problems.append([problem["id"], None])
+                else:
+                    break
         http.clear()
         return get_problems  # type: ignore[return-value]
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
-        """Scrapes needed_problems limited by scrape_limit. (All problems if -1)"""
-        if self.scrape_limit >= len(needed_problems):
-            self.scrape_limit = -1
+        """Scrapes needed_problems limited by scrape_limit. (All problems if scrape_limit not set)"""
+        if self.scrape_limit:
+            if self.scrape_limit >= len(needed_problems):
+                self.scrape_limit = None
         if needed_problems:
             print(
-                f"Attempting to scrape {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems)} {self.website_name} problems"
+                f"Attempting to scrape {self.scrape_limit if self.scrape_limit else len(needed_problems)} {self.website_name} problems"
             )
             driver = self.create_webdriver()
             for problem in tqdm(needed_problems[: self.scrape_limit]):
@@ -259,7 +295,7 @@ class Leetscraper:
         else:
             print(f"No {self.website_name} problems to scrape")
         print(
-            f"Successfully scraped {self.scrape_limit if self.scrape_limit > -1 else len(needed_problems) - self.errors} {self.website_name} Problems"
+            f"Successfully scraped {(self.scrape_limit if self.scrape_limit else len(needed_problems)) - self.errors} {self.website_name} Problems"
         )
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
@@ -333,6 +369,26 @@ class Leetscraper:
                     .strip()
                 )
                 problem_name = problem[0].split("/")[0]
+            if self.website_name == "codewars.com":
+                try:
+                    difficulty = self.website_options["difficulty"][  # type: ignore[index]
+                        (
+                            int(
+                                soup.find("div", {"class": "inner-small-hex"})  # type: ignore[union-attr]
+                                .get_text()
+                                .split(" ")[0]
+                            )
+                        )
+                    ]
+                except Exception:
+                    difficulty = "BETA"  # type: ignore[assignment]
+                problem_description = (
+                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    .get_text()
+                    .strip()
+                )
+                problem_name = problem[0]
+                problem[1] = difficulty  # type: ignore [call-overload]
             if not path.isdir(
                 f"{self.scraped_path}/PROBLEMS/{self.website_name}/{problem[1]}/"
             ):
