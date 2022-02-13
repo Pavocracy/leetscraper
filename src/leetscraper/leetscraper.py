@@ -180,14 +180,15 @@ class Leetscraper:
         file_handler = logging.FileHandler(
             f"{path.dirname(__file__)}/leetscraper.log", "a"
         )
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(formatting)
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(logging.INFO)
-        stream_handler.setFormatter(formatting)
-        logger.addHandler(file_handler)
-        logger.addHandler(stream_handler)
-        logger.debug("Creating log file %s/leetscraper.log", path.dirname(__file__))
+        if not logger.hasHandlers():
+            file_handler.setLevel(logging.DEBUG)
+            file_handler.setFormatter(formatting)
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            stream_handler.setFormatter(formatting)
+            logger.addHandler(file_handler)
+            logger.addHandler(stream_handler)
+            logger.debug("Creating log file %s/leetscraper.log", path.dirname(__file__))
         return logger
 
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
