@@ -118,7 +118,7 @@ class Leetscraper:
         self.logger = self.create_logger()
         if not supported_website:
             message = f"{self.website_name} is not a supported website!"
-            self.logger.debug(message)
+            self.logger.exception(message)
             raise Exception(message)
         if not path.isdir(self.scraped_path):
             try:
@@ -133,7 +133,7 @@ class Leetscraper:
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
             message = "scrape_limit is set to 0!"
-            self.logger.debug(message)
+            self.logger.exception(message)
             raise Exception(message)
         try:
             if platform.startswith("darwin"):
@@ -161,7 +161,7 @@ class Leetscraper:
             self.chrome_version = sub("[^0-9.]+", "", get_version)
         except Exception as error:
             message = f"Could not find chrome version! Error: {error}"
-            self.logger.debug(message)
+            self.logger.exception(message)
             raise Exception(message) from error
         self.errors = 0
         if auto_scrape:
@@ -370,6 +370,7 @@ class Leetscraper:
                 self.scrape_limit if self.scrape_limit else len(needed_problems),
                 self.website_name,
             )
+        logging.shutdown()
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
