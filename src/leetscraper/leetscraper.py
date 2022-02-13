@@ -1,5 +1,6 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
+# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
+# Verify with gpg --verify leetscraper.py.sig leetscraper.py
 # This file is part of leetscraper which is released under GPL-2.0 License.
 
 """Leetscraper, a coding challenge webscraper for leetcode, and other websites!

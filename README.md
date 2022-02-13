@@ -99,3 +99,9 @@ Contributing to this project means you are willing to follow the same conduct th
 This project uses the GPL-2.0 License, As generally speaking, I want you to be able to do whatever you want with this project, But still have the ability to add your changes
 to this codebase should you make improvements or extend support.
 For further details on what this licence allows, please see [LICENSE.md](https://github.com/Pavocracy/leetscraper/blob/main/LICENSE.md "GPL v2 Licence")
+
+***
+
+***Copyright (C) 2022 Pavocracy <pavocracy@pm.me>***
+***Signed using RSA key [9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6](https://github.com/Pavocracy/Pavocracy/blob/main/public.key "Public RSA Key")***
+***Verify with gpg --verify leetscraper.py.sig leetscraper.py***
