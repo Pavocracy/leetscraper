@@ -168,6 +168,7 @@ class Leetscraper:
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(scraped_problems)
             self.scrape_problems(needed_problems)
+        logging.shutdown()
 
     def create_logger(self) -> logging.Logger:
         """Creates the logger. All messages to leetscraper.log, INFO and above to console."""
@@ -186,7 +187,7 @@ class Leetscraper:
         stream_handler.setFormatter(formatting)
         logger.addHandler(file_handler)
         logger.addHandler(stream_handler)
-        logger.info("Creating log file %s/leetscraper.log", self.scraped_path)
+        logger.debug("Creating log file %s/leetscraper.log", path.dirname(__file__))
         return logger
 
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
@@ -370,7 +371,6 @@ class Leetscraper:
                 self.scrape_limit if self.scrape_limit else len(needed_problems),
                 self.website_name,
             )
-        logging.shutdown()
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
