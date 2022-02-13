@@ -1,5 +1,6 @@
 # [leetscraper](https://pypi.org/project/leetscraper/ "leetscraper on pypi") &middot; [![Downloads](https://pepy.tech/badge/leetscraper)](https://pepy.tech/project/leetscraper "Total downloads from pypi") &middot; [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Average time to resolve an issue") &middot; [![Percentage of issues still open](http://isitmaintained.com/badge/open/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Percentage of issues still open")
 leetscraper is a web scraper for leetcode and other coding challenge websites!  
+  
 This scraper currently works for 
 [leetcode.com](https://leetcode.com "leetcode website"), 
 [projecteuler.net](https://projecteuler.net "projecteuler website"), 
