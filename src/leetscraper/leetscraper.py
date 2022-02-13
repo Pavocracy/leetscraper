@@ -177,7 +177,7 @@ class Leetscraper:
             "%(asctime)s [%(levelname)s]: %(message)s", datefmt="%d/%m/%Y %I:%M:%S %p"
         )
         file_handler = logging.FileHandler(
-            f"{path.abspath(__file__)}/leetscraper.log", "a"
+            f"{path.dirname(__file__)}/leetscraper.log", "a"
         )
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatting)
