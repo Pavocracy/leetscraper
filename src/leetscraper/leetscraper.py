@@ -168,7 +168,7 @@ class Leetscraper:
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(scraped_problems)
             self.scrape_problems(needed_problems)
-        logging.shutdown()
+            logging.shutdown()
 
     def create_logger(self) -> logging.Logger:
         """Creates the logger. All messages to leetscraper.log, INFO and above to console."""
