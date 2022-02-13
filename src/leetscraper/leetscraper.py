@@ -370,15 +370,18 @@ class Leetscraper:
                 )
                 problem_name = problem[0].split("/")[0]
             if self.website_name == "codewars.com":
-                difficulty = self.website_options["difficulty"][  # type: ignore[index]
-                    (
-                        int(
-                            soup.find("div", {"class": "inner-small-hex"})  # type: ignore[union-attr]
-                            .get_text()
-                            .split(" ")[0]
+                try:
+                    difficulty = self.website_options["difficulty"][  # type: ignore[index]
+                        (
+                            int(
+                                soup.find("div", {"class": "inner-small-hex"})  # type: ignore[union-attr]
+                                .get_text()
+                                .split(" ")[0]
+                            )
                         )
-                    )
-                ]
+                    ]
+                except Exception:
+                    difficulty = "BETA"  # type: ignore[assignment]
                 problem_description = (
                     soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
                     .get_text()
