@@ -114,17 +114,26 @@ class Leetscraper:
                 "base_url": "https://www.codewars.com/kata/",
                 "problem_description": {"id": "description"},
             }
+        self.logger = self.create_logger()
         if not supported_website:
-            raise Exception(f"{self.website_name} is not a supported website!")
+            message = f"{self.website_name} is not a supported website!"
+            self.logger.exception(message)
+            raise Exception(message)
         if not path.isdir(self.scraped_path):
             try:
                 makedirs(self.scraped_path)
             except Exception as error:
-                print(f"Could not use path {self.scraped_path}: {error}")
-                print(f"Using {getcwd()} instead!")
+                self.logger.warning(  # type: ignore[has-type]
+                    "Could not use path %s!: %s.\nUsing %s instead!",
+                    self.scraped_path,
+                    error,
+                    getcwd(),
+                )
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
-            raise Exception("scrape_limit is set to 0!")
+            message = "scrape_limit is set to 0!"
+            self.logger.exception(message)
+            raise Exception(message)
         try:
             if platform.startswith("darwin"):
                 check_chrome_version = run(
@@ -150,20 +159,23 @@ class Leetscraper:
             get_version = str(check_chrome_version.stdout)
             self.chrome_version = sub("[^0-9.]+", "", get_version)
         except Exception as error:
-            raise Exception(f"Could not find chrome version! Error: {error}") from error
+            message = f"Could not find chrome version! Error: {error}"
+            self.logger.exception(message)
+            raise Exception(message) from error
         self.errors = 0
-        self.logger = self.create_logger()
         if auto_scrape:
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(scraped_problems)
             self.scrape_problems(needed_problems)
 
-    def create_logger(self):
+    def create_logger(self) -> logging.Logger:
         """Creates the logger. All messages to leetscraper.log, INFO and above to console."""
         logger = logging.getLogger("leetscraper")
         logger.setLevel(logging.DEBUG)
-        formatting = logging.Formatter("%(asctime)s [%(levelname)s]: %(message)s")
-        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log")
+        formatting = logging.Formatter(
+            "%(asctime)s [%(levelname)s]: %(message)s", datefmt="%d/%m/%Y %I:%M:%S %p"
+        )
+        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log", "a")
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatting)
         stream_handler = logging.StreamHandler()
@@ -188,7 +200,7 @@ class Leetscraper:
         )
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
-        self.logger.debug("Created webdriver %s for %s", driver.name, self.website_name)
+        self.logger.debug("Created %s webdriver for %s", driver.name, self.website_name)
         return driver
 
     def webdriver_quit(self, driver) -> None:
@@ -334,7 +346,7 @@ class Leetscraper:
             self.webdriver_quit(driver)
             stop = time()
             self.logger.debug(
-                "scraping %s problems for %s took %s seconds",
+                "scraping %s %s problems took %s seconds",
                 self.scrape_limit if self.scrape_limit else len(needed_problems),
                 self.website_name,
                 int(stop - start),
