@@ -18,9 +18,10 @@ It was written with automation in mind. If you wish to use these functions indiv
 See related docstrings for help.
 """
 
+import logging
 from subprocess import run
 from sys import platform
-from time import sleep
+from time import time, sleep
 from json import loads
 from os import getcwd, walk, path, makedirs
 from re import sub
@@ -51,13 +52,13 @@ class Leetscraper:
     """
 
     def __init__(self, **kwargs) -> None:
-        self.supported_website = False
+        supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
         self.scrape_limit = kwargs.get("scrape_limit", None)
         auto_scrape = kwargs.get("auto_scrape", True)
         if self.website_name == "leetcode.com":
-            self.supported_website = True
+            supported_website = True
             self.website_options = {
                 "difficulty": {1: "EASY", 2: "MEDIUM", 3: "HARD"},
                 "api_url": "https://leetcode.com/api/problems/all/",
@@ -67,7 +68,7 @@ class Leetscraper:
                 },
             }
         if self.website_name == "projecteuler.net":
-            self.supported_website = True
+            supported_website = True
             self.website_options = {
                 "difficulty": {33: "EASY", 66: "MEDIUM", 100: "HARD"},
                 "api_url": "https://projecteuler.net/recent",
@@ -75,7 +76,7 @@ class Leetscraper:
                 "problem_description": {"id": "content"},
             }
         if self.website_name == "codechef.com":
-            self.supported_website = True
+            supported_website = True
             self.website_options = {
                 "difficulty": {1: "SCHOOL", 2: "EASY", 3: "MEDIUM", 4: "HARD"},
                 "api_url": "https://www.codechef.com/api/list/problems/",
@@ -83,7 +84,7 @@ class Leetscraper:
                 "problem_description": {"class": "problem-statement"},
             }
         if self.website_name == "hackerrank.com":
-            self.supported_website = True
+            supported_website = True
             self.website_options = {
                 "categories": [
                     "algorithms",
@@ -97,7 +98,7 @@ class Leetscraper:
                 "problem_description": {"class": "problem-statement"},
             }
         if self.website_name == "codewars.com":
-            self.supported_website = True
+            supported_website = True
             self.website_options = {
                 "difficulty": {
                     8: "EASY",
@@ -113,7 +114,7 @@ class Leetscraper:
                 "base_url": "https://www.codewars.com/kata/",
                 "problem_description": {"id": "description"},
             }
-        if not self.supported_website:
+        if not supported_website:
             raise Exception(f"{self.website_name} is not a supported website!")
         if not path.isdir(self.scraped_path):
             try:
@@ -123,7 +124,7 @@ class Leetscraper:
                 print(f"Using {getcwd()} instead!")
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
-            raise Exception(f"scrape_limit is set to 0!")
+            raise Exception("scrape_limit is set to 0!")
         try:
             if platform.startswith("darwin"):
                 check_chrome_version = run(
@@ -151,10 +152,27 @@ class Leetscraper:
         except Exception as error:
             raise Exception(f"Could not find chrome version! Error: {error}") from error
         self.errors = 0
+        self.logger = self.create_logger()
         if auto_scrape:
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(scraped_problems)
             self.scrape_problems(needed_problems)
+
+    def create_logger(self):
+        """Creates the logger. All messages to leetscraper.log, INFO and above to console."""
+        logger = logging.getLogger("leetscraper")
+        logger.setLevel(logging.DEBUG)
+        formatting = logging.Formatter("%(asctime)s [%(levelname)s]: %(message)s")
+        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log")
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatting)
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        stream_handler.setFormatter(formatting)
+        logger.addHandler(file_handler)
+        logger.addHandler(stream_handler)
+        logger.info("Creating log file %s/leetscraper.log", self.scraped_path)
+        return logger
 
     def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
         """Instantiates the webdriver with pre-defined options."""
@@ -170,18 +188,20 @@ class Leetscraper:
         )
         driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
         driver.implicitly_wait(0)
+        self.logger.debug("Created webdriver %s for %s", driver.name, self.website_name)
         return driver
 
     def webdriver_quit(self, driver) -> None:
         """Closes the webdriver."""
-        print(f"Closing {self.website_name} driver")
+        self.logger.debug("Closing %s driver", self.website_name)
         driver.quit()
 
     def scraped_problems(self) -> List[str]:
         """Returns a list of all website problems already scraped in the scraped_path."""
-        print(
-            f"Checking {self.scraped_path} for exsisting {self.website_name} problems"
+        self.logger.info(
+            "Checking %s for existing %s problems", self.scraped_path, self.website_name
         )
+        start = time()
         scraped_problems = []
         for (dirpath, dirnames, filenames) in walk(
             f"{self.scraped_path}/PROBLEMS/{self.website_name}"
@@ -198,11 +218,19 @@ class Leetscraper:
                         scraped_problems.append(file.split(".")[0])
                     if self.website_name == "codewars.com":
                         scraped_problems.append(file.split(".")[0])
+        stop = time()
+        self.logger.debug(
+            "checking for %s scraped_problems in %s took %s seconds",
+            self.website_name,
+            self.scraped_path,
+            int(stop - start),
+        )
         return scraped_problems
 
     def needed_problems(self, scraped_problems: list) -> List[List[str]]:
         """Returns a list of website problems missing from the scraped_path."""
-        print(f"Getting the list of {self.website_name} problems to scrape")
+        self.logger.info("Getting the list of %s problems to scrape", self.website_name)
+        start = time()
         http = PoolManager()
         get_problems = []
         if self.website_name == "leetcode.com":
@@ -264,8 +292,8 @@ class Leetscraper:
                     else:
                         break
         if self.website_name == "codewars.com":
-            print(
-                "***INFO*** codewars can take up to 5 minutes to search all problems!"
+            self.logger.info(
+                "**NOTE** codewars can take up to 5 minutes to search all problems!"
             )
             for i in range(0, 999):
                 request = http.request(
@@ -279,6 +307,12 @@ class Leetscraper:
                             get_problems.append([problem["id"], None])
                 else:
                     break
+        stop = time()
+        self.logger.debug(
+            "getting list of needed_problems for %s took %s seconds",
+            self.website_name,
+            int(stop - start),
+        )
         http.clear()
         return get_problems  # type: ignore[return-value]
 
@@ -288,18 +322,39 @@ class Leetscraper:
             if self.scrape_limit >= len(needed_problems):
                 self.scrape_limit = None
         if needed_problems:
-            print(
-                f"Attempting to scrape {self.scrape_limit if self.scrape_limit else len(needed_problems)} {self.website_name} problems"
+            self.logger.info(
+                "Attempting to scrape %s %s problems",
+                self.scrape_limit if self.scrape_limit else len(needed_problems),
+                self.website_name,
             )
+            start = time()
             driver = self.create_webdriver()
             for problem in tqdm(needed_problems[: self.scrape_limit]):
                 self.create_problem(problem, driver)
             self.webdriver_quit(driver)
+            stop = time()
+            self.logger.debug(
+                "scraping %s problems for %s took %s seconds",
+                self.scrape_limit if self.scrape_limit else len(needed_problems),
+                self.website_name,
+                int(stop - start),
+            )
         else:
-            print(f"No {self.website_name} problems to scrape")
-        print(
-            f"Successfully scraped {(self.scrape_limit if self.scrape_limit else len(needed_problems)) - self.errors} {self.website_name} Problems"
-        )
+            self.logger.warning("No %s problems to scrape", self.website_name)
+        if self.errors:
+            self.logger.warning(
+                "Scraped %s problems, but %s problems failed! Check leetscraper.log for failed scrapes.",
+                self.scrape_limit
+                if self.scrape_limit
+                else len(needed_problems) - self.errors,
+                self.errors,
+            )
+        else:
+            self.logger.info(
+                "Successfully scraped %s %s problems",
+                self.scrape_limit if self.scrape_limit else len(needed_problems),
+                self.website_name,
+            )
 
     def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
@@ -406,7 +461,10 @@ class Leetscraper:
                 file.writelines(self.website_options["base_url"] + problem[0] + "\n\n")  # type: ignore[operator]
                 file.writelines(problem_description + "\n")
         except Exception as error:
-            print(
-                f'\nError occurred while scraping {self.website_options["base_url"]}{problem[0]}: {error}'
+            self.logger.debug(
+                "\nError occurred while scraping %s%s: %s",
+                self.website_options["base_url"],
+                problem[0],
+                error,
             )
             self.errors += 1
