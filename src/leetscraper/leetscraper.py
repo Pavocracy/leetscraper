@@ -1,4 +1,5 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
+# RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is part of leetscraper which is released under GPL-2.0 License.
 
 """Leetscraper, a coding challenge webscraper for leetcode, and other websites!
@@ -175,7 +176,7 @@ class Leetscraper:
         formatting = logging.Formatter(
             "%(asctime)s [%(levelname)s]: %(message)s", datefmt="%d/%m/%Y %I:%M:%S %p"
         )
-        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log", "a")
+        file_handler = logging.FileHandler(f"{self.scraped_path}/leetscraper.log")
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatting)
         stream_handler = logging.StreamHandler()
