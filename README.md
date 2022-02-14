@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
 How fast and reliable this scraper performs will change depending on things like which website you are scraping and your internet connection. 
 There is also no guarantee that as these websites add new problems, that they will use the same class names in their html tags. Expect things 
-to break and for some requests to fail. leetsraper.log will contain urls of failed scrapes if you wish to grab these manually, or run the scraper
+to break and for some requests to fail. leetscraper.log will contain urls of failed scrapes if you wish to grab these manually, or run the scraper
 again and see if the failures were just timeouts or dropped requests. Your mileage absolutely WILL vary, but as a rough point of reference of what you can expect, here is the results of a test scrape.  
   
  *10 hours 23 minutes 41 seconds to scrape 15665 problems from 5 websites with an error rate of 0.54%*
