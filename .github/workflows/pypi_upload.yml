@@ -1,4 +1,4 @@
-name: Publish package to pypi
+name: Publish package to PyPI
 
 on:
   release:
@@ -15,7 +15,7 @@ jobs:
     - name: 'Setup Python'
       uses: actions/setup-python@v2
       with:
-        python-version: 3.7.12
+        python-version: 3.7
 
     - name: Install dependencies
       run: |
@@ -28,9 +28,9 @@ jobs:
         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-    - name: Publish
+    - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run:
-        twine upload dist/* -s -i pavocracy@pm.me
+        twine upload dist/* --sign --identity pavocracy@pm.me
