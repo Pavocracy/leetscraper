@@ -63,7 +63,6 @@ if __name__ == "__main__":
         "hackerrank.com",
         "codewars.com",
     ]
-
     for site in websites:
         Leetscraper(website_name=site)
 ```
