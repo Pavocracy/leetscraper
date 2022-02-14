@@ -22,7 +22,7 @@ See related docstrings for help.
 import logging
 from subprocess import run
 from sys import platform
-from time import time, sleep
+from time import time
 from json import loads
 from os import getcwd, walk, path, makedirs
 from re import sub
@@ -352,7 +352,9 @@ class Leetscraper:
             stop = time()
             self.logger.debug(
                 "Scraping %s %s problems took %s seconds",
-                self.scrape_limit if self.scrape_limit else len(needed_problems),
+                self.scrape_limit - self.errors
+                if self.scrape_limit
+                else len(needed_problems) - self.errors,
                 self.website_name,
                 int(stop - start),
             )
@@ -361,7 +363,7 @@ class Leetscraper:
         if self.errors:
             self.logger.warning(
                 "Scraped %s problems, but %s problems failed! Check leetscraper.log for failed scrapes.",
-                self.scrape_limit
+                self.scrape_limit - self.errors
                 if self.scrape_limit
                 else len(needed_problems) - self.errors,
                 self.errors,
@@ -381,11 +383,10 @@ class Leetscraper:
         """
         try:
             driver.get(self.website_options["base_url"] + problem[0])
-            WebDriverWait(driver, 10).until(
+            WebDriverWait(driver, 3).until(
                 EC.invisibility_of_element_located((By.ID, "initial-loading")),
                 "Timeout limit reached",
             )
-            sleep(1)
             html = driver.page_source
             soup = BeautifulSoup(html, "html.parser")
             if self.website_name == "leetcode.com":
