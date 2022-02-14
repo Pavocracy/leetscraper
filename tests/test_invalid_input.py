@@ -1,5 +1,5 @@
 import unittest
-from src.leetscraper import Leetscraper
+from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
 class TestLeetscraper(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 from shutil import rmtree
 from os import path, walk
-from src.leetscraper import Leetscraper
+from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
 class TestLeetscraper(unittest.TestCase):
