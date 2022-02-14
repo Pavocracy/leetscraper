@@ -24,5 +24,7 @@ A clear and concise description of what you expected to happen.
  - python version used
  - leetscraper version
 
+
 ***Please attach your leetscraper.log file to this bug report***
-***You can find the log file in the site-packages\leetscraper directory***
+***You can find the log file where leetscraper was imported from***
+***In most cases this will be site-packages/leetscraper directory***
