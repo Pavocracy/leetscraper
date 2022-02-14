@@ -27,7 +27,7 @@ If you want to manually fix this instead, you can use `pip install types-library
 ```python
 pylint ./src
 ```
-- Use pylint to ensure there is a general level of "best practice" used. You would be surprised at how often this can give some very good suggestions to make things more readable.  
+- Use pylint to ensure there is a general level of "best practice" used. You would be surprised at how often this can give some very good suggestions to make things more readable. 
 Anything over a score of 9/10 will be accepted into the main branch :)
 
 ```python
