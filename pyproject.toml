@@ -7,3 +7,16 @@ build-backend = "setuptools.build_meta"
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = "line-too-long"
+
+[tool.pylint.'MASTER']
+fail-under = 9.0
+
+[tool.mypy]
+python_version = 3.7
+warn_unused_ignores = true
+show_error_codes = true
+disable_error_code = [
+    "union-attr",
+    "attr-defined",
+    "arg-type"
+]

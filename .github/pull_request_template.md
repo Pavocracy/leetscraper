@@ -15,7 +15,7 @@ Please delete options that are not relevant.
 
 - [ ] I have formatted my code with black
 - [ ] I have checked my code with mypy.
-- [ ] I have check my code with pylint
+- [ ] I have checked my code with pylint
 - [ ] I have ran the unit tests and they all pass
 - [ ] I have added unit tests for this new feature/supported website (if required)
 - [ ] I have made corresponding changes to the documentation (if required)
