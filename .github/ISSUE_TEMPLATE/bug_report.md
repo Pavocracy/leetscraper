@@ -23,3 +23,5 @@ A clear and concise description of what you expected to happen.
  - operating system (windows, ubuntu ect)
  - python version used
  - leetscraper version
+
+***Please attach your leetscraper.log file to this bug report***

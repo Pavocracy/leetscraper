@@ -35,7 +35,7 @@ jobs:
       run: |
         black ./src/ --check
         mypy ./src/
-        pylint ./src/ --fail-under=9 
+        pylint ./src/
 
     - name: 'Run Unit Tests'
       run:

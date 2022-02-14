@@ -124,7 +124,7 @@ class Leetscraper:
             try:
                 makedirs(self.scraped_path)
             except Exception as error:
-                self.logger.warning(  # type: ignore[has-type]
+                self.logger.warning(
                     "Could not use path %s!: %s.\nUsing %s instead!",
                     self.scraped_path,
                     error,
@@ -179,7 +179,7 @@ class Leetscraper:
         )
         if not logger.hasHandlers():
             file_handler = logging.FileHandler(
-                f"{path.dirname(__file__)}/leetscraper.log", "a"
+                f"{self.scraped_path}/leetscraper.log", "a"
             )
             file_handler.setLevel(logging.DEBUG)
             file_handler.setFormatter(formatting)
@@ -188,10 +188,10 @@ class Leetscraper:
             stream_handler.setFormatter(formatting)
             logger.addHandler(file_handler)
             logger.addHandler(stream_handler)
-            logger.debug("Creating log file %s/leetscraper.log", path.dirname(__file__))
+            logger.debug("Creating log file %s/leetscraper.log", self.scraped_path)
         return logger
 
-    def create_webdriver(self) -> webdriver:  # type: ignore[valid-type]
+    def create_webdriver(self) -> webdriver.chrome.webdriver.WebDriver:
         """Instantiates the webdriver with pre-defined options."""
         options = Options()
         options.headless = True
@@ -203,7 +203,7 @@ class Leetscraper:
         service = Service(
             ChromeDriverManager(log_level=0, print_first_line=False).install()
         )
-        driver = webdriver.Chrome(service=service, options=options)  # type: ignore[operator, call-arg]
+        driver = webdriver.Chrome(service=service, options=options)  # type: ignore[call-arg]
         driver.implicitly_wait(0)
         self.logger.debug("Created %s webdriver for %s", driver.name, self.website_name)
         return driver
@@ -269,12 +269,12 @@ class Leetscraper:
         if self.website_name == "projecteuler.net":
             request = http.request("GET", self.website_options["api_url"])
             soup = BeautifulSoup(request.data, "html.parser")
-            data = soup.find("td", {"class": "id_column"}).get_text()  # type: ignore[union-attr]
+            data = soup.find("td", {"class": "id_column"}).get_text()
             for i in range(1, int(data) + 1):
                 if str(i) not in scraped_problems:
-                    get_problems.append([str(i), None])  # type: ignore[list-item]
+                    get_problems.append([str(i), None])
         if self.website_name == "codechef.com":
-            for value in self.website_options["difficulty"].values():  # type: ignore[attr-defined]
+            for value in self.website_options["difficulty"].values():
                 request = http.request(
                     "GET",
                     self.website_options["api_url"] + value.lower() + "?limit=999",
@@ -282,7 +282,7 @@ class Leetscraper:
                 data = loads(request.data.decode("utf-8"))
                 for problem in data["data"]:
                     if problem["code"] not in scraped_problems:
-                        get_problems.append([problem["code"], value])  # type: ignore[list-item]
+                        get_problems.append([problem["code"], value])
         if self.website_name == "hackerrank.com":
             headers = {}
             chrome_version = f"Chrome/{self.chrome_version}"
@@ -331,7 +331,7 @@ class Leetscraper:
             int(stop - start),
         )
         http.clear()
-        return get_problems  # type: ignore[return-value]
+        return get_problems
 
     def scrape_problems(self, needed_problems: List[List[str]]) -> None:
         """Scrapes needed_problems limited by scrape_limit. (All problems if scrape_limit not set)"""
@@ -373,29 +373,31 @@ class Leetscraper:
                 self.website_name,
             )
 
-    def create_problem(self, problem: List[str], driver: webdriver) -> None:  # type: ignore[valid-type]
+    def create_problem(
+        self, problem: List[str], driver: webdriver.chrome.webdriver.WebDriver
+    ) -> None:
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
         Creates files in scraped_path/website_name/DIFFICULTY/problem.md
         """
         try:
-            driver.get(self.website_options["base_url"] + problem[0])  # type: ignore[operator, attr-defined]
+            driver.get(self.website_options["base_url"] + problem[0])  # type: ignore[operator]
             WebDriverWait(driver, 10).until(
                 EC.invisibility_of_element_located((By.ID, "initial-loading")),
                 "Timeout limit reached",
             )
             sleep(1)
-            html = driver.page_source  # type: ignore[attr-defined]
+            html = driver.page_source
             soup = BeautifulSoup(html, "html.parser")
             if self.website_name == "leetcode.com":
                 problem_description = (
-                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    soup.find("div", self.website_options["problem_description"])
                     .get_text()
                     .strip()
                 )
                 problem_name = problem[0]
             if self.website_name == "projecteuler.net":
                 problem_description = (
-                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    soup.find("div", self.website_options["problem_description"])
                     .get_text()
                     .strip()
                 )
@@ -412,18 +414,16 @@ class Leetscraper:
                     )
                 except IndexError:
                     difficulty = 100
-                for key, value in self.website_options["difficulty"].items():  # type: ignore[attr-defined]
+                for key, value in self.website_options["difficulty"].items():
                     if int(difficulty) <= key:
                         problem[1] = value
                         break
                 problem_description = (
-                    soup.find("div", {"class": "problem_content"})  # type: ignore[union-attr]
-                    .get_text()
-                    .strip()
+                    soup.find("div", {"class": "problem_content"}).get_text().strip()
                 )
             if self.website_name == "codechef.com":
                 problem_description = (
-                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    soup.find("div", self.website_options["problem_description"])
                     .get_text()
                     .split("Author:")[0]
                     .strip()
@@ -439,7 +439,7 @@ class Leetscraper:
                 problem_name = problem[0] + f"-{problem_name}"
             if self.website_name == "hackerrank.com":
                 problem_description = (
-                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    soup.find("div", self.website_options["problem_description"])
                     .get_text()
                     .strip()
                 )
@@ -449,7 +449,7 @@ class Leetscraper:
                     difficulty = self.website_options["difficulty"][  # type: ignore[index]
                         (
                             int(
-                                soup.find("div", {"class": "inner-small-hex"})  # type: ignore[union-attr]
+                                soup.find("div", {"class": "inner-small-hex"})
                                 .get_text()
                                 .split(" ")[0]
                             )
@@ -458,12 +458,12 @@ class Leetscraper:
                 except Exception:
                     difficulty = "BETA"  # type: ignore[assignment]
                 problem_description = (
-                    soup.find("div", self.website_options["problem_description"])  # type: ignore[union-attr, arg-type]
+                    soup.find("div", self.website_options["problem_description"])
                     .get_text()
                     .strip()
                 )
                 problem_name = problem[0]
-                problem[1] = difficulty  # type: ignore [call-overload]
+                problem[1] = difficulty  # type: ignore[call-overload]
             if not path.isdir(
                 f"{self.scraped_path}/PROBLEMS/{self.website_name}/{problem[1]}/"
             ):
