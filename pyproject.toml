@@ -15,8 +15,4 @@ fail-under = 9.0
 python_version = 3.7
 warn_unused_ignores = true
 show_error_codes = true
-disable_error_code = [
-    "union-attr",
-    "attr-defined",
-    "arg-type"
-]
+disable_error_code = "union-attr"

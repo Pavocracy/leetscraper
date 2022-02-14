@@ -52,7 +52,7 @@ class Leetscraper:
     being scraped automatically and saved to the current working directory.
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs):
         supported_website = False
         self.website_name = kwargs.get("website_name", "leetcode.com")
         self.scraped_path = kwargs.get("scraped_path", getcwd())
@@ -125,14 +125,14 @@ class Leetscraper:
                 makedirs(self.scraped_path)
             except Exception as error:
                 self.logger.warning(
-                    "Could not use path %s!: %s.\nUsing %s instead!",
+                    "Could not use path %s! %s. Using %s instead!",
                     self.scraped_path,
                     error,
                     getcwd(),
                 )
                 self.scraped_path = getcwd()
         if self.scrape_limit == 0:
-            message = "scrape_limit is set to 0!"
+            message = "Scrape_limit is set to 0!"
             self.logger.exception(message)
             raise Exception(message)
         try:
@@ -160,7 +160,7 @@ class Leetscraper:
             get_version = str(check_chrome_version.stdout)
             self.chrome_version = sub("[^0-9.]+", "", get_version)
         except Exception as error:
-            message = f"Could not find chrome version! Error: {error}"
+            message = f"Could not find chrome version! {error}"
             self.logger.exception(message)
             raise Exception(message) from error
         self.errors = 0
@@ -188,7 +188,7 @@ class Leetscraper:
             stream_handler.setFormatter(formatting)
             logger.addHandler(file_handler)
             logger.addHandler(stream_handler)
-            logger.debug("Creating log file %s/leetscraper.log", path.dirname(__file__))
+            logger.debug("Log file: %s/leetscraper.log", path.dirname(__file__))
         return logger
 
     def create_webdriver(self) -> webdriver.chrome.webdriver.WebDriver:
@@ -208,14 +208,14 @@ class Leetscraper:
         self.logger.debug("Created %s webdriver for %s", driver.name, self.website_name)
         return driver
 
-    def webdriver_quit(self, driver) -> None:
+    def webdriver_quit(self, driver):
         """Closes the webdriver."""
         self.logger.debug("Closing %s driver", self.website_name)
         driver.quit()
 
     def scraped_problems(self) -> List[str]:
         """Returns a list of all website problems already scraped in the scraped_path."""
-        self.logger.info(
+        self.logger.debug(
             "Checking %s for existing %s problems", self.scraped_path, self.website_name
         )
         start = time()
@@ -237,7 +237,7 @@ class Leetscraper:
                         scraped_problems.append(file.split(".")[0])
         stop = time()
         self.logger.debug(
-            "checking for %s scraped_problems in %s took %s seconds",
+            "Checking for %s scraped_problems in %s took %s seconds",
             self.website_name,
             self.scraped_path,
             int(stop - start),
@@ -261,7 +261,7 @@ class Leetscraper:
                     get_problems.append(
                         [
                             problem["stat"]["question__title_slug"],
-                            self.website_options["difficulty"][  # type: ignore[index]
+                            self.website_options["difficulty"][
                                 problem["difficulty"]["level"]
                             ],
                         ]
@@ -291,7 +291,7 @@ class Leetscraper:
                 for i in range(0, 1001, 50):
                     request = http.request(
                         "GET",
-                        self.website_options["api_url"]  # type: ignore[operator]
+                        self.website_options["api_url"]
                         + category
                         + f"/challenges?offset={i}&limit=50",
                         headers=headers,
@@ -310,11 +310,11 @@ class Leetscraper:
                         break
         if self.website_name == "codewars.com":
             self.logger.info(
-                "**NOTE** codewars can take up to 5 minutes to search all problems!"
+                "**NOTE** codewars can take up to 5 minutes to find all problems!"
             )
             for i in range(0, 999):
                 request = http.request(
-                    "GET", self.website_options["base_url"] + f"?page={i}"  # type: ignore[operator]
+                    "GET", self.website_options["base_url"] + f"?page={i}"
                 )
                 soup = BeautifulSoup(request.data, "html.parser")
                 data = soup.find_all("div", {"class": "list-item-kata"})
@@ -326,14 +326,14 @@ class Leetscraper:
                     break
         stop = time()
         self.logger.debug(
-            "getting list of needed_problems for %s took %s seconds",
+            "Getting list of needed_problems for %s took %s seconds",
             self.website_name,
             int(stop - start),
         )
         http.clear()
         return get_problems
 
-    def scrape_problems(self, needed_problems: List[List[str]]) -> None:
+    def scrape_problems(self, needed_problems: List[List[str]]):
         """Scrapes needed_problems limited by scrape_limit. (All problems if scrape_limit not set)"""
         if self.scrape_limit:
             if self.scrape_limit >= len(needed_problems):
@@ -351,7 +351,7 @@ class Leetscraper:
             self.webdriver_quit(driver)
             stop = time()
             self.logger.debug(
-                "scraping %s %s problems took %s seconds",
+                "Scraping %s %s problems took %s seconds",
                 self.scrape_limit if self.scrape_limit else len(needed_problems),
                 self.website_name,
                 int(stop - start),
@@ -375,12 +375,12 @@ class Leetscraper:
 
     def create_problem(
         self, problem: List[str], driver: webdriver.chrome.webdriver.WebDriver
-    ) -> None:
+    ):
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
         Creates files in scraped_path/website_name/DIFFICULTY/problem.md
         """
         try:
-            driver.get(self.website_options["base_url"] + problem[0])  # type: ignore[operator]
+            driver.get(self.website_options["base_url"] + problem[0])
             WebDriverWait(driver, 10).until(
                 EC.invisibility_of_element_located((By.ID, "initial-loading")),
                 "Timeout limit reached",
@@ -446,7 +446,7 @@ class Leetscraper:
                 problem_name = problem[0].split("/")[0]
             if self.website_name == "codewars.com":
                 try:
-                    difficulty = self.website_options["difficulty"][  # type: ignore[index]
+                    difficulty = self.website_options["difficulty"][
                         (
                             int(
                                 soup.find("div", {"class": "inner-small-hex"})
@@ -475,11 +475,11 @@ class Leetscraper:
                 "w",
                 encoding="utf-8",
             ) as file:
-                file.writelines(self.website_options["base_url"] + problem[0] + "\n\n")  # type: ignore[operator]
+                file.writelines(self.website_options["base_url"] + problem[0] + "\n\n")
                 file.writelines(problem_description + "\n")
         except Exception as error:
             self.logger.debug(
-                "\nError occurred while scraping %s%s: %s",
+                "Failed to scrape %s%s %s",
                 self.website_options["base_url"],
                 problem[0],
                 error,
