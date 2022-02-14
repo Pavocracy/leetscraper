@@ -67,10 +67,43 @@ if __name__ == "__main__":
         Leetscraper(website_name=site)
 ```
 
+### Information
+
+How fast and reliable this scraper performs will change depending on things like which website you are scraping and your internet connection. 
+There is also no guarantee that as these websites add new problems, that they will use the same class names in their html tags. Expect things 
+to break and for some requests to fail. leetsraper.log will contain urls of failed scrapes if you wish to grab these manually, or run the scraper
+again and see if the failures were just timeouts or dropped requests. Your mileage absolutely WILL vary, but as a rough point of reference of what you can expect, here is the results of a test scrape.  
+  
+ *10 hours 23 minutes 41 seconds to scrape 15665 problems from 5 websites with an error rate of 0.54%*
+```
+14/02/2022 12:52:53 PM [INFO]: Getting the list of leetcode.com problems to scrape
+14/02/2022 12:52:54 PM [INFO]: Attempting to scrape 1694 leetcode.com problems
+14/02/2022 02:51:05 PM [DEBUG]: Scraping 1693 leetcode.com problems took 7088 seconds
+14/02/2022 02:51:05 PM [WARNING]: Scraped 1693 problems, but 1 problems failed! Check leetscraper.log for failed scrapes.
+14/02/2022 02:51:05 PM [INFO]: Getting the list of projecteuler.net problems to scrape
+14/02/2022 02:51:07 PM [INFO]: Attempting to scrape 785 projecteuler.net problems
+14/02/2022 03:16:16 PM [DEBUG]: Scraping 785 projecteuler.net problems took 1506 seconds
+14/02/2022 03:16:16 PM [INFO]: Successfully scraped 785 projecteuler.net problems
+14/02/2022 03:16:16 PM [INFO]: Getting the list of codechef.com problems to scrape
+14/02/2022 03:16:32 PM [INFO]: Attempting to scrape 2973 codechef.com problems
+14/02/2022 04:44:35 PM [DEBUG]: Scraping 2892 codechef.com problems took 5280 seconds
+14/02/2022 04:44:35 PM [WARNING]: Scraped 2892 problems, but 81 problems failed! Check leetscraper.log for failed scrapes.
+14/02/2022 04:44:35 PM [INFO]: Getting the list of hackerrank.com problems to scrape
+14/02/2022 04:45:14 PM [INFO]: Attempting to scrape 1089 hackerrank.com problems
+14/02/2022 05:38:43 PM [DEBUG]: Scraping 1086 hackerrank.com problems took 3207 seconds
+14/02/2022 05:38:43 PM [WARNING]: Scraped 1086 problems, but 3 problems failed! Check leetscraper.log for failed scrapes.
+14/02/2022 05:38:43 PM [INFO]: Getting the list of codewars.com problems to scrape
+14/02/2022 05:38:43 PM [INFO]: **NOTE** codewars can take up to 5 minutes to find all problems!
+14/02/2022 05:43:30 PM [INFO]: Attempting to scrape 9209 codewars.com problems
+14/02/2022 11:23:33 PM [DEBUG]: Scraping 9209 codewars.com problems took 20340 seconds
+14/02/2022 11:23:33 PM [INFO]: Successfully scraped 9209 codewars.com problems
+```
+
 You can pass through different arguments for different websites to control exactly how the scraper behaves.
 You can also disable scraping problems at time of instantiation by using the kwarg `auto_scrape=False`.
 This allows you to call the class functions in different order, or one at a time.
 This will change how the scraper works, as its designed to look in a directory for already scraped problems to avoid duplicates.
+This scraper was built with automation in mind. Run the script and forget, and come back to scraped coding problems.
 I would encourage you to look at the function docstrings if you wish to use this scraper outside of its intended automated use.
 
 ***
