@@ -35,11 +35,11 @@ body:
 - type: textarea
   attributes:
     label: Environment details
-    value: |
-      - OS:
-      - python:
-      - leetscraper:
-    render: markdown
+    placeholder: |
+      Environment example:
+      - OS: Ubuntu 20.04
+      - python: 3.7.12
+      - leetscraper: 1.4.0
   validations:
     required: true
 - type: textarea
