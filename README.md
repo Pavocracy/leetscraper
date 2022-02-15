@@ -74,7 +74,7 @@ There is also no guarantee that as these websites add new problems, that they wi
 to break and for some requests to fail. leetscraper.log will contain urls of failed scrapes if you wish to grab these manually, or run the scraper
 again and see if the failures were just timeouts or dropped requests. Your mileage absolutely WILL vary, but as a rough point of reference of what you can expect, here is the results of a test scrape.  
   
- *10 hours 23 minutes 41 seconds to scrape 15665 problems from 5 websites with an error rate of 0.54%*
+ *10 hours, 30 minutes and 40 seconds to scrape 15665 problems from 5 websites with an error rate of 0.54%*
 ```
 14/02/2022 12:52:53 PM [INFO]: Getting the list of leetcode.com problems to scrape
 14/02/2022 12:52:54 PM [INFO]: Attempting to scrape 1694 leetcode.com problems
