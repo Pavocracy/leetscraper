@@ -1,9 +1,12 @@
-name: 'Pull Requests'
+name: 'Tests'
 
-on: pull_request
+on: 
+  pull_request:
+  schedule:
+    - cron: '00 00 * * 1'
 
 jobs:
-  run-checks:
+  run-tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
