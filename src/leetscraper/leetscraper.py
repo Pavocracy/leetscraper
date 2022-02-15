@@ -360,6 +360,7 @@ class Leetscraper:
             )
         else:
             self.logger.warning("No %s problems to scrape", self.website_name)
+            return
         if self.errors:
             self.logger.warning(
                 "Scraped %s problems, but %s problems failed! Check leetscraper.log for failed scrapes.",
