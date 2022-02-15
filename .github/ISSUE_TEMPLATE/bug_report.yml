@@ -26,7 +26,6 @@ body:
 - type: textarea
   attributes:
     label: Steps To Reproduce
-    description: Steps to reproduce the behavior.
     placeholder: |
       1. Do this
       2: Do that
