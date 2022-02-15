@@ -3,6 +3,9 @@ name: 'Testing'
 on: 
   schedule:
     - cron: '00 00 * * 1'
+  workflow_run:
+    workflows: [Release Drafter]
+    types: [completed]
 
 jobs:
   run-tests:
