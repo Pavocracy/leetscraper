@@ -14,13 +14,13 @@ body:
 - type: textarea
   attributes:
     label: Describe the bug
-    description: A clear and concise description of what the bug is.
+    placeholder: A clear and concise description of what the bug is.
   validations:
     required: true
 - type: textarea
   attributes:
     label: Expected Behavior
-    description: A clear and concise description of what you expected to happen.
+    placeholder: A clear and concise description of what you expected to happen.
   validations:
     required: true
 - type: textarea
@@ -35,9 +35,9 @@ body:
     required: true
 - type: textarea
   attributes:
-    label: Environment
+    label: Environment details
     description: |
-      Environment:
+      Environment example:
         - OS: Ubuntu 20.04
         - python: 3.7.12
         - leetscraper: 1.4.0
@@ -51,7 +51,7 @@ body:
 - type: textarea
   attributes:
     label: Anything else?
-    description: |
+    placeholder: |
       Please attach your leetscraper.log file to this bug report. 
       You can find the log file where leetscraper was imported from. 
       In most cases this will be site-packages/leetscraper directory.  

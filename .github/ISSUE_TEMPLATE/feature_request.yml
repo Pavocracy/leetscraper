@@ -14,18 +14,18 @@ body:
 - type: textarea
   attributes:
     label: Feature you would like to see in leetscraper
-    description: A clear and concise description of what the functionality is that you want, or an additional website you would like supported.
+    placeholder: A clear and concise description of what the functionality is that you want, or an additional website you would like supported.
   validations:
     required: true
 - type: textarea
   attributes:
     label: Is this requested feature relevant for this project?
-    description: Quick explanation of why you think this makes sense to be added to this project. 
+    placeholder: Quick explanation of why you think this makes sense to be added to this project. 
   validations:
     required: true
 - type: textarea
   attributes:
     label: Do you have any experience or working code examples to help implement this feature?
-    description: If you have already tried to do this yourself, or know technical details of whats required and willing to share, please do so!
+    placeholder: If you have already tried to do this yourself, or know technical details of whats required and willing to share, please do so!
   validations:
     required: false
