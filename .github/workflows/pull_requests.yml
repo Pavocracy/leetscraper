@@ -1,11 +1,9 @@
-name: 'Testing'
+name: 'Pull Request Checks'
 
-on: 
-  schedule:
-    - cron: '00 00 * * 0'
+on: pull_request
 
 jobs:
-  run-tests:
+  run-checks:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -13,7 +11,7 @@ jobs:
         python: ["3.7", "3.8", "3.9", "3.10"]
     
     steps:
-    - name: 'Checkout Repo' 
+    - name: 'Checkout PR' 
       uses: actions/checkout@v2
 
     - name: 'Setup Python'

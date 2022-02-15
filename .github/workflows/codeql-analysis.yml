@@ -35,9 +35,9 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
+    # If the Autobuild fails above, remove it and uncomment the following three lines
+    # and modify them (or add more) to build your code if your project
+    # uses a compiled language
 
     #- run: |
     #   make bootstrap
