@@ -40,7 +40,13 @@ class TestLeetscraper(unittest.TestCase):
         self.assertEqual(
             len(scraped_problems), (leetscraper.scrape_limit - leetscraper.errors)
         )
-        rmtree(leetscraper.scraped_path)
+
+        # Check scraped_problems
+        scraped_problems = leetscraper.scraped_problems()
+        self.assertGreater(len(scraped_problems), 0)
+
+        # Cleanup problems
+        rmtree(leetscraper.scraped_path + "/PROBLEMS")
 
 
 if __name__ == "__main__":

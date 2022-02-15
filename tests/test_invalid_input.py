@@ -11,6 +11,10 @@ class TestLeetscraper(unittest.TestCase):
         with self.assertRaises(Exception):
             Leetscraper(scrape_limit="five")
 
+    def test_scrape_limit_zero(self):
+        with self.assertRaises(Exception):
+            Leetscraper(scrape_limit=0)
+
 
 if __name__ == "__main__":
     unittest.main()
