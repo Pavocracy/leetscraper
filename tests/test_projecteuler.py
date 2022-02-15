@@ -43,7 +43,7 @@ class TestLeetscraper(unittest.TestCase):
 
         # Check scraped_problems
         scraped_problems = leetscraper.scraped_problems()
-        self.assertGreater(scraped_problems, 0)
+        self.assertGreater(len(scraped_problems), 0)
 
         # Cleanup problems
         rmtree(leetscraper.scraped_path + "/PROBLEMS")
