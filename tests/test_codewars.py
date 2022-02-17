@@ -5,7 +5,7 @@ from src.leetscraper import Leetscraper  # type: ignore[import]
 
 
 class TestLeetscraper(unittest.TestCase):
-    def test_codechef(self):
+    def test_codewars(self):
         leetscraper = Leetscraper(
             website_name="codewars.com",
             scraped_path="./unittesting",
@@ -27,7 +27,7 @@ class TestLeetscraper(unittest.TestCase):
         # Check needed_problems
         scraped_problems = []
         needed_problems = leetscraper.needed_problems(scraped_problems)
-        self.assertGreater(len(needed_problems), 0)
+        self.assertGreater(len(needed_problems), 9000)
 
         # Check scrape_problems with scrape_limit
         leetscraper.scrape_problems(needed_problems)
@@ -43,7 +43,9 @@ class TestLeetscraper(unittest.TestCase):
 
         # Check scraped_problems
         scraped_problems = leetscraper.scraped_problems()
-        self.assertGreater(len(scraped_problems), 0)
+        self.assertEqual(
+            len(scraped_problems), (leetscraper.scrape_limit - leetscraper.errors)
+        )
 
         # Cleanup problems
         rmtree(leetscraper.scraped_path + "/PROBLEMS")
