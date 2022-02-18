@@ -358,11 +358,11 @@ class Leetscraper:
                 self.create_problem(problem, driver)
             self.webdriver_quit(driver)
             stop = time()
+            if not self.scrape_limit:
+                self.scrape_limit = len(needed_problems)
             self.logger.debug(
                 "Scraping %s %s problems took %s seconds",
-                self.scrape_limit - self.errors
-                if self.scrape_limit
-                else len(needed_problems) - self.errors,
+                self.scrape_limit - self.errors,
                 self.website_name,
                 int(stop - start),
             )
