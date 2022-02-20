@@ -1,3 +1,5 @@
+name: 'Build on Release'
+
 on:
   push:
     # regex match for semantic version tags
