@@ -1,8 +1,8 @@
 name: 'Publish package to PyPI'
 
-  workflow_run:
-    workflows: ["build"]
-    types: [completed]
+workflow_run:
+  workflows: ["build"]
+  types: [completed]
 
 jobs:
   publish:
