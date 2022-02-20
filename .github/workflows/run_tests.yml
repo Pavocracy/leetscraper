@@ -1,14 +1,14 @@
 name: 'Testing'
 
-on: 
-  schedule:
-    - cron: '00 00 * * 1'
-  workflow_run:
-    workflows: [Release Drafter]
-    types: [completed]
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
   run-tests:
+  if: github.event.pull_request.merged == true
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
