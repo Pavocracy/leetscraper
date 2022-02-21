@@ -138,3 +138,4 @@ For further details on what this licence allows, please see [LICENSE.md](https:/
 
 ***Copyright (C) 2022 Pavocracy <pavocracy@pm.me>***  
 ***Signed using RSA key [9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6](https://github.com/Pavocracy/Pavocracy/blob/main/public.key "Public RSA Key")***  
+*See related docs for [how to verify](https://github.com/Pavocracy/leetscraper/blob/main/docs/VERIFY_SIGNED_PACKAGES.md) signed packages*
