@@ -257,80 +257,85 @@ class Leetscraper:
         start = time()
         http = PoolManager()
         get_problems = []
-        if self.website_name == "leetcode.com":
-            request = http.request("GET", self.website_options["api_url"])
-            data = loads(request.data.decode("utf-8"))
-            for problem in data["stat_status_pairs"]:
-                if (
-                    problem["stat"]["question__title_slug"] not in scraped_problems
-                    and problem["paid_only"] is not True
-                ):
-                    get_problems.append(
-                        [
-                            problem["stat"]["question__title_slug"],
-                            self.website_options["difficulty"][
-                                problem["difficulty"]["level"]
-                            ],
-                        ]
-                    )
-        if self.website_name == "projecteuler.net":
-            request = http.request("GET", self.website_options["api_url"])
-            soup = BeautifulSoup(request.data, "html.parser")
-            data = soup.find("td", {"class": "id_column"}).get_text()
-            for i in range(1, int(data) + 1):
-                if str(i) not in scraped_problems:
-                    get_problems.append([str(i), None])
-        if self.website_name == "codechef.com":
-            for value in self.website_options["difficulty"].values():
-                request = http.request(
-                    "GET",
-                    self.website_options["api_url"] + value.lower() + "?limit=999",
-                )
+        try:
+            if self.website_name == "leetcode.com":
+                request = http.request("GET", self.website_options["api_url"])
                 data = loads(request.data.decode("utf-8"))
-                for problem in data["data"]:
-                    if problem["code"] not in scraped_problems:
-                        get_problems.append([problem["code"], value])
-        if self.website_name == "hackerrank.com":
-            headers = {}
-            chrome_version = f"Chrome/{self.chrome_version}"
-            headers["User-Agent"] = chrome_version
-            for category in self.website_options["categories"]:
-                for i in range(0, 1001, 50):
+                for problem in data["stat_status_pairs"]:
+                    if (
+                        problem["stat"]["question__title_slug"] not in scraped_problems
+                        and problem["paid_only"] is not True
+                    ):
+                        get_problems.append(
+                            [
+                                problem["stat"]["question__title_slug"],
+                                self.website_options["difficulty"][
+                                    problem["difficulty"]["level"]
+                                ],
+                            ]
+                        )
+            if self.website_name == "projecteuler.net":
+                request = http.request("GET", self.website_options["api_url"])
+                soup = BeautifulSoup(request.data, "html.parser")
+                data = soup.find("td", {"class": "id_column"}).get_text()
+                for i in range(1, int(data) + 1):
+                    if str(i) not in scraped_problems:
+                        get_problems.append([str(i), None])
+            if self.website_name == "codechef.com":
+                for value in self.website_options["difficulty"].values():
                     request = http.request(
                         "GET",
-                        self.website_options["api_url"]
-                        + category
-                        + f"/challenges?offset={i}&limit=50",
-                        headers=headers,
+                        self.website_options["api_url"] + value.lower() + "?limit=999",
                     )
                     data = loads(request.data.decode("utf-8"))
-                    if data["models"]:
-                        for problem in data["models"]:
-                            if problem["slug"] not in scraped_problems:
-                                get_problems.append(
-                                    [
-                                        problem["slug"] + "/problem",
-                                        problem["difficulty_name"].upper(),
-                                    ]
-                                )
+                    for problem in data["data"]:
+                        if problem["code"] not in scraped_problems:
+                            get_problems.append([problem["code"], value])
+            if self.website_name == "hackerrank.com":
+                headers = {}
+                chrome_version = f"Chrome/{self.chrome_version}"
+                headers["User-Agent"] = chrome_version
+                for category in self.website_options["categories"]:
+                    for i in range(0, 1001, 50):
+                        request = http.request(
+                            "GET",
+                            self.website_options["api_url"]
+                            + category
+                            + f"/challenges?offset={i}&limit=50",
+                            headers=headers,
+                        )
+                        data = loads(request.data.decode("utf-8"))
+                        if data["models"]:
+                            for problem in data["models"]:
+                                if problem["slug"] not in scraped_problems:
+                                    get_problems.append(
+                                        [
+                                            problem["slug"] + "/problem",
+                                            problem["difficulty_name"].upper(),
+                                        ]
+                                    )
+                        else:
+                            break
+            if self.website_name == "codewars.com":
+                self.logger.info(
+                    "**NOTE** codewars can take up to 5 minutes to find all problems!"
+                )
+                for i in range(0, 999):
+                    request = http.request(
+                        "GET", self.website_options["base_url"] + f"?page={i}"
+                    )
+                    soup = BeautifulSoup(request.data, "html.parser")
+                    data = soup.find_all("div", {"class": "list-item-kata"})
+                    if data:
+                        for problem in data:
+                            if problem["id"] not in scraped_problems:
+                                get_problems.append([problem["id"], None])
                     else:
                         break
-        if self.website_name == "codewars.com":
-            self.logger.info(
-                "**NOTE** codewars can take up to 5 minutes to find all problems!"
+        except Exception as error:
+            self.logger.debug(
+                "Failed to get problems for %s. Error: %s", self.website_name, error
             )
-            for i in range(0, 999):
-                request = http.request(
-                    "GET", self.website_options["base_url"] + f"?page={i}"
-                )
-                soup = BeautifulSoup(request.data, "html.parser")
-                data = soup.find_all("div", {"class": "list-item-kata"})
-                if data:
-                    for problem in data:
-                        if problem["id"] not in scraped_problems:
-                            get_problems.append([problem["id"], None])
-                else:
-                    break
         stop = time()
         self.logger.debug(
             "Getting list of needed_problems for %s took %s seconds",
