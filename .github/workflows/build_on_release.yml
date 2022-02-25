@@ -35,4 +35,6 @@ jobs:
     - name: 'Commit Build Files'
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: Build commit
+        commit_message: Build Release v$VERSION
+      env:  
+        VERSION: ${{ github.event.release.tag_name }}
