@@ -13,19 +13,19 @@ pip install -r ./requirements.txt
 - Make sure to install the requirements, as it contains the versions of librarys needed to pass formatting and linting.
 
 ```python
-black ./src
+python -m black ./src
 ```
 - Use black to format the code. This is not the be all end all solution to nicely formatted code, but it will atleast be consistent with how I've made this project.
 
 ```python
-mypy ./src
+python -m mypy ./src
 ```
 - Use mypy to check for any obvious type issues. This mostly is about encouraging using type hints to be more human readable. 
 If you are having errors such as `error: Skipping analyzing 'libraryname': found module but no type hints or library stubs`, you probably didn't install from requirements.txt.  
 If you want to manually fix this instead, you can use `pip install types-libraryname` for the library being skipped. 
 
 ```python
-pylint ./src
+python -m pylint ./src
 ```
 - Use pylint to ensure there is a general level of "best practice" used. You would be surprised at how often this can give some very good suggestions to make things more readable. 
 Anything over a score of 9/10 will be accepted into the main branch :)
