@@ -13,12 +13,11 @@ name: "CodeQL"
 
 on:
   workflow_run:
-    workflows: ["Build on Release"]
+    workflows: ["Testing"]
     types: [completed]
 
 jobs:
   analyze:
-    if: github.event.pull_request.merged == true
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
