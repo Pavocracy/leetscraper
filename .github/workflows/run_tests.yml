@@ -1,10 +1,9 @@
 name: 'Testing'
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Build on Release"]
+    types: [completed]
 
 jobs:
   run-tests:
