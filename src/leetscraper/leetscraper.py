@@ -1,6 +1,6 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
 # Signed using RSA key D959AEE8875DEEE6
-# This file is part of leetscraper which is released under GPL-2.0 License.
+# This file is released under GPL-2.0 License.
 
 """
   __             __
