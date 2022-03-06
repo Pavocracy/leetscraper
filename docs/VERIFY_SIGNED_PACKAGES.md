@@ -16,10 +16,10 @@ Use gpg to verify the packages are signed by [this key](https://github.com/Pavoc
 
 ### Trust this key if you wish
 
-If you wish to trust this key, you can find the [public key here](https://github.com/Pavocracy/Pavocracy/blob/main/public.key) or download it with gpg.  
+If you wish to trust this key, you can find the [public key here](https://github.com/Pavocracy/Pavocracy/blob/main/pavocracy.pub) or download it with gpg.  
 
 If you downloaded the public key, import it using:  
-`gpg --import public.key`
+`gpg --import pavocracy.pub`
 
 Otherwise you can get it with gpg using:  
 `gpg --recv-keys D959AEE8875DEEE6`
