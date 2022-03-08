@@ -22,7 +22,7 @@ If you downloaded the public key, import it using:
 `gpg --import pavocracy.pub`
 
 Otherwise you can get it with gpg using:  
-`gpg --recv-keys D959AEE8875DEEE6`
+`gpg --recv-keys 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6`
 
 Set the trust level using:  
 `gpg --edit-key Pavocracy`  
