@@ -12,4 +12,4 @@ mypy-extensions==0.4.3
 pylint==2.12.2
 types-beautifulsoup4==4.10.14
 types-selenium==3.141.9
-types-urllib3==1.26.10
+types-urllib3==1.26.11
