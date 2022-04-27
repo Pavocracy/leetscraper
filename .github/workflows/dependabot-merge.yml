@@ -2,12 +2,15 @@ name: Dependabot auto-merge
 
 on:
   pull_request:
-    branches: [main]
+    types: [ labeled ]
+    branches: [ main ]
 
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    if: |
+      github.actor == 'dependabot[bot]'
+      && startsWith(github.ref, 'dependabot/pip')
     steps:
       - uses: actions/github-script@v6
         with:
