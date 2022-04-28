@@ -171,7 +171,7 @@ class Leetscraper:
                 "windows": 'powershell -command "&{(Get-Item C:\\Program` Files\\Google\\Chrome\\Application\\chrome.exe).VersionInfo.ProductVersion}"',
             },
             "firefox": {
-                "mac": "/Applications/Firefox\\ Firefox.app/Contents/MacOS/Firefox\\ Firefox --version",
+                "mac": "/Applications/Firefox.app/Contents/MacOS/firefox -v",
                 "linux": "firefox --version",
                 "windows": '"C:\\Program Files\\Mozilla Firefox\\firefox.exe" -v | more',
             },
