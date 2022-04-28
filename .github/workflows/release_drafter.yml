@@ -2,8 +2,8 @@ name: 'Release Drafter'
 
 on:
   pull_request:
-    types: [closed]
-    branches: [main]
+    types: [ closed ]
+    branches: [ main ]
 
 jobs:
   update_release_draft:
