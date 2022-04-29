@@ -17,7 +17,7 @@ It was created as a way to gather coding problems to solve without having to sig
   
 ### Install package
 
-Installing leetscraper with pip will also install python dependencies needed. Google Chrome is also needed for this scraper.
+Installing leetscraper with pip will also install python dependencies needed. Chrome or Firefox are also required for this scraper to work.
 ```python
 pip install leetscraper
 ```
