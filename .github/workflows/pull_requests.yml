@@ -33,5 +33,7 @@ jobs:
         python -m pylint src/
 
     - name: 'Run Unit Tests'
+      env:
+        GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}
       run:
         python -m unittest discover
