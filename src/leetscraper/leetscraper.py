@@ -31,20 +31,17 @@ from subprocess import run
 from sys import platform
 from time import time
 from json import loads
-from os import getcwd, walk, path, makedirs
+from os import getcwd, walk, path, makedirs, devnull
 from re import sub
-from typing import List
+from typing import List, Union, Dict
 
 from tqdm import tqdm  # type: ignore[import]
 from urllib3 import PoolManager
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
 
 
 class Leetscraper:
@@ -142,40 +139,64 @@ class Leetscraper:
             message = "Scrape_limit is set to 0!"
             self.logger.exception(message)
             raise Exception(message)
-        try:
-            if platform.startswith("darwin"):
-                check_chrome_version = run(
-                    "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
-                    capture_output=True,
-                    check=True,
-                    shell=True,
-                )
-            if platform.startswith("linux"):
-                check_chrome_version = run(
-                    "google-chrome --version",
-                    capture_output=True,
-                    check=True,
-                    shell=True,
-                )
-            if platform.startswith("win32"):
-                check_chrome_version = run(
-                    'reg query "HKEY_CURRENT_USER\\Software\\Google\\Chrome\\BLBeacon" /v version',
-                    capture_output=True,
-                    check=True,
-                    shell=True,
-                )
-            get_version = str(check_chrome_version.stdout)
-            self.chrome_version = sub("[^0-9.]+", "", get_version)
-        except Exception as error:
-            message = f"Could not find chrome version! {error}"
-            self.logger.exception(message)
-            raise Exception(message) from error
+        self.platform = self.check_platform()
         self.errors = 0
         if auto_scrape:
+            avaliable_browsers = self.check_supported_browsers()
+            driver = self.create_webdriver(avaliable_browsers)
             scraped_problems = self.scraped_problems()
             needed_problems = self.needed_problems(scraped_problems)
-            self.scrape_problems(needed_problems)
+            self.scrape_problems(needed_problems, driver)
             logging.shutdown()
+
+    def check_platform(self) -> str:
+        """Check which operating system is used for supported browser query."""
+        if platform.startswith("darwin"):
+            return "mac"
+        if platform.startswith("linux"):
+            return "linux"
+        if platform.startswith("win32"):
+            return "windows"
+        message = "You are not using a supported OS!"
+        self.logger.exception(message)
+        raise Exception(message)
+
+    def check_supported_browsers(self) -> Dict[str, str]:
+        """Looks for supported browsers installed and ensures the correct webdriver version is initialized."""
+        avaliable_browsers = {}
+        query = {
+            "chrome": {
+                "mac": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",
+                "linux": "google-chrome --version",
+                "windows": 'powershell -command "&{(Get-Item C:\\Program` Files\\Google\\Chrome\\Application\\chrome.exe).VersionInfo.ProductVersion}"',
+            },
+            "firefox": {
+                "mac": "/Applications/Firefox.app/Contents/MacOS/firefox -v",
+                "linux": "firefox --version",
+                "windows": '"C:\\Program Files\\Mozilla Firefox\\firefox.exe" -v | more',
+            },
+        }
+        for browser in query.keys():
+            try:
+                check_browser_version = run(
+                    query[browser][self.platform],
+                    capture_output=True,
+                    check=True,
+                    shell=True,
+                )
+                get_version = str(check_browser_version.stdout)
+                browser_version = sub("[^0-9.]+", "", get_version)
+                avaliable_browsers[browser] = browser_version
+            except Exception:
+                message = (
+                    f"Could not find {browser} version! checking for other browsers"
+                )
+                self.logger.warning(message)
+        if avaliable_browsers:
+            return avaliable_browsers
+        message = "No supported browser found!"
+        self.logger.exception(message)
+        raise Exception(message)
 
     def create_logger(self) -> logging.Logger:
         """Creates the logger. All messages to leetscraper.log, INFO and above to console."""
@@ -198,22 +219,68 @@ class Leetscraper:
             print(f"Logging start! Log file: {path.dirname(__file__)}/leetscraper.log")
         return logger
 
-    def create_webdriver(self) -> webdriver.chrome.webdriver.WebDriver:
+    def create_webdriver(
+        self, avaliable_browsers: dict
+    ) -> Union[webdriver.Firefox, webdriver.Chrome]:
         """Instantiates the webdriver with pre-defined options."""
-        options = Options()
-        options.headless = True
-        options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        options.add_argument("--silent")
-        options.add_argument("--disable-gpu")
-        if self.website_name == "hackerrank.com":
-            options.add_argument(f"user-agent=Chrome/{self.chrome_version}")
-        service = Service(
-            ChromeDriverManager(log_level=0, print_first_line=False).install()
-        )
-        driver = webdriver.Chrome(service=service, options=options)  # type: ignore[call-arg]
-        driver.implicitly_wait(0)
-        self.logger.debug("Created %s webdriver for %s", driver.name, self.website_name)
-        return driver
+        for browser, browser_version in avaliable_browsers.items():
+            try:
+                if browser == "chrome":
+                    from selenium.webdriver.chrome.service import Service
+                    from selenium.webdriver.chrome.options import Options
+                    from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
+
+                    service = Service(
+                        ChromeDriverManager(
+                            log_level=0, print_first_line=False
+                        ).install(),
+                        log_path=devnull,
+                    )
+                    options = Options()
+                    options.add_experimental_option(
+                        "excludeSwitches", ["enable-logging"]
+                    )
+                    options.add_argument("--headless")
+                    options.add_argument("--silent")
+                    options.add_argument("--disable-gpu")
+                    if self.website_name == "hackerrank.com":
+                        options.add_argument(f"user-agent={browser}/{browser_version}")
+                    driver = webdriver.Chrome(service=service, options=options)  # type: ignore[call-arg]
+                if browser == "firefox":
+                    from selenium.webdriver.firefox.service import Service  # type: ignore[no-redef]
+                    from selenium.webdriver.firefox.options import Options  # type: ignore[no-redef]
+                    from webdriver_manager.firefox import GeckoDriverManager  # type: ignore[import]
+
+                    service = Service(
+                        GeckoDriverManager(
+                            log_level=0, print_first_line=False
+                        ).install(),
+                        log_path=devnull,
+                    )
+                    options = Options()
+                    options.set_capability(
+                        "moz:firefoxOptions", {"log": {"level": "fatal"}}
+                    )
+                    options.add_argument("--headless")
+                    options.add_argument("--silent")
+                    options.add_argument("--disable-gpu")
+                    driver = webdriver.Firefox(service=service, options=options)  # type: ignore[call-arg, assignment]
+                driver.implicitly_wait(0)
+                self.browser = browser
+                self.browser_version = browser_version
+                self.logger.debug(
+                    "Created %s webdriver for %s", driver.name, self.website_name
+                )
+                return driver
+            except Exception as error:
+                self.logger.warning(
+                    "Could not initialize %s! %s. Trying another browser!",
+                    browser,
+                    error,
+                )
+        message = "Could not initialize any browsers found!"
+        self.logger.exception(message)
+        raise Exception(message)
 
     def webdriver_quit(self, driver):
         """Closes the webdriver."""
@@ -293,8 +360,7 @@ class Leetscraper:
                             get_problems.append([problem["code"], value])
             if self.website_name == "hackerrank.com":
                 headers = {}
-                chrome_version = f"Chrome/{self.chrome_version}"
-                headers["User-Agent"] = chrome_version
+                headers["User-Agent"] = f"{self.browser}/{self.browser_version}"
                 for category in self.website_options["categories"]:
                     for i in range(0, 1001, 50):
                         request = http.request(
@@ -345,7 +411,11 @@ class Leetscraper:
         http.clear()
         return get_problems
 
-    def scrape_problems(self, needed_problems: List[List[str]]):
+    def scrape_problems(
+        self,
+        needed_problems: List[List[str]],
+        driver: Union[webdriver.Firefox, webdriver.Chrome],
+    ):
         """Scrapes needed_problems limited by scrape_limit. (All problems if scrape_limit not set)"""
         if self.scrape_limit:
             if self.scrape_limit >= len(needed_problems):
@@ -357,7 +427,6 @@ class Leetscraper:
                 self.website_name,
             )
             start = time()
-            driver = self.create_webdriver()
             for problem in tqdm(needed_problems[: self.scrape_limit]):
                 self.create_problem(problem, driver)
             self.webdriver_quit(driver)
@@ -389,7 +458,7 @@ class Leetscraper:
             )
 
     def create_problem(
-        self, problem: List[str], driver: webdriver.chrome.webdriver.WebDriver
+        self, problem: List[str], driver: Union[webdriver.Firefox, webdriver.Chrome]
     ):
         """Gets the html source of a problem, filters down to the problem description, creates a file.\n
         Creates files in scraped_path/website_name/DIFFICULTY/problem.md
