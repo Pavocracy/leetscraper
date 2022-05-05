@@ -12,6 +12,7 @@ def get_logger() -> logging.Logger:
     """Looks for leetscraper logger, otherwise creates a logger.
     All messages to leetscraper.log, INFO and above to console.
     """
+    # TODO: Change to logging config file?
     logger = logging.getLogger("leetscraper")
     logger.setLevel(logging.DEBUG)
     formatting = logging.Formatter(

@@ -27,8 +27,10 @@ See related docstrings for help.
 """
 
 from os import getcwd
+
 from .driver import create_webdriver, webdriver_quit
 from .logger import get_logger
+from .scraper import check_problems, needed_problems, scrape_problems
 from .system import check_path, check_platform, check_supported_browsers
 from .website import set_website
 
@@ -46,7 +48,7 @@ class Leetscraper:
     """
 
     def __init__(self, **kwargs):
-        """gfgfg"""
+        """Initialize leetscraper with default values unless kwargs are given."""
         self.website = set_website(kwargs.get("website_name", "leetcode.com"))
         self.scrape_path = check_path(kwargs.get("scrape_path", getcwd()))
         self.scrape_limit = int(kwargs.get("scrape_limit", -1))
@@ -60,26 +62,28 @@ class Leetscraper:
             raise Exception(message)
         if not self.auto_scrape:
             return
-        self.driver, self.needed_problems = self.setup_scraper()
+        self.driver, self.get_problems = self.setup_scraper()
         self.scraped = self.start_scraping()
         webdriver_quit(self.driver, self.website.website_name)
 
     def setup_scraper(self) -> tuple:
-        """dfdfg"""
+        """Calling this method is required to setup the arguments needed to scrape."""
         user_platform = check_platform()
         browsers = check_supported_browsers(user_platform)
-        scraped_problems = self.website.scraped_problems(self.scrape_path)
-        driver = create_webdriver(browsers, self.website.website_name)
-        needed_problems = self.website.needed_problems(
-            scraped_problems, self.scrape_limit
+        scraped_problems = check_problems(self.website, self.scrape_path)
+        get_problems = needed_problems(
+            self.website, scraped_problems, self.scrape_limit
         )
-        return driver, needed_problems
+        driver = create_webdriver(browsers, self.website.website_name)
+        return driver, get_problems
 
     def start_scraping(self) -> int:
-        """gfgfh"""
-        scraped = self.website.scrape_problems(
+        """This method scrapes coding problems from the supported website given to the Leetscraper
+        class. It returns a value of scraped problems minus any errors caught by exceptions."""
+        scraped = scrape_problems(
+            self.website,
             self.driver,
-            self.needed_problems,
+            self.get_problems,
             self.scrape_path,
             self.scrape_limit,
         )

@@ -9,22 +9,22 @@ browser being used, and closing the webdriver.
 
 from os import devnull
 from typing import Union
+
 from selenium import webdriver
+
 from .logger import get_logger
 
-webdriverType = Union[webdriver.Firefox, webdriver.Chrome]
+WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
 
 
-def create_webdriver(
-    avaliable_browsers: dict, website_name: str
-) -> Union[webdriver.Firefox, webdriver.Chrome]:
+def create_webdriver(avaliable_browsers: dict, website_name: str) -> WebdriverType:
     """Initializes the webdriver with pre-defined options."""
     for browser, browser_version in avaliable_browsers.items():
         try:
             if browser == "chrome":
                 from selenium.webdriver.chrome.service import Service as ChromeService
                 from selenium.webdriver.chrome.options import Options as ChromeOptions
-                from webdriver_manager.chrome import ChromeDriverManager  # type: ignore[import]
+                from webdriver_manager.chrome import ChromeDriverManager
 
                 service = ChromeService(
                     ChromeDriverManager(log_level=0, print_first_line=False).install(),
@@ -37,11 +37,11 @@ def create_webdriver(
                 options.add_argument("--disable-gpu")
                 if website_name == "hackerrank.com":
                     options.add_argument(f"user-agent={browser}/{browser_version}")
-                driver = webdriver.Chrome(service=service, options=options)  # type: ignore[call-arg]
+                driver = webdriver.Chrome(service=service, options=options)
             if browser == "firefox":
                 from selenium.webdriver.firefox.service import Service as FirefoxService
                 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-                from webdriver_manager.firefox import GeckoDriverManager  # type: ignore[import]
+                from webdriver_manager.firefox import GeckoDriverManager
 
                 service = FirefoxService(
                     GeckoDriverManager(log_level=0, print_first_line=False).install(),
@@ -52,9 +52,9 @@ def create_webdriver(
                     "moz:firefoxOptions", {"log": {"level": "fatal"}}
                 )
                 options.add_argument("--headless")
-                options.add_argument("--silent")
+                # options.add_argument("--silent") no longer works since firefox 91.9.0esr?
                 options.add_argument("--disable-gpu")
-                driver = webdriver.Firefox(service=service, options=options)  # type: ignore[call-arg]
+                driver = webdriver.Firefox(service=service, options=options)
             driver.implicitly_wait(0)
             logger = get_logger()
             logger.debug("Created %s webdriver for %s", driver.name, website_name)
@@ -73,7 +73,7 @@ def create_webdriver(
 
 
 def webdriver_quit(
-    driver: Union[webdriver.Firefox, webdriver.Chrome],
+    driver: WebdriverType,
     website_name: str,
 ):
     """Closes the webdriver."""

@@ -1,7 +1,8 @@
 import unittest
+import logging
 from shutil import rmtree
-from os import path, walk
-from src.leetscraper import Leetscraper  # type: ignore[import]
+from src.leetscraper.leetscraper import Leetscraper
+from src.leetscraper.scraper import check_problems
 
 
 class TestLeetscraper(unittest.TestCase):
@@ -9,20 +10,12 @@ class TestLeetscraper(unittest.TestCase):
         leetscraper = Leetscraper(scrape_path="./tests/unittesting", scrape_limit=3)
 
         # Check scraped_problems
-        scraped_problems = []
-        for (dirpath, dirnames, filenames) in walk(
-            f"./{leetscraper.scrape_path}/PROBLEMS/{leetscraper.website.website_name}"
-        ):
-            for file in filenames:
-                if file:
-                    scraped_problems.append(file.split(".")[0])
-        self.assertEqual(
-            len(scraped_problems),
-            leetscraper.scraped,
-        )
+        scraped_problems = check_problems(leetscraper.website, leetscraper.scrape_path)
+        self.assertEqual(len(scraped_problems), leetscraper.scraped)
 
-        # Cleanup problems
+        # Cleanup problems and logging
         rmtree(leetscraper.scrape_path)
+        logging.shutdown()
 
 
 if __name__ == "__main__":
