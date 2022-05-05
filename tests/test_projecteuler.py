@@ -53,7 +53,7 @@ class TestLeetscraper(unittest.TestCase):
 
             # Check scrape_problems with scrape_limit
             start = 0
-            end = leetscraper.scrape_limit * len(test_browser)
+            end = leetscraper.scrape_limit * test_browser
             scraped = scrape_problems(
                 leetscraper.website,
                 driver,
