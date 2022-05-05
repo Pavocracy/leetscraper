@@ -68,7 +68,7 @@ class TestLeetscraper(unittest.TestCase):
             )
             self.assertEqual(
                 len(scraped_problems),
-                (scraped * test_browser),
+                ((scraped * test_browser) - leetscraper.website.errors),
             )
 
             # Check driver_quit and interate counts

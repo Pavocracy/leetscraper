@@ -76,7 +76,7 @@ def scrape_problems(
     """Scrapes the list of get_problems by calling the create_problem method.
     Returns a count of total problems scraped.
     """
-    errors = 0
+    website.errors = 0
     start = time()
     for problem in tqdm(get_problems):
         scrape = create_problem(website, problem, driver, scrape_path)
