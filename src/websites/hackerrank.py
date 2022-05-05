@@ -58,7 +58,10 @@ class Hackerrank:
                                         problem["difficulty_name"].upper(),
                                     ]
                                 )
-                                if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                                if (
+                                    scrape_limit > 0
+                                    and len(get_problems) >= scrape_limit
+                                ):
                                     return get_problems
                     else:
                         break

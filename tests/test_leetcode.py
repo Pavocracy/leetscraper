@@ -69,7 +69,8 @@ class TestLeetscraper(unittest.TestCase):
                 (scraped * test_browser),
             )
 
-            # Check driver_quit
+            # Check driver_quit and interate browser count
+            test_browser += 1
             webdriver_quit(driver, leetscraper.website.website_name)
 
         # Cleanup problems and logging
