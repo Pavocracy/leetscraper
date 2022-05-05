@@ -33,6 +33,24 @@ class TestLeetscraper(unittest.TestCase):
         avaliable_browsers = check_supported_browsers(platform)
         self.assertTrue(avaliable_browsers)
 
+        # Check needed_problems with scrape_limit
+        scraped_problems = []
+        get_problems = needed_problems(
+            leetscraper.website,
+            scraped_problems,
+            leetscraper.scrape_limit * len(avaliable_browsers),
+        )
+        self.assertEqual(
+            len(get_problems), (leetscraper.scrape_limit * len(avaliable_browsers))
+        )
+
+        # Check create_webdriver with all browsers
+        for browser, version in avaliable_browsers.items():
+            test_browser = 1
+            driver = create_webdriver(
+                {browser: version}, leetscraper.website.website_name
+            )
+
             # Check scrape_problems with scrape_limit
             start = 0
             end = leetscraper.scrape_limit * len(test_browser)
