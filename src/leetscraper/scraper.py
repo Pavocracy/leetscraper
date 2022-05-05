@@ -76,16 +76,14 @@ def scrape_problems(
     """Scrapes the list of get_problems by calling the create_problem method.
     Returns a count of total problems scraped.
     """
-    website.errors = 0
+    errors = 0
     start = time()
     for problem in tqdm(get_problems):
         scrape = create_problem(website, problem, driver, scrape_path)
-        website.errors += scrape
+        errors += scrape
     stop = time()
     scraped = (
-        scrape_limit - website.errors
-        if scrape_limit > 0
-        else len(needed_problems) - website.errors
+        scrape_limit - errors if scrape_limit > 0 else len(needed_problems) - errors
     )
     logger = get_logger()
     logger.debug(

@@ -54,7 +54,8 @@ class TestLeetscraper(unittest.TestCase):
             # Check scrape_problems with scrape_limit
             start = 0
             end = leetscraper.scrape_limit * test_browser
-            scraped = scrape_problems(
+            scraped = 0
+            scraped += scrape_problems(
                 leetscraper.website,
                 driver,
                 get_problems[start:end],
@@ -66,10 +67,7 @@ class TestLeetscraper(unittest.TestCase):
             scraped_problems = check_problems(
                 leetscraper.website, leetscraper.scrape_path
             )
-            self.assertEqual(
-                len(scraped_problems),
-                ((scraped * test_browser) - leetscraper.website.errors),
-            )
+            self.assertEqual(len(scraped_problems), scraped)
 
             # Check driver_quit and interate counts
             test_browser += 1
