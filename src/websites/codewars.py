@@ -56,8 +56,8 @@ class Codewars:
                     for problem in data:
                         if problem["id"] not in scraped_problems:
                             get_problems.append([problem["id"], None])
-                        if scrape_limit > 0 and len(get_problems) >= scrape_limit:
-                            break
+                            if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                                return get_problems
                 else:
                     break
         except Exception as error:

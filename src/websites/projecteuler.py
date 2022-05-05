@@ -41,8 +41,8 @@ class Projecteuler:
             for i in range(1, int(data) + 1):
                 if str(i) not in scraped_problems:
                     get_problems.append([str(i), None])
-                if scrape_limit > 0 and len(get_problems) >= scrape_limit:
-                    break
+                    if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                        return get_problems
         except Exception as error:
             logger = get_logger()
             logger.debug(

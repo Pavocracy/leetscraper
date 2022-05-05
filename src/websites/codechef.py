@@ -44,10 +44,8 @@ class Codechef:
                 for problem in data["data"]:
                     if problem["code"] not in scraped_problems:
                         get_problems.append([problem["code"], value])
-                    if scrape_limit > 0 and len(get_problems) >= scrape_limit:
-                        break
-                if scrape_limit > 0 and len(get_problems) >= scrape_limit:
-                    break
+                        if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                            return get_problems
         except Exception as error:
             logger = get_logger()
             logger.debug(

@@ -47,8 +47,8 @@ class Leetcode:
                             self.difficulty[problem["difficulty"]["level"]],
                         ]
                     )
-                if scrape_limit > 0 and len(get_problems) >= scrape_limit:
-                    break
+                    if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                        return get_problems
         except Exception as error:
             logger = get_logger()
             logger.debug(
