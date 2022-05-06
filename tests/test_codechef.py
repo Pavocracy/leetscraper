@@ -65,17 +65,17 @@ class TestLeetscraper(unittest.TestCase):
             )
             print(f"scraped {scraped} {leetscraper.website.website_name} problems")
 
-            # Check scraped_problems
-            scraped_problems = check_problems(
-                leetscraper.website, leetscraper.scrape_path
-            )
-            self.assertEqual(len(scraped_problems), total_scraped)
-
             # Check driver_quit and iterate counts
             test_browser += 1
             total_scraped += scraped
             start += leetscraper.scrape_limit
             webdriver_quit(driver, leetscraper.website.website_name)
+
+            # Check scraped_problems
+            scraped_problems = check_problems(
+                leetscraper.website, leetscraper.scrape_path
+            )
+            self.assertEqual(len(scraped_problems), total_scraped)
 
         # Cleanup problems and logging
         rmtree(leetscraper.scrape_path)
