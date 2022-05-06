@@ -46,14 +46,14 @@ class TestLeetscraper(unittest.TestCase):
 
         # Check create_webdriver with all browsers
         total_scraped = 0
+        test_browser = 1
+        start = 0
         for browser, version in avaliable_browsers.items():
-            test_browser = 1
             driver = create_webdriver(
                 {browser: version}, leetscraper.website.website_name
             )
 
             # Check scrape_problems with scrape_limit
-            start = 0
             end = leetscraper.scrape_limit * test_browser
             total_scraped += scrape_problems(
                 leetscraper.website,
