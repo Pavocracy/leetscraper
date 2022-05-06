@@ -13,7 +13,7 @@ name: "CodeQL"
 
 on:
   workflow_run:
-    workflows: [ "Build on Release" ]
+    workflows: [ "Build and Publish" ]
     types: [ completed ]
 
 jobs:
