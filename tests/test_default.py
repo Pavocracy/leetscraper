@@ -1,6 +1,7 @@
 import unittest
 import logging
 from shutil import rmtree
+
 from src.leetscraper.leetscraper import Leetscraper
 from src.leetscraper.scraper import check_problems
 

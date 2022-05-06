@@ -12,6 +12,7 @@ from re import sub
 from sys import platform
 from subprocess import run
 from typing import Dict
+
 from .logger import get_logger
 
 

@@ -2,12 +2,8 @@
 
 ### Download packages from pypi
 
-Download the leetscraper packages from [pypi.org](https://pypi.org/project/leetscraper/#files) or use curl with the copied url.  
-`curl https://copy-pasted-url-to/leetscraper-x.x.x.tar.gz -o leetscraper-x.x.x.tar.gz` 
-  
-The signature file is uploaded to pypi, but it does not get displayed on the front end so you need to download it manually.  
-To download the armored ASCII signature file, add ".asc" to the end of the url for the package.  
-`curl https://copy-pasted-url-to/leetscraper-x.x.x.tar.gz.asc -o leetscraper-x.x.x.tar.gz.asc`
+Download the leetscraper packages and the signature files from [pypi.org](https://pypi.org/project/leetscraper/#files) or use curl with the copied url. 
+example: `curl https://copy-pasted-url-to/leetscraper-x.x.x.tar.gz -o leetscraper-x.x.x.tar.gz` 
 
 ### Use gpg to verify the signature
 

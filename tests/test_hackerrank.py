@@ -2,6 +2,7 @@ import unittest
 import logging
 from shutil import rmtree
 from os import path
+
 from src.leetscraper.leetscraper import Leetscraper
 from src.leetscraper.driver import create_webdriver, webdriver_quit
 from src.leetscraper.scraper import check_problems, needed_problems, scrape_problems

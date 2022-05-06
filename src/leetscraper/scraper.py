@@ -17,9 +17,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from urllib3 import PoolManager
 
-from src.leetscraper.logger import get_logger
-from src.leetscraper.driver import WebdriverType
-from src.leetscraper.website import WebsiteType
+from .logger import get_logger
+from .driver import WebdriverType
+from .website import WebsiteType
 
 
 def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
