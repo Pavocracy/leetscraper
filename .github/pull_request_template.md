@@ -6,6 +6,7 @@ Please delete any options below that are not relevant.
 ## Type of change
 
 - [ ] Bug fix. Tag the issue with Fixes #(issue_number)
+- [ ] Major Feature (This is for all breaking changes!)
 - [ ] New feature (non-breaking change which adds functionality or website support)
 - [ ] Code addition (extended unit tests, code cleanup ect that doesnt change functionality)
 - [ ] Documentation update

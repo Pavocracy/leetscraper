@@ -2,14 +2,18 @@ import unittest
 import logging
 from shutil import rmtree
 from os import path
-from src.leetscraper import Leetscraper  # type: ignore[import]
+
+from src.leetscraper.leetscraper import Leetscraper
+from src.leetscraper.driver import create_webdriver, webdriver_quit
+from src.leetscraper.scraper import check_problems, needed_problems, scrape_problems
+from src.leetscraper.system import check_platform, check_supported_browsers
 
 
 class TestLeetscraper(unittest.TestCase):
     def test_hackerrank(self):
         leetscraper = Leetscraper(
             website_name="hackerrank.com",
-            scraped_path="./unittesting",
+            scrape_path="./tests/unittesting",
             scrape_limit=3,
             auto_scrape=False,
         )
@@ -17,47 +21,62 @@ class TestLeetscraper(unittest.TestCase):
         # Check auto_scrape=False
         self.assertFalse(
             path.isdir(
-                f"{leetscraper.scraped_path}/PROBLEMS/{leetscraper.website_name}"
+                f"{leetscraper.scrape_path}/PROBLEMS/{leetscraper.website.website_name}"
             )
         )
-        self.assertTrue(path.isdir(leetscraper.scraped_path))
+        self.assertTrue(path.isdir(leetscraper.scrape_path))
+
+        # Check platform
+        platform = check_platform()
+        self.assertTrue(platform)
 
         # Check supported_browsers
-        avaliable_browsers = leetscraper.check_supported_browsers()
+        avaliable_browsers = check_supported_browsers(platform)
         self.assertTrue(avaliable_browsers)
 
-        # Set browser and version for request header (hackerrank only)
-        leetscraper.browser = list(avaliable_browsers.keys())[0]
-        leetscraper.browser_version = avaliable_browsers[leetscraper.browser]
-
-        # Create a list of browsers to test
-        browsers = []
-        for browser, version in avaliable_browsers.items():
-            browsers.append({browser: version})
-
-        # Check needed_problems
+        # Check needed_problems with scrape_limit
         scraped_problems = []
-        needed_problems = leetscraper.needed_problems(scraped_problems)
-        self.assertGreater(len(needed_problems), 1000)
+        get_problems = needed_problems(
+            leetscraper.website,
+            scraped_problems,
+            leetscraper.scrape_limit * len(avaliable_browsers),
+        )
+        self.assertEqual(
+            len(get_problems), (leetscraper.scrape_limit * len(avaliable_browsers))
+        )
 
-        # Check create driver with all browsers
-        for index, browser in enumerate(browsers):
-            driver = leetscraper.create_webdriver(browser)
+        # Check create_webdriver with all browsers
+        total_scraped = 0
+        test_browser = 1
+        start = 0
+        for browser, version in avaliable_browsers.items():
+            driver = create_webdriver(
+                {browser: version}, leetscraper.website.website_name
+            )
 
             # Check scrape_problems with scrape_limit
-            leetscraper.scrape_problems(
-                needed_problems[index * leetscraper.scrape_limit :], driver
+            end = leetscraper.scrape_limit * test_browser
+            total_scraped += scrape_problems(
+                leetscraper.website,
+                driver,
+                get_problems[start:end],
+                leetscraper.scrape_path,
+                leetscraper.scrape_limit,
             )
+
+            # Check driver_quit and iterate counts
+            test_browser += 1
+            start += leetscraper.scrape_limit
+            webdriver_quit(driver, leetscraper.website.website_name)
 
             # Check scraped_problems
-            scraped_problems = leetscraper.scraped_problems()
-            self.assertEqual(
-                len(scraped_problems),
-                ((leetscraper.scrape_limit * (index + 1)) - leetscraper.errors),
+            scraped_problems = check_problems(
+                leetscraper.website, leetscraper.scrape_path
             )
+            self.assertEqual(len(scraped_problems), total_scraped)
 
         # Cleanup problems and logging
-        rmtree(leetscraper.scraped_path)
+        rmtree(leetscraper.scrape_path)
         logging.shutdown()
 
 

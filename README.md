@@ -24,7 +24,7 @@ pip install leetscraper
 
 ### Examples
 
-Import the module and Instantiate the class. The class has some kwargs options to control the behaviour of the scraper.
+Import the module and Initialize the class. The class has some kwargs options to control the behaviour of the scraper.
 However, all the default values will start to scrape all problems from [leetcode.com](https://leetcode.com "leetcode website") to the cwd.
   
 The most basic usage looks like this:
@@ -39,7 +39,7 @@ The avaliable kwargs to control the behaviour of the scraper are:
 ```python
 """
 website_name: name of a supported website to scrape ("leetcode.com" set if ignored)
-scraped_path: "path/to/save/scraped_problems" (Current working directory set if ignored)
+scrape_path: "path/to/save/scraped_problems" (Current working directory set if ignored)
 scrape_limit: Integer of how many problems to scrape at a time (no limit set if ignored)
 auto_scrape: "True", "False" (True set if ignored)
 """
@@ -50,7 +50,7 @@ Example of how to automatically scrape the first 50 problems from [projecteuler.
 from leetscraper import Leetscraper
 
 if __name__ == "__main__":
-    Leetscraper(website_name="projecteuler.net", scraped_path="~/SOLVE-ME", scrape_limit=50)
+    Leetscraper(website_name="projecteuler.net", scrape_path="~/SOLVE-ME", scrape_limit=50)
 ```
 
 Example of how to scrape all problems from all supported websites:

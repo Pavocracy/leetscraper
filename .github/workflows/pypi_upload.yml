@@ -23,16 +23,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install twine
 
-    - name: 'Import GPG key'
-      uses: crazy-max/ghaction-import-gpg@v4
-      with:
-        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-        passphrase: ${{ secrets.GPG_PASSPHRASE }}
-
     - name: 'Publish to PyPI'
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run:
-        # Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
-        python -m twine upload dist/* --sign --identity pavocracy@pm.me
+        python -m twine upload dist/*

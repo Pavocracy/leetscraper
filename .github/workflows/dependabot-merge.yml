@@ -8,9 +8,7 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: |
-      github.actor == 'dependabot[bot]'
-      && startsWith(github.ref, 'dependabot/pip')
+    if: github.actor == 'dependabot[bot]'
     steps:
       - uses: actions/github-script@v6
         with:

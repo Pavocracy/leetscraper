@@ -2,6 +2,7 @@
 __pychace__
 */__pycache__
 */*/__pycache__
+*/*/*/__pycache__
 src/*.egg-info
 unittesting/
 leetscraper.log
