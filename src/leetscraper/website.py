@@ -9,7 +9,7 @@ given supported website.
 
 from typing import Union
 
-from src.websites import Codechef, Codewars, Hackerrank, Leetcode, Projecteuler
+from .websites import Codechef, Codewars, Hackerrank, Leetcode, Projecteuler
 from .logger import get_logger
 
 
