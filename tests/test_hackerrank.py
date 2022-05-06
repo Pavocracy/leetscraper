@@ -55,19 +55,16 @@ class TestLeetscraper(unittest.TestCase):
             # Check scrape_problems with scrape_limit
             start = 0
             end = leetscraper.scrape_limit * test_browser
-            scraped = 0
-            scraped += scrape_problems(
+            total_scraped += scrape_problems(
                 leetscraper.website,
                 driver,
                 get_problems[start:end],
                 leetscraper.scrape_path,
                 leetscraper.scrape_limit,
             )
-            print(f"scraped {scraped} {leetscraper.website.website_name} problems")
 
             # Check driver_quit and iterate counts
             test_browser += 1
-            total_scraped += scraped
             start += leetscraper.scrape_limit
             webdriver_quit(driver, leetscraper.website.website_name)
 

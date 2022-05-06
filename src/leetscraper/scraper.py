@@ -79,11 +79,10 @@ def scrape_problems(
     errors = 0
     start = time()
     for problem in tqdm(get_problems):
-        scrape = create_problem(website, problem, driver, scrape_path)
-        errors += scrape
+        errors += create_problem(website, problem, driver, scrape_path)
     stop = time()
     scraped = (
-        scrape_limit - errors if scrape_limit > 0 else len(needed_problems) - errors
+        scrape_limit - errors if scrape_limit > 0 else len(get_problems) - errors
     )
     logger = get_logger()
     logger.debug(
