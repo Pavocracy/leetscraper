@@ -25,10 +25,8 @@ jobs:
         pip install twine build
 
     - name: 'Update version'
-      run: |
+      run:
         sed -i 's/[0-9].[0-9].[0-9]/'$VERSION'/' src/leetscraper/__init__.py
-        echo "##[set-output name=message;]$(Release Leetscraper v'$VERSION')"
-      id: update_version_message
       env:  
         VERSION: ${{ github.event.release.tag_name }}
 
@@ -52,7 +50,7 @@ jobs:
     - name: 'Commit Build Files'
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: ${{ steps.update_version_message.outputs.message }}
+        commit_message: Release New Leetscraper Version
 
     - name: 'Upload dist files to release'
       uses: svenstaro/upload-release-action@v2
