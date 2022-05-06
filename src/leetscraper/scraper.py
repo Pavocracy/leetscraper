@@ -81,9 +81,7 @@ def scrape_problems(
     for problem in tqdm(get_problems):
         errors += create_problem(website, problem, driver, scrape_path)
     stop = time()
-    scraped = (
-        scrape_limit - errors if scrape_limit > 0 else len(get_problems) - errors
-    )
+    scraped = scrape_limit - errors if scrape_limit > 0 else len(get_problems) - errors
     logger = get_logger()
     logger.debug(
         "Scraping %s %s problems took %s seconds",
