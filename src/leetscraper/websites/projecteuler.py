@@ -13,7 +13,7 @@ from typing import List, Optional
 from bs4 import BeautifulSoup
 from urllib3 import PoolManager
 
-from src.leetscraper.logger import get_logger
+from ..logger import get_logger
 
 
 class Projecteuler:

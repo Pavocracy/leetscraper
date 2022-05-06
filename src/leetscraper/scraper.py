@@ -8,7 +8,7 @@ Each function will call the website methods for website specific filtering.
 
 from os import walk, path, makedirs
 from time import time
-from typing import List
+from typing import List, Optional
 
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
@@ -48,7 +48,7 @@ def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
 
 def needed_problems(
     website: WebsiteType, scraped_problems: List[str], scrape_limit: int
-) -> List[List[str]]:
+) -> List[List[Optional[str]]]:
     """Returns a list of scrape_limit website problems missing from the scraped_path."""
     logger = get_logger()
     logger.info("Getting the list of %s problems to scrape", website.website_name)

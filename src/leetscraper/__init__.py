@@ -9,5 +9,5 @@ __licence__ = "GPL-2.0"
 __author__ = "Pavocracy"
 __email__ = "pavocracy@pm.me"
 
-from src.websites import *
+from .websites import *
 from .leetscraper import Leetscraper
