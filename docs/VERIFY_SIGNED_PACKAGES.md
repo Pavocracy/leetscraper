@@ -2,7 +2,7 @@
 
 ### Download packages from pypi
 
-Download the leetscraper packages and the signature files from [pypi.org](https://pypi.org/project/leetscraper/#files) or use curl with the copied url. 
+Download the leetscraper packages and the signature files from [pypi.org](https://pypi.org/project/leetscraper/#files) or from the [dist folder](https://github.com/Pavocracy/leetscraper/tree/main/dist) in this repo. You could also use curl with the copied url from either source. 
 example: `curl https://copy-pasted-url-to/leetscraper-x.x.x.tar.gz -o leetscraper-x.x.x.tar.gz` 
 
 ### Use gpg to verify the signature
