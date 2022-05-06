@@ -27,6 +27,8 @@ jobs:
     - name: 'Update version'
       run:
         sed -i 's/[0-9].[0-9].[0-9]/'$VERSION'/' src/leetscraper/__init__.py
+        echo "##[set-output name=message;]$(Release Leetscraper v'$VERSION')"
+      id: update_version_message
       env:  
         VERSION: ${{ github.event.release.tag_name }}
 
@@ -42,7 +44,7 @@ jobs:
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: 'Sign build files'
-    # Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
+      # Sign using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
       run: |
         gpg --list-keys
         bash gpg-sign.sh
@@ -50,13 +52,14 @@ jobs:
     - name: 'Commit Build Files'
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: Build Release v'$VERSION'
+        commit_message: ${{ steps.update_version_message.outputs.message }}
 
     - name: 'Upload dist files to release'
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/*
+        tag: ${{ github.ref }}
 
     - name: 'Publish to PyPI'
       env:
