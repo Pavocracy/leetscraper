@@ -51,7 +51,7 @@ class Leetcode:
                         return get_problems
         except Exception as error:
             logger = get_logger()
-            logger.debug(
+            logger.warning(
                 "Failed to get problems for %s. Error: %s", self.website_name, error
             )
         return get_problems

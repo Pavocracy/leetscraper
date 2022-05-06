@@ -45,7 +45,7 @@ class TestLeetscraper(unittest.TestCase):
         )
 
         # Check create_webdriver with all browsers
-        scraped = 0
+        total_scraped = 0
         for browser, version in avaliable_browsers.items():
             test_browser = 1
             driver = create_webdriver(
@@ -55,6 +55,7 @@ class TestLeetscraper(unittest.TestCase):
             # Check scrape_problems with scrape_limit
             start = 0
             end = leetscraper.scrape_limit * test_browser
+            scraped = 0
             scraped += scrape_problems(
                 leetscraper.website,
                 driver,
@@ -62,15 +63,17 @@ class TestLeetscraper(unittest.TestCase):
                 leetscraper.scrape_path,
                 leetscraper.scrape_limit,
             )
+            print(f"scraped {scraped} {leetscraper.website.website_name} problems")
 
             # Check scraped_problems
             scraped_problems = check_problems(
                 leetscraper.website, leetscraper.scrape_path
             )
-            self.assertEqual(len(scraped_problems), scraped)
+            self.assertEqual(len(scraped_problems), total_scraped)
 
-            # Check driver_quit and interate counts
+            # Check driver_quit and iterate counts
             test_browser += 1
+            total_scraped += scraped
             start += leetscraper.scrape_limit
             webdriver_quit(driver, leetscraper.website.website_name)
 
