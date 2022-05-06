@@ -6,7 +6,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = ["import-error", "import-outside-toplevel", "broad-except"]
+disable = ["import-error", "import-outside-toplevel", "broad-except", "duplicate-code"]
 
 [tool.pylint.'MASTER']
 fail-under = 9.0
