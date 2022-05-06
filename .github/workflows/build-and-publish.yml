@@ -46,13 +46,8 @@ jobs:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run:
+        # Sign using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
         python -m twine upload dist/* --sign --identity pavocracy@pm.me
-
-    - name: 'Sign build files'
-      # Sign using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
-      run: |
-        gpg --list-keys
-        bash gpg-sign.sh
 
     - name: 'Commit Build Files'
       uses: stefanzweifel/git-auto-commit-action@v4
