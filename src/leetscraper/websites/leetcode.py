@@ -8,11 +8,11 @@ the class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
-from typing import List
+from typing import List, Optional
 
 from urllib3 import PoolManager
 
-from src.leetscraper.logger import get_logger
+from ..logger import get_logger
 
 
 class Leetcode:
@@ -30,7 +30,7 @@ class Leetcode:
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
-    ) -> List[List[str]]:
+    ) -> List[List[Optional[str]]]:
         """Returns problems to scrape defined by checks in this method."""
         get_problems = []
         try:
