@@ -9,7 +9,7 @@ from src.leetscraper.system import check_platform, check_supported_browsers
 
 
 class TestLeetscraper(unittest.TestCase):
-    def test_codechef(self):
+    def test_codewars(self):
         leetscraper = Leetscraper(
             website_name="codewars.com",
             scrape_path="./tests/unittesting",

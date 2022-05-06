@@ -133,7 +133,7 @@ def create_problem(
         return 0
     except Exception as error:
         logger = get_logger()
-        logger.debug(
+        logger.warning(
             "Failed to scrape %s%s! %s",
             website.base_url,
             problem[0],
