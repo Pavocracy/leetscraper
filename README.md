@@ -1,5 +1,9 @@
 # [leetscraper](https://pypi.org/project/leetscraper/ "leetscraper on pypi")  
-[![Downloads](https://pepy.tech/badge/leetscraper)](https://pepy.tech/project/leetscraper "Total downloads from pypi") &middot; [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Average time to resolve an issue") &middot; [![Percentage of issues still open](http://isitmaintained.com/badge/open/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Percentage of issues still open") &middot; [![CodeQL](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml)  
+[![Downloads](https://pepy.tech/badge/leetscraper)](https://pepy.tech/project/leetscraper "Total downloads from pypi") &middot; 
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Average time to resolve an issue") &middot; 
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/pavocracy/leetscraper.svg)](http://isitmaintained.com/project/pavocracy/leetscraper "Percentage of issues still open") &middot; 
+[![codecov](https://codecov.io/gh/Pavocracy/leetscraper/branch/main/graph/badge.svg?token=KUQ6T9TPLO)](https://codecov.io/gh/Pavocracy/leetscraper) &middot; 
+[![CodeQL](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml)  
   
 leetscraper, a coding challenge webscraper for leetcode, and other websites!  
   
