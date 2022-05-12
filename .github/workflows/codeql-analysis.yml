@@ -12,13 +12,12 @@
 name: "CodeQL"
 
 on:
-  pull_request:
-    types: [ closed ]
-    branches: [ main ]
+  workflow_run:
+    workflows: [ "Code Coverage" ]
+    types: [ completed ]
 
 jobs:
   analyze:
-    if: github.event.pull_request.merged == true
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
