@@ -76,6 +76,10 @@ def scrape_problems(
     """Scrapes the list of get_problems by calling the create_problem method.
     Returns a count of total problems scraped.
     """
+    if not get_problems:
+        logger = get_logger()
+        logger.warning("Nothing to scrape! get_problems is empty!")
+        return 0
     errors = 0
     start = time()
     for problem in tqdm(get_problems):
