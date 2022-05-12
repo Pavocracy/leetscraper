@@ -1,0 +1,23 @@
+    
+name: 'Code Coverage'
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ main ]
+
+jobs:
+  code_cov:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 'Get Unittest Coverage Report'
+      run: |
+        coverage run -m unittest discover
+        coverage xml
+
+    - name: 'Upload Coverage Report'
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
