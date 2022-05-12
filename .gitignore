@@ -7,3 +7,4 @@ src/*.egg-info
 unittesting/
 leetscraper.log
 geckodriver.log
+.coverage

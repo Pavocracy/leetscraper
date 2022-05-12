@@ -1,10 +1,15 @@
 name: 'Pull Request Checks'
 
-on: pull_request
+on:
+  pull_request:
+    branches: [ main ]
 
 jobs:
   run-checks:
     runs-on: ${{ matrix.os }}
+    env:
+      # This is needed to authenticate with githubs API to avoid rate limits
+      GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
@@ -31,8 +36,11 @@ jobs:
         python -m pylint src/
 
     - name: 'Run Unit Tests'
-      env:
-        # This is needed to authenticate with githubs API to avoid rate limits
-        GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}
       run:
-        python -m unittest discover
+        python -m coverage run -m unittest discover
+
+    - name: 'Upload Coverage Report'
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: .coverage
