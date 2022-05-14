@@ -7,57 +7,131 @@ installing the correct version of the webdriver for the supported
 browser being used, and closing the webdriver.
 """
 
-from os import devnull
-from typing import Union
+from os import devnull, path
+from json import load
+from typing import Union, Dict
+from datetime import date
 
 from selenium import webdriver
 
+from .website import WebsiteType
 from .logger import get_logger
 
 WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
 
 
-def create_webdriver(avaliable_browsers: dict, website_name: str) -> WebdriverType:
+def check_installed_webdrivers() -> Dict[str, str]:
+    """Checks for installed webdrivers to use. Will only use webdrivers cached today."""
+    installed_webdrivers: dict = {}
+    try:
+        today = date.today().strftime("%d/%m/%Y")
+        wdm_drivers = path.join(path.expanduser("~"), ".wdm", "drivers.json")
+        with open(wdm_drivers, "r", encoding="utf-8") as file:
+            cached_webdrivers = load(file)
+            for found_webdriver in cached_webdrivers:
+                timestamp = cached_webdrivers[found_webdriver]["timestamp"]
+                if timestamp == today:
+                    cached_webdriver = found_webdriver.split("_")[1]
+                    cached_webdriver_version = found_webdriver.split("_")[2]
+                    other_webdrivers = installed_webdrivers.get(cached_webdriver, None)
+                    if other_webdrivers:
+                        # Remove v from driver version and compare versions as a tuple of ints.
+                        current = tuple(
+                            map(
+                                int,
+                                (other_webdrivers.replace("v", "").split(".")),
+                            )
+                        )
+                        new = tuple(
+                            map(
+                                int,
+                                (cached_webdriver_version.replace("v", "").split(".")),
+                            )
+                        )
+                        if new > current:
+                            installed_webdrivers[
+                                cached_webdriver
+                            ] = cached_webdriver_version
+                        else:
+                            break
+                    installed_webdrivers[cached_webdriver] = cached_webdriver_version
+    except Exception:
+        logger = get_logger()
+        logger.debug(
+            "Did not find any recent webdrivers! Will download the latest drivers instead."
+        )
+    logger = get_logger()
+    logger.debug("Found cached webdrivers! %s", installed_webdrivers)
+    return installed_webdrivers
+
+
+def header_constructor(
+    leetscraper_version: str, browser: str, browser_version: str
+) -> str:
+    """Construct custom user-agent header to try and do the right thing by letting these websites
+    know this is a bot making requests to their servers.
+    """
+    return f"Mozilla/5.0 (compatible; Leetscraper/{leetscraper_version}; +https://github.com/Pavocracy/leetscraper) {browser}/{browser_version}"
+
+
+def create_webdriver(
+    avaliable_browsers: dict,
+    website: WebsiteType,
+    installed_webdrivers: dict,
+    leetscraper_version: str,
+) -> WebdriverType:
     """Initializes the webdriver with pre-defined options."""
     for browser, browser_version in avaliable_browsers.items():
         try:
+            user_agent = None
+            if website.need_headers:
+                user_agent = header_constructor(
+                    leetscraper_version, browser, browser_version
+                )
             if browser == "chrome":
                 from selenium.webdriver.chrome.service import Service as ChromeService
                 from selenium.webdriver.chrome.options import Options as ChromeOptions
                 from webdriver_manager.chrome import ChromeDriverManager
 
+                webdriver_version = installed_webdrivers.get("chromedriver", "latest")
                 service = ChromeService(
-                    ChromeDriverManager(log_level=0, print_first_line=False).install(),
+                    ChromeDriverManager(
+                        version=webdriver_version, log_level=0, print_first_line=False
+                    ).install(),
                     log_path=devnull,
                 )
                 options = ChromeOptions()
                 options.add_experimental_option("excludeSwitches", ["enable-logging"])
                 options.add_argument("--headless")
-                options.add_argument("--silent")
                 options.add_argument("--disable-gpu")
-                if website_name == "hackerrank.com":
-                    options.add_argument(f"user-agent={browser}/{browser_version}")
+                if user_agent:
+                    options.add_argument(f"--user-agent={user_agent}")
                 driver = webdriver.Chrome(service=service, options=options)
             if browser == "firefox":
                 from selenium.webdriver.firefox.service import Service as FirefoxService
                 from selenium.webdriver.firefox.options import Options as FirefoxOptions
                 from webdriver_manager.firefox import GeckoDriverManager
 
+                webdriver_version = installed_webdrivers.get("geckodriver", "latest")
                 service = FirefoxService(
-                    GeckoDriverManager(log_level=0, print_first_line=False).install(),
+                    GeckoDriverManager(
+                        version=webdriver_version, log_level=0, print_first_line=False
+                    ).install(),
                     log_path=devnull,
                 )
                 options = FirefoxOptions()
                 options.set_capability(
                     "moz:firefoxOptions", {"log": {"level": "fatal"}}
                 )
-                options.add_argument("--headless")
-                # options.add_argument("--silent") no longer works since firefox 91.9.0esr?
-                options.add_argument("--disable-gpu")
+                options.add_argument("-headless")
+                if user_agent:
+                    options.set_preference("general.useragent.override", user_agent)
                 driver = webdriver.Firefox(service=service, options=options)
             driver.implicitly_wait(0)
             logger = get_logger()
-            logger.debug("Created %s webdriver for %s", driver.name, website_name)
+            logger.debug(
+                "Created %s webdriver for %s", driver.name, website.website_name
+            )
             return driver
         except Exception as error:
             logger = get_logger()

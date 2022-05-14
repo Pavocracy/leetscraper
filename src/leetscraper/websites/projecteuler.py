@@ -28,6 +28,7 @@ class Projecteuler:
         self.base_url = "https://projecteuler.net/problem="
         self.problem_description = {"id": "content"}
         self.file_split = "-"
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -35,7 +36,9 @@ class Projecteuler:
         """Returns problems to scrape defined by checks in this method."""
         get_problems = []
         try:
-            request = http.request("GET", self.api_url)
+            headers = {}
+            headers["User-Agent"] = self.headers
+            request = http.request("GET", self.api_url, headers=headers)
             soup = BeautifulSoup(request.data, "html.parser")
             data = soup.find("td", {"class": "id_column"}).get_text()
             for i in range(1, int(data) + 1):

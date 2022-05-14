@@ -28,6 +28,7 @@ class Codechef:
         self.base_url = "https://www.codechef.com/problems/"
         self.problem_description = {"class": "problem-statement"}
         self.file_split = "-"
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -35,10 +36,13 @@ class Codechef:
         """Returns problems to scrape defined by checks in this method."""
         get_problems = []
         try:
+            headers = {}
+            headers["User-Agent"] = self.headers
             for value in self.difficulty.values():
                 request = http.request(
                     "GET",
                     self.api_url + value.lower() + "?limit=999",
+                    headers=headers,
                 )
                 data = loads(request.data.decode("utf-8"))
                 for problem in data["data"]:

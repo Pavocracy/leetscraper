@@ -1,6 +1,6 @@
 import unittest
 
-from src.leetscraper import Leetscraper
+from src.leetscraper.leetscraper import Leetscraper
 
 
 class TestLeetscraper(unittest.TestCase):

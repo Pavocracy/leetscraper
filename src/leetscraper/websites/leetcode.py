@@ -27,6 +27,7 @@ class Leetcode:
         self.base_url = "https://leetcode.com/problems/"
         self.problem_description = {"class": "content__u3I1 question-content__JfgR"}
         self.file_split = "."
+        self.need_headers = False
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int

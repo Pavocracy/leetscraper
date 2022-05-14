@@ -4,7 +4,11 @@ from shutil import rmtree
 from os import path
 
 from src.leetscraper.leetscraper import Leetscraper
-from src.leetscraper.driver import create_webdriver, webdriver_quit
+from src.leetscraper.driver import (
+    check_installed_webdrivers,
+    create_webdriver,
+    webdriver_quit,
+)
 from src.leetscraper.scraper import check_problems, needed_problems, scrape_problems
 from src.leetscraper.system import check_platform, check_supported_browsers
 
@@ -40,6 +44,8 @@ class TestLeetscraper(unittest.TestCase):
             leetscraper.website,
             scraped_problems,
             leetscraper.scrape_limit * len(avaliable_browsers),
+            avaliable_browsers,
+            leetscraper.version,
         )
         self.assertEqual(
             len(get_problems), (leetscraper.scrape_limit * len(avaliable_browsers))
@@ -49,9 +55,13 @@ class TestLeetscraper(unittest.TestCase):
         total_scraped = 0
         test_browser = 1
         start = 0
+        installed_webdrivers = check_installed_webdrivers()
         for browser, version in avaliable_browsers.items():
             driver = create_webdriver(
-                {browser: version}, leetscraper.website.website_name
+                {browser: version},
+                leetscraper.website,
+                installed_webdrivers,
+                leetscraper.version,
             )
 
             # Check scrape_problems with scrape_limit

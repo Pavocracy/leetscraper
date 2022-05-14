@@ -13,7 +13,6 @@ from typing import List, Optional
 from urllib3 import PoolManager
 
 from ..logger import get_logger
-from ..system import check_platform, check_supported_browsers
 
 
 class Hackerrank:
@@ -28,9 +27,7 @@ class Hackerrank:
         self.base_url = "https://www.hackerrank.com/challenges/"
         self.problem_description = {"class": "problem-statement"}
         self.file_split = "."
-        # Hackerrank requires User-Agent headers for scraping.
-        platform = check_platform()
-        self.browsers = check_supported_browsers(platform)
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -39,8 +36,7 @@ class Hackerrank:
         get_problems = []
         try:
             headers = {}
-            browser, version = list(self.browsers.items())[0]
-            headers["User-Agent"] = f"{browser}/{version}"
+            headers["User-Agent"] = self.headers
             for category in self.categories:
                 for i in range(0, 1001, 50):
                     request = http.request(
