@@ -36,6 +36,7 @@ class Codewars:
         self.base_url = "https://www.codewars.com/kata/"
         self.problem_description = {"id": "description"}
         self.file_split = "."
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -43,13 +44,19 @@ class Codewars:
         """Returns problems to scrape defined by checks in this method."""
         get_problems = []
         try:
+            headers = {}
+            headers["User-Agent"] = self.headers
             if scrape_limit == -1 or scrape_limit > 999:
                 logger = get_logger()
                 logger.info(
                     "**NOTE** codewars can take up to 5 minutes to find all problems!"
                 )
             for i in range(0, 999):
-                request = http.request("GET", self.base_url + f"?page={i}")
+                request = http.request(
+                    "GET",
+                    self.base_url + f"?page={i}",
+                    headers=headers,
+                )
                 soup = BeautifulSoup(request.data, "html.parser")
                 data = soup.find_all("div", {"class": "list-item-kata"})
                 if data:

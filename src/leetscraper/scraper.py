@@ -18,7 +18,7 @@ from tqdm import tqdm
 from urllib3 import PoolManager
 
 from .logger import get_logger
-from .driver import WebdriverType
+from .driver import header_constructor, WebdriverType
 from .website import WebsiteType
 
 
@@ -47,13 +47,22 @@ def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
 
 
 def needed_problems(
-    website: WebsiteType, scraped_problems: List[str], scrape_limit: int
+    website: WebsiteType,
+    scraped_problems: List[str],
+    scrape_limit: int,
+    browsers: dict,
+    leetscraper_version: str,
 ) -> List[List[Optional[str]]]:
     """Returns a list of scrape_limit website problems missing from the scraped_path."""
     logger = get_logger()
     logger.info("Getting the list of %s problems to scrape", website.website_name)
-    start = time()
+    if website.need_headers:
+        browser, browser_version = list(browsers.items())[0]
+        website.headers = header_constructor(
+            leetscraper_version, browser, browser_version
+        )
     http = PoolManager()
+    start = time()
     get_problems = website.get_problems(http, scraped_problems, scrape_limit)
     stop = time()
     logger.debug(
