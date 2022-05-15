@@ -8,3 +8,4 @@ unittesting/
 leetscraper.log
 geckodriver.log
 .coverage
+coverage.*
