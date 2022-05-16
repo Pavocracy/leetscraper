@@ -15,7 +15,7 @@ from datetime import date
 from selenium import webdriver
 
 from .website import WebsiteType
-from .logger import get_logger
+from .logger import log_message
 
 WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
 
@@ -56,12 +56,12 @@ def check_installed_webdrivers() -> Dict[str, str]:
                             break
                     installed_webdrivers[cached_webdriver] = cached_webdriver_version
     except Exception:
-        logger = get_logger()
-        logger.debug(
-            "Did not find any recent webdrivers! Will download the latest drivers instead."
+        log_message(
+            "debug",
+            "Did not find any recent webdrivers! Will download the latest drivers instead.",
         )
-    logger = get_logger()
-    logger.debug("Found cached webdrivers! %s", installed_webdrivers)
+        return installed_webdrivers
+    log_message("debug", "Found cached webdrivers! %s", installed_webdrivers)
     return installed_webdrivers
 
 
@@ -128,21 +128,22 @@ def create_webdriver(
                     options.set_preference("general.useragent.override", user_agent)
                 driver = webdriver.Firefox(service=service, options=options)
             driver.implicitly_wait(0)
-            logger = get_logger()
-            logger.debug(
-                "Created %s webdriver for %s", driver.name, website.website_name
+            log_message(
+                "debug",
+                "Created %s webdriver for %s",
+                driver.name,
+                website.website_name,
             )
             return driver
         except Exception as error:
-            logger = get_logger()
-            logger.warning(
+            log_message(
+                "warning",
                 "Could not initialize %s! %s. Trying another browser!",
                 browser,
                 error,
             )
     message = "Could not initialize any browsers found!"
-    logger = get_logger()
-    logger.exception(message)
+    log_message("exception", message)
     raise Exception(message)
 
 
@@ -151,6 +152,5 @@ def webdriver_quit(
     website_name: str,
 ):
     """Closes the webdriver."""
-    logger = get_logger()
-    logger.debug("Closing %s driver", website_name)
+    log_message("debug", "Closing %s driver", website_name)
     driver.quit()

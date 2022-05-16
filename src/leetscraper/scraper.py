@@ -17,16 +17,18 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from urllib3 import PoolManager
 
-from .logger import get_logger
-from .driver import header_constructor, WebdriverType
+from .logger import log_message
+from .driver import header_constructor, WebdriverType, webdriver_quit
 from .website import WebsiteType
 
 
 def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
     """Returns a list of all website problems already scraped in the scrape_path."""
-    logger = get_logger()
-    logger.debug(
-        "Checking %s for existing %s problems", scrape_path, website.website_name
+    log_message(
+        "debug",
+        "Checking %s for existing %s problems",
+        scrape_path,
+        website.website_name,
     )
     start = time()
     scraped_problems = []
@@ -37,7 +39,8 @@ def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
             if file:
                 scraped_problems.append(file.split(website.file_split)[0])
     stop = time()
-    logger.debug(
+    log_message(
+        "debug",
         "Checking for %s scraped_problems in %s took %s seconds",
         website.website_name,
         scrape_path,
@@ -54,8 +57,10 @@ def needed_problems(
     leetscraper_version: str,
 ) -> List[List[Optional[str]]]:
     """Returns a list of scrape_limit website problems missing from the scraped_path."""
-    logger = get_logger()
-    logger.info("Getting the list of %s problems to scrape", website.website_name)
+
+    log_message(
+        "info", "Getting the list of %s problems to scrape", website.website_name
+    )
     if website.need_headers:
         browser, browser_version = list(browsers.items())[0]
         website.headers = header_constructor(
@@ -65,7 +70,8 @@ def needed_problems(
     start = time()
     get_problems = website.get_problems(http, scraped_problems, scrape_limit)
     stop = time()
-    logger.debug(
+    log_message(
+        "debug",
         "Getting list of %s needed_problems for %s took %s seconds",
         scrape_limit if scrape_limit > 0 else len(get_problems),
         website.website_name,
@@ -86,8 +92,7 @@ def scrape_problems(
     Returns a count of total problems scraped.
     """
     if not get_problems:
-        logger = get_logger()
-        logger.warning("Nothing to scrape! get_problems is empty!")
+        log_message("warning", "Nothing to scrape! get_problems is empty!")
         return 0
     errors = 0
     start = time()
@@ -95,13 +100,14 @@ def scrape_problems(
         errors += create_problem(website, problem, driver, scrape_path)
     stop = time()
     scraped = scrape_limit - errors if scrape_limit > 0 else len(get_problems) - errors
-    logger = get_logger()
-    logger.debug(
+    log_message(
+        "debug",
         "Scraping %s %s problems took %s seconds",
         scraped,
         website.website_name,
         int(stop - start),
     )
+    webdriver_quit(driver, website.website_name)
     return scraped
 
 
@@ -142,8 +148,8 @@ def create_problem(
             file.writelines(problem_description + "\n")
         return 0
     except Exception as error:
-        logger = get_logger()
-        logger.debug(
+        log_message(
+            "debug",
             "Failed to scrape %s%s! %s",
             website.base_url,
             problem[0],

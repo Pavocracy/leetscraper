@@ -10,7 +10,7 @@ given supported website.
 from typing import Union
 
 from .websites import Codechef, Codewars, Hackerrank, Leetcode, Projecteuler
-from .logger import get_logger
+from .logger import log_message
 
 
 WebsiteType = Union[Codechef, Codewars, Hackerrank, Leetcode, Projecteuler]
@@ -32,7 +32,6 @@ def set_website(
         return Hackerrank()
     if website_name == "codewars.com":
         return Codewars()
-    logger = get_logger()
     message = f"{website_name} is not a supported website!"
-    logger.exception(message)
+    log_message("exception", message)
     raise Exception(message)
