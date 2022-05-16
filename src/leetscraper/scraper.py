@@ -1,12 +1,12 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
 """This module contains the functions used to do the actual scraping.
 Each function will call the website methods for website specific filtering.
 """
 
-from os import walk, path, makedirs
+from os import makedirs, path, walk
 from time import time
 from typing import List, Optional
 
@@ -17,8 +17,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from urllib3 import PoolManager
 
-from .logger import log_message
 from .driver import header_constructor, WebdriverType, webdriver_quit
+from .logger import log_message
 from .website import WebsiteType
 
 
@@ -57,7 +57,6 @@ def needed_problems(
     leetscraper_version: str,
 ) -> List[List[Optional[str]]]:
     """Returns a list of scrape_limit website problems missing from the scraped_path."""
-
     log_message(
         "info", "Getting the list of %s problems to scrape", website.website_name
     )

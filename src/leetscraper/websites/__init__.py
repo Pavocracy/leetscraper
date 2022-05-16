@@ -1,9 +1,9 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""leetscraper currently supports leetcode.com, projecteuler.net, codechef.com, hackerrank.com,
-codewars.com.
+"""leetscraper currently supports codechef.com, codewars.com, hackerrank.com, leetcode.com, 
+projecteuler.net.
 """
 
 __all__ = ["Codechef", "Codewars", "Hackerrank", "Leetcode", "Projecteuler"]

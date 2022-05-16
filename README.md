@@ -73,6 +73,24 @@ if __name__ == "__main__":
         Leetscraper(website_name=site)
 ```
 
+Example of how to manually scrape 3 specific problems from leetcode.com:
+```python
+from leetscraper import Leetscraper
+
+if __name__ == "__main__":
+    scraper = Leetscraper(
+        website_name="leetcode.com",
+        auto_scrape=False,
+    )
+    scraper.driver, scraper.get_problems = scraper.setup_scraper()
+    scraper.get_problems = [
+        ["number-of-longest-increasing-subsequence", 2],
+        ["partition-equal-subset-sum", 2],
+        ["minimum-possible-integer-after-at-most-k-adjacent-swaps-on-digits", 3],
+    ]
+    scraper.scraped = scraper.start_scraping()
+```
+
 ### Information
 
 How fast and reliable this scraper performs will change depending on things like which website you are scraping and your internet connection. 

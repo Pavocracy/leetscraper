@@ -1,30 +1,33 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the functions which are responsible for
-installing the correct version of the webdriver for the supported
-browser being used, and closing the webdriver.
+"""This module contains the functions which are responsible for installing the correct version of
+the webdriver for the supported browser being used, and closing the webdriver.
 """
 
-from os import devnull, path
-from json import load
-from typing import Union, Dict
 from datetime import date
+from json import load
+from os import devnull, path
+from typing import Dict, Union
 
 from selenium import webdriver
 
-from .website import WebsiteType
 from .logger import log_message
+from .website import WebsiteType
 
 WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
 
 
 def check_installed_webdrivers() -> Dict[str, str]:
     """Checks for installed webdrivers to use. Will only use webdrivers cached today."""
-    installed_webdrivers: dict = {}
+    # Much of the code in this function mirrors the patterns found in webdriver_manager.
+    # https://github.com/SergeyPirogov/webdriver_manager/blob/master/webdriver_manager/driver_cache.py
     try:
+        installed_webdrivers: dict = {}
+        # This is to match the date format wdm uses.
         today = date.today().strftime("%d/%m/%Y")
+        # This is the default path where wdm stores the list of cached webdrivers.
         wdm_drivers = path.join(path.expanduser("~"), ".wdm", "drivers.json")
         with open(wdm_drivers, "r", encoding="utf-8") as file:
             cached_webdrivers = load(file)
@@ -83,7 +86,7 @@ def create_webdriver(
     """Initializes the webdriver with pre-defined options."""
     for browser, browser_version in avaliable_browsers.items():
         try:
-            user_agent = None
+            user_agent: str = ""
             if website.need_headers:
                 user_agent = header_constructor(
                     leetscraper_version, browser, browser_version
@@ -120,6 +123,7 @@ def create_webdriver(
                     log_path=devnull,
                 )
                 options = FirefoxOptions()
+                # Firefox does not allow no logging, So set to highest level instead.
                 options.set_capability(
                     "moz:firefoxOptions", {"log": {"level": "fatal"}}
                 )

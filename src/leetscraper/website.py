@@ -1,16 +1,15 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the function which is responsible for
-initializating the required class for successful scraping of the
-given supported website.
+"""This module contains the function which is responsible for initializating the required class
+for successful scraping of the given supported website.
 """
 
 from typing import Union
 
-from .websites import Codechef, Codewars, Hackerrank, Leetcode, Projecteuler
 from .logger import log_message
+from .websites import Codechef, Codewars, Hackerrank, Leetcode, Projecteuler
 
 
 WebsiteType = Union[Codechef, Codewars, Hackerrank, Leetcode, Projecteuler]

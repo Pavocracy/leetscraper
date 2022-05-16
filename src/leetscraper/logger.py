@@ -1,6 +1,6 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
 """This module contains the functions to ensure all logging is done to the same file."""
 
@@ -34,8 +34,8 @@ def get_logger() -> logging.Logger:
 
 
 def log_message(log_level: str, message: str, *args: object):
-    """Send a message to the leetscraper logger. You must specify a log level and pass any objects
-    required for the message formatting.
+    """Send a message to the leetscraper logger. You must specify a log level, a message and pass
+    any objects required for the message formatting.
     """
     logger = get_logger()
     if log_level == "debug":
