@@ -1,5 +1,4 @@
 import unittest
-import logging
 from shutil import rmtree
 
 from src.leetscraper.leetscraper import Leetscraper
@@ -14,9 +13,8 @@ class TestLeetscraper(unittest.TestCase):
         scraped_problems = check_problems(leetscraper.website, leetscraper.scrape_path)
         self.assertEqual(len(scraped_problems), leetscraper.scraped)
 
-        # Cleanup problems and logging
+        # Cleanup problems
         rmtree(leetscraper.scrape_path)
-        logging.shutdown()
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Codechef class and its methods.
-Initialisation of the class will set attributes required for most of
-the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Codechef class and its methods. Initialisation of the class will set
+attributes required for most of the class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
@@ -44,9 +43,9 @@ class Codechef:
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
     ) -> List[List[Optional[str]]]:
         """Returns problems to scrape defined by checks in this method."""
-        get_problems = []
         try:
-            headers = {}
+            get_problems: list = []
+            headers: dict = {}
             headers["User-Agent"] = self.headers
             request = http.request(
                 "GET", self.api_url + "?limit=99999", headers=headers

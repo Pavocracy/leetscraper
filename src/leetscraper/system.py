@@ -1,16 +1,16 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the functions which are responsible for
-checking if the operating system used is supported, if the given
-path is valid, and looks for a supported browser to use for the WebDriver.
+"""This module contains the functions which are responsible for checking if the operating system
+used is supported, if the given path is valid, and looks for a supported browser to use for the
+WebDriver.
 """
 
-from os import path, makedirs, getcwd
+from os import getcwd, makedirs, path
 from re import sub
-from sys import platform
 from subprocess import run
+from sys import platform
 from typing import Dict
 
 from .logger import log_message
@@ -30,7 +30,8 @@ def check_path(scrape_path: str) -> str:
                     error,
                     getcwd(),
                 )
-                check_path(getcwd())
+                scrape_path = getcwd()
+                check_path(scrape_path)
             else:
                 message = f"{scrape_path} Error!: {error}"
                 log_message("exception", message)
@@ -57,7 +58,9 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
     """Looks for supported browsers installed to initialize the correct webdriver version.
     Raise an exception if no supported browsers found on the callers operating system.
     """
-    avaliable_browsers = {}
+    # Much of the code in this function mirrors the patterns found in webdriver_manager.
+    # https://github.com/SergeyPirogov/webdriver_manager/blob/master/webdriver_manager/utils.py
+    avaliable_browsers: dict = {}
     query = {
         "chrome": {
             "mac": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version",

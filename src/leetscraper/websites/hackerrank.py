@@ -1,10 +1,9 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Hackerrank class and its methods.
-Initialisation of the class will set attributes required for most of
-the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Hackerrank class and its methods. Initialisation of the class will set
+attributes required for most of the class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
@@ -20,7 +19,6 @@ class Hackerrank:
 
     def __init__(self):
         """These are the attributes specific to URLs and HTML tags for hackerrank.com."""
-        # TODO: Handle multiple HTML tags when a website is not consistent?
         self.website_name = "hackerrank.com"
         self.categories = ["algorithms", "data-structures", "mathematics", "ai", "fp"]
         self.api_url = "https://www.hackerrank.com/rest/contests/master/tracks/"
@@ -33,9 +31,9 @@ class Hackerrank:
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
     ) -> List[List[Optional[str]]]:
         """Returns problems to scrape defined by checks in this method."""
-        get_problems = []
         try:
-            headers = {}
+            get_problems: list = []
+            headers: dict = {}
             headers["User-Agent"] = self.headers
             for category in self.categories:
                 for i in range(0, 1001, 50):

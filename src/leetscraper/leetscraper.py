@@ -1,6 +1,6 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
 """
   __             __
@@ -16,7 +16,7 @@ website, will set some attributes that will allow coding challenges to be reques
 filtered down to the problem description, and written to a markdown file.
 
 This scraper currently works for:
-leetcode.com, projecteuler.net, codechef.com, hackerrank.com, codewars.com
+codechef.com, codewars.com, hackerrank.com, leetcode.com, projecteuler.net.
 
 It uses chrome or firefox with Selenium to scrape problems. If chrome or firefox are not
 installed on your machine this scraper will raise an Exception and exit without scraping.
@@ -60,7 +60,7 @@ class Leetscraper:
                 f"scrape_limit error!: Cannot scrape {self.scrape_limit} problems!"
             )
             log_message("exception", message)
-            raise Exception(message)
+            raise ValueError(message)
         if not self.auto_scrape:
             return
         self.driver, self.get_problems = self.setup_scraper()

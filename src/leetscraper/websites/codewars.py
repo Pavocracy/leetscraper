@@ -1,10 +1,9 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Codewars class and its methods.
-Initialisation of the class will set attributes required for most of
-the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Codewars class and its methods. Initialisation of the class will set
+attributes required for most of the class methods. Some Leetscraper attributes will be required.
 """
 
 from typing import List, Optional
@@ -20,7 +19,6 @@ class Codewars:
 
     def __init__(self):
         """These are the attributes specific to URLs and HTML tags for codewars.com."""
-        # TODO: Handle multiple HTML tags when a website is not consistent?
         self.website_name = "codewars.com"
         self.difficulty = {
             8: "EASY",
@@ -42,9 +40,10 @@ class Codewars:
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
     ) -> List[List[Optional[str]]]:
         """Returns problems to scrape defined by checks in this method."""
-        get_problems = []
+        # TODO: Find a better way than this! This is REALLY slow!
         try:
-            headers = {}
+            get_problems: list = []
+            headers: dict = {}
             headers["User-Agent"] = self.headers
             if scrape_limit == -1 or scrape_limit > 999:
                 log_message(
@@ -86,22 +85,21 @@ class Codewars:
         If an Error happens, it will return the error message instead.
         """
         try:
-            try:
-                difficulty = self.difficulty[
-                    (
-                        int(
-                            soup.find("div", {"class": "inner-small-hex"})
-                            .get_text()
-                            .split(" ")[0]
-                        )
-                    )
-                ]
-            except Exception:
-                difficulty = "BETA"
             problem_description = (
                 soup.find("div", self.problem_description).get_text().strip()
             )
             problem_name = problem[0]
+            difficulty = self.difficulty[
+                (
+                    int(
+                        soup.find("div", {"class": "inner-small-hex"})
+                        .get_text()
+                        .split(" ")[0]
+                    )
+                )
+            ]
+        except ValueError:
+            difficulty = "BETA"
             problem[1] = difficulty
         except Exception as error:
             return "Error!", error, problem

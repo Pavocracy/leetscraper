@@ -1,10 +1,9 @@
 # Copyright (C) 2022 Pavocracy <pavocracy@pm.me>
-# Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
+# Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Projecteuler class and its methods.
-Initialisation of the class will set attributes required for most of
-the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Projecteuler class and its methods. Initialisation of the class will
+set attributes required for most of the class methods. Some Leetscraper attributes will be required.
 """
 
 from re import sub
@@ -21,7 +20,6 @@ class Projecteuler:
 
     def __init__(self):
         """These are the attributes specific to URLs and HTML tags for projecteuler.net."""
-        # TODO: Handle multiple HTML tags when a website is not consistent?
         self.website_name = "projecteuler.net"
         self.difficulty = {33: "EASY", 66: "MEDIUM", 100: "HARD"}
         self.api_url = "https://projecteuler.net/recent"
@@ -34,9 +32,9 @@ class Projecteuler:
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
     ) -> List[List[Optional[str]]]:
         """Returns problems to scrape defined by checks in this method."""
-        get_problems = []
         try:
-            headers = {}
+            get_problems: list = []
+            headers: dict = {}
             headers["User-Agent"] = self.headers
             request = http.request("GET", self.api_url, headers=headers)
             soup = BeautifulSoup(request.data, "html.parser")
@@ -65,27 +63,22 @@ class Projecteuler:
         If an Error happens, it will return the error message instead.
         """
         try:
-            problem_description = (
+            filter_problem = (
                 soup.find("div", self.problem_description).get_text().strip()
             )
-            get_name = (
-                problem_description.split("Published")[0].strip().replace(" ", "-")
-            )
+            get_name = filter_problem.split("Published")[0].strip().replace(" ", "-")
             problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
             problem_name = problem[0] + f"-{problem_name}"
-            try:
-                difficulty = int(
-                    problem_description.split("Difficulty rating: ")[1].split("%")[0]
-                )
-            except IndexError:
-                difficulty = 100
+            problem_description = (
+                soup.find("div", {"class": "problem_content"}).get_text().strip()
+            )
+            difficulty = filter_problem.split("Difficulty rating: ")[1].split("%")[0]
             for key, value in self.difficulty.items():
                 if int(difficulty) <= key:
                     problem[1] = value
                     break
-            problem_description = (
-                soup.find("div", {"class": "problem_content"}).get_text().strip()
-            )
+        except IndexError:
+            problem[1] = "NA"
         except Exception as error:
             return "Error!", error, problem
         return problem_name, problem_description, problem
