@@ -12,7 +12,7 @@ from typing import List, Optional
 from bs4 import BeautifulSoup
 from urllib3 import PoolManager
 
-from ..logger import get_logger
+from ..logger import log_message
 
 
 class Codewars:
@@ -47,9 +47,9 @@ class Codewars:
             headers = {}
             headers["User-Agent"] = self.headers
             if scrape_limit == -1 or scrape_limit > 999:
-                logger = get_logger()
-                logger.info(
-                    "**NOTE** codewars can take up to 5 minutes to find all problems!"
+                log_message(
+                    "info",
+                    "**NOTE** codewars can take up to 5 minutes to find all problems!",
                 )
             for i in range(0, 999):
                 request = http.request(
@@ -68,9 +68,11 @@ class Codewars:
                 else:
                     break
         except Exception as error:
-            logger = get_logger()
-            logger.warning(
-                "Failed to get problems for %s. Error: %s", self.website_name, error
+            log_message(
+                "warning",
+                "Failed to get problems for %s. Error: %s",
+                self.website_name,
+                error,
             )
         return get_problems
 

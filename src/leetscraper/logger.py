@@ -2,7 +2,7 @@
 # Signed using RSA key 9A5D2D5AA10873B9ABCD92F1D959AEE8875DEEE6
 # This file is released as part of leetscraper under GPL-2.0 License.
 
-"""This module contains the function to ensure all logging is done to the same file."""
+"""This module contains the functions to ensure all logging is done to the same file."""
 
 import logging
 from os import path
@@ -31,3 +31,20 @@ def get_logger() -> logging.Logger:
         logger.addHandler(stream_handler)
         print(f"Logging started! Log file: {path.dirname(__file__)}/leetscraper.log")
     return logger
+
+
+def log_message(log_level: str, message: str, *args: object):
+    """Send a message to the leetscraper logger. You must specify a log level and pass any objects
+    required for the message formatting.
+    """
+    logger = get_logger()
+    if log_level == "debug":
+        logger.debug(message, *args)
+    if log_level == "info":
+        logger.info(message, *args)
+    if log_level == "warning":
+        logger.warning(message, *args)
+    if log_level == "error":
+        logger.error(message, *args)
+    if log_level == "exception":
+        logger.exception(message, *args)

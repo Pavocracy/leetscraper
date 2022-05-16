@@ -13,7 +13,7 @@ from typing import List, Optional
 
 from urllib3 import PoolManager
 
-from ..logger import get_logger
+from ..logger import log_message
 
 
 class Codechef:
@@ -58,9 +58,11 @@ class Codechef:
                     if scrape_limit > 0 and len(get_problems) >= scrape_limit:
                         return get_problems
         except Exception as error:
-            logger = get_logger()
-            logger.warning(
-                "Failed to get problems for %s. Error: %s", self.website_name, error
+            log_message(
+                "warning",
+                "Failed to get problems for %s. Error: %s",
+                self.website_name,
+                error,
             )
         return get_problems
 

@@ -13,7 +13,7 @@ from sys import platform
 from subprocess import run
 from typing import Dict
 
-from .logger import get_logger
+from .logger import log_message
 
 
 def check_path(scrape_path: str) -> str:
@@ -23,8 +23,8 @@ def check_path(scrape_path: str) -> str:
             makedirs(scrape_path)
         except Exception as error:
             if scrape_path != getcwd():
-                logger = get_logger()
-                logger.warning(
+                log_message(
+                    "warning",
                     "Could not use path %s! %s. Trying %s instead!",
                     scrape_path,
                     error,
@@ -33,8 +33,7 @@ def check_path(scrape_path: str) -> str:
                 check_path(getcwd())
             else:
                 message = f"{scrape_path} Error!: {error}"
-                logger = get_logger()
-                logger.exception(message)
+                log_message("exception", message)
                 raise Exception(message) from error
     return scrape_path
 
@@ -50,8 +49,7 @@ def check_platform() -> str:
     if platform.startswith("win32"):
         return "windows"
     message = "You are not using a supported OS!"
-    logger = get_logger()
-    logger.exception(message)
+    log_message("exception", message)
     raise Exception(message)
 
 
@@ -85,11 +83,9 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
             avaliable_browsers[browser] = browser_version
         except Exception:
             message = f"Could not find {browser} version! checking for other browsers"
-            logger = get_logger()
-            logger.warning(message)
+            log_message("warning", message)
     if avaliable_browsers:
         return avaliable_browsers
     message = "No supported browser found!"
-    logger = get_logger()
-    logger.exception(message)
+    log_message("exception", message)
     raise Exception(message)

@@ -12,7 +12,7 @@ from typing import List, Optional
 
 from urllib3 import PoolManager
 
-from ..logger import get_logger
+from ..logger import log_message
 
 
 class Hackerrank:
@@ -62,9 +62,11 @@ class Hackerrank:
                     else:
                         break
         except Exception as error:
-            logger = get_logger()
-            logger.warning(
-                "Failed to get problems for %s. Error: %s", self.website_name, error
+            log_message(
+                "warning",
+                "Failed to get problems for %s. Error: %s",
+                self.website_name,
+                error,
             )
         return get_problems
 

@@ -28,8 +28,8 @@ See related docstrings for help.
 
 from os import getcwd
 
-from .driver import check_installed_webdrivers, create_webdriver, webdriver_quit
-from .logger import get_logger
+from .driver import check_installed_webdrivers, create_webdriver
+from .logger import log_message
 from .scraper import check_problems, needed_problems, scrape_problems
 from .system import check_path, check_platform, check_supported_browsers
 from .website import set_website
@@ -41,7 +41,7 @@ class Leetscraper:
 
     website_name: name of a supported website to scrape ("leetcode.com" set if ignored)
     scrape_path: "path/to/save/problems" (Current working directory set if ignored)
-    scrape_limit: Integer of how many problems to scrape at a time (no limit set if ignored)
+    scrape_limit: integer of how many problems to scrape at a time (no limit set if ignored)
     auto_scrape: "True", "False" (True set if ignored)
 
     This means calling this class with no arguments will result in all leetcode problems
@@ -59,14 +59,12 @@ class Leetscraper:
             message = (
                 f"scrape_limit error!: Cannot scrape {self.scrape_limit} problems!"
             )
-            logger = get_logger()
-            logger.exception(message)
+            log_message("exception", message)
             raise Exception(message)
         if not self.auto_scrape:
             return
         self.driver, self.get_problems = self.setup_scraper()
         self.scraped = self.start_scraping()
-        webdriver_quit(self.driver, self.website.website_name)
 
     def setup_scraper(self) -> tuple:
         """Calling this method is required to setup the arguments needed to scrape."""
