@@ -3,13 +3,10 @@ from shutil import rmtree
 from os import path
 
 from src.leetscraper.leetscraper import Leetscraper
-from src.leetscraper.driver import (
-    check_installed_webdrivers,
-    create_webdriver,
-    webdriver_quit,
-)
+from src.leetscraper.driver import check_installed_webdrivers, create_webdriver
 from src.leetscraper.scraper import check_problems, needed_problems, scrape_problems
 from src.leetscraper.system import check_platform, check_supported_browsers
+from src.leetscraper.version import check_version
 
 
 class TestLeetscraper(unittest.TestCase):
@@ -37,6 +34,9 @@ class TestLeetscraper(unittest.TestCase):
         avaliable_browsers = check_supported_browsers(platform)
         self.assertTrue(avaliable_browsers)
 
+        # Check version
+        version = check_version()
+
         # Check needed_problems with scrape_limit
         scraped_problems = []
         get_problems = needed_problems(
@@ -44,7 +44,7 @@ class TestLeetscraper(unittest.TestCase):
             scraped_problems,
             leetscraper.scrape_limit * len(avaliable_browsers),
             avaliable_browsers,
-            leetscraper.version,
+            version,
         )
         self.assertEqual(
             len(get_problems), (leetscraper.scrape_limit * len(avaliable_browsers))
@@ -60,7 +60,7 @@ class TestLeetscraper(unittest.TestCase):
                 {browser: version},
                 leetscraper.website,
                 installed_webdrivers,
-                leetscraper.version,
+                version,
             )
 
             # Check scrape_problems with scrape_limit
@@ -73,10 +73,9 @@ class TestLeetscraper(unittest.TestCase):
                 leetscraper.scrape_limit,
             )
 
-            # Check driver_quit and iterate counts
+            # Iterate counts
             test_browser += 1
             start += leetscraper.scrape_limit
-            webdriver_quit(driver, leetscraper.website.website_name)
 
             # Check scraped_problems
             scraped_problems = check_problems(

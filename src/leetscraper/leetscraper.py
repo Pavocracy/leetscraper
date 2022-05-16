@@ -32,8 +32,8 @@ from .driver import check_installed_webdrivers, create_webdriver
 from .logger import log_message
 from .scraper import check_problems, needed_problems, scrape_problems
 from .system import check_path, check_platform, check_supported_browsers
+from .version import check_version
 from .website import set_website
-from .__init__ import __version__
 
 
 class Leetscraper:
@@ -50,7 +50,6 @@ class Leetscraper:
 
     def __init__(self, **kwargs):
         """Initialize leetscraper with default values unless kwargs are given."""
-        self.version = __version__
         self.website = set_website(kwargs.get("website_name", "leetcode.com"))
         self.scrape_path = check_path(kwargs.get("scrape_path", getcwd()))
         self.scrape_limit = int(kwargs.get("scrape_limit", -1))
@@ -71,19 +70,20 @@ class Leetscraper:
         user_platform = check_platform()
         browsers = check_supported_browsers(user_platform)
         scraped_problems = check_problems(self.website, self.scrape_path)
+        version = check_version()
         get_problems = needed_problems(
             self.website,
             scraped_problems,
             self.scrape_limit,
             browsers,
-            self.version,
+            version,
         )
         installed_webdrivers = check_installed_webdrivers()
         driver = create_webdriver(
             browsers,
             self.website,
             installed_webdrivers,
-            self.version,
+            version,
         )
         return driver, get_problems
 

@@ -156,5 +156,5 @@ def webdriver_quit(
     website_name: str,
 ):
     """Closes the webdriver."""
-    log_message("debug", "Closing %s driver", website_name)
+    log_message("debug", "Closing %s's %s driver", website_name, driver.name)
     driver.quit()

@@ -7,6 +7,8 @@
 import logging
 from os import path
 
+from .version import check_version
+
 
 def get_logger() -> logging.Logger:
     """Looks for leetscraper logger, otherwise creates a logger.
@@ -29,6 +31,16 @@ def get_logger() -> logging.Logger:
         stream_handler.setFormatter(formatting)
         logger.addHandler(file_handler)
         logger.addHandler(stream_handler)
+        version = check_version()
+        # fmt: off
+        print(
+f""" __             __
+|  .-----.-----|  |_.-----.----.----.---.-.-----.-----.----.
+|  |  -__|  -__|   _|__ --|  __|   _|  _  |  _  |  -__|   _|
+|__|_____|_____|____|_____|____|__| |___._|   __|_____|__|
+                                          |__|    v{version}\n"""
+        )
+        # fmt: on
         print(f"Logging started! Log file: {path.dirname(__file__)}/leetscraper.log")
     return logger
 
