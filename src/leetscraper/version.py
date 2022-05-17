@@ -11,7 +11,7 @@ defeat and making a stand alone module that does nothing else but hold the __ver
 other modules to use. I hope I can one day laugh at this instead of sigh in sadness.
 """
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 
 def check_version() -> str:
