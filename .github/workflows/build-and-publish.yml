@@ -26,7 +26,7 @@ jobs:
 
     - name: 'Update version'
       run:
-        sed -i 's/[0-9].[0-9].[0-9]/'$VERSION'/' src/leetscraper/__init__.py
+        sed -i 's/[0-9].[0-9].[0-9]/'$VERSION'/' src/leetscraper/version.py
       env:  
         VERSION: ${{ github.event.release.tag_name }}
 

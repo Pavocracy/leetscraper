@@ -4,10 +4,8 @@
 
 """leetscraper, a coding challenge webscraper for leetcode, and other websites!"""
 
-__version__ = "2.1.0"
 __licence__ = "GPL-2.0"
 __author__ = "Pavocracy"
 __email__ = "pavocracy@pm.me"
 
-from .websites import *
 from .leetscraper import Leetscraper

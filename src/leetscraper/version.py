@@ -7,11 +7,11 @@ All I wanted to do was have a __version__ variable inside of the leetscraper __i
 that can be imported to other modules for use in functions, while being the singular
 location to update the __version__ variable via automated workflows and accessed by setup.cfg.
 But I could not figure out how to stop the cyclic import errors. So here we are, admitting
-defeat and making a stand alone module that does nothing else but grab the __version__ for
-other modules to use. I hope I can one day laugh at this instead of sigh.
+defeat and making a stand alone module that does nothing else but hold the __version__ for
+other modules to use. I hope I can one day laugh at this instead of sigh in sadness.
 """
 
-from leetscraper import __version__
+__version__ = "2.1.0"
 
 
 def check_version() -> str:
