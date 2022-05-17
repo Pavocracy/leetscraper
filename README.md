@@ -44,7 +44,7 @@ The avaliable kwargs to control the behaviour of the scraper are:
 """
 website_name: name of a supported website to scrape ("leetcode.com" set if ignored)
 scrape_path: "path/to/save/scraped_problems" (Current working directory set if ignored)
-scrape_limit: Integer of how many problems to scrape at a time (no limit set if ignored)
+scrape_limit: integer of how many problems to scrape at a time (no limit set if ignored)
 auto_scrape: "True", "False" (True set if ignored)
 """
 ```
