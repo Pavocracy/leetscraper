@@ -5,14 +5,19 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.pylint.'MESSAGES CONTROL']
-disable = ["import-outside-toplevel", "broad-except", "duplicate-code"]
-
-[tool.pylint.'MASTER']
-fail-under = 9.0
+# Conform to pep8
+[tool.black]
+line_length = 79
+target-version = ['py37']
 
 [tool.mypy]
 python_version = 3.7
 warn_unused_ignores = true
 show_error_codes = true
-disable_error_code = ["import", "attr-defined", "union-attr", "arg-type", "assignment", "call-arg"]
+disable_error_code = []
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = []
+
+[tool.pylint.'MASTER']
+fail-under = 9.0
