@@ -8,6 +8,7 @@ class TestLeetscraper(unittest.TestCase):
     def test_cli(self):
         output = run(["python3", "src/leetscraper/cli.py", "-v"],
                      capture_output=True, check=True, shell=True)
+        print(f"Check if leetscraper v{__version__} in {output}")
         self.assertTrue(f"leetscraper v{__version__}" in str(output.stdout))
 
 
