@@ -1,8 +1,11 @@
 # Code of Conduct
 
+This Code of Conduct serves as a basic guide on what you should expect as a contributor to this project.
+
 ***
 
-### Web scraping  
+## Web scraping
+
 Web scrapers are a touchy subject for some. Others have no moral objections at all. For me its all about context.
 I built this project for the purpose of being able to solve coding problems at my leisure on my local machine.
 I am not always interested in signing up to a website and submitting my code to a solution checker. I just want a reason to code sometimes :)
@@ -12,7 +15,8 @@ Most of the websites TOS forbid redistributing their problems and solutions.
 
 ***
 
-### Contributor behaviour
+## Contributor behaviour
+
 Contributing to this project MUST be a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, religion, or nationality.
   
 Examples of unacceptable behavior by participants include:  

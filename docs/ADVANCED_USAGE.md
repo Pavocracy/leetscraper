@@ -1,6 +1,13 @@
 # Advanced usage
 
-### kwargs with leetscraper
+Leetscraper is a package fully intended for automated use. However, there is nothing stopping you from using these class methods
+and module functions separately as part of a manual process. This can be as simple as utalising the kwargs to control intended
+behaviour, or calling functions and methods as you see fit. Below is some examples of advanced usage.
+
+***
+
+## kwargs with leetscraper
+
 Leetscraper allows you to pass through different kwargs to control exactly how the scraper behaves.
 You can also disable scraping problems at time of initialization by using the kwarg `auto_scrape=False`.
 This allows you to call the class functions in different order, or one at a time.
@@ -9,7 +16,9 @@ This scraper was built with automation in mind. Run the script and forget, and c
 For manual use you will need the help of this doc and I would also encourage you to read the methods and functions docstrings.
 Below is some good examples of how to control the automation of leetscraper, or use it manually.
 
-### Examples 
+***
+
+## Examples 
 
 Example of how to automatically scrape the first 50 problems from projecteuler.net to a directory called SOLVE-ME:
 ```python

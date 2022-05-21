@@ -9,6 +9,7 @@ If you have added support for a website and would like to put up a PR, that's ap
 ## Pull Requests Process
 
 ### Automated Process
+
 For your (and mine!) convenience, this repo contains a bash script [contributing.sh](https://github.com/Pavocracy/leetscraper/blob/main/contributing.sh "contributing bash script")  
 It can be passed flags to automatically run different tools required to enable your PR to be merged into the main branch.  
 -i is to install requirments.txt  
@@ -25,6 +26,7 @@ bash contributing.sh -iadmp
 ```
 
 ### Manual Process
+
 If you do not wish to use the contributing.sh script (or it doesn't work for you), Then please follow the below manual steps before submitting a PR:
 ```python
 pip install -r requirements.txt
