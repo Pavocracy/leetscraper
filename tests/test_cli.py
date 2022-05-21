@@ -11,13 +11,16 @@ class TestLeetscraper(unittest.TestCase):
         cli_path = path.abspath("src/leetscraper/cli.py")
         log_message("warning", "trying to run %s", cli_path)
         output = run(["python3", cli_path, "-v"],
-                     capture_output=True, check=True, shell=True, stdout=PIPE,
+                     stdout=PIPE,
                      stderr=PIPE)
-        log_message("warning",
-                    "Checking if leetscraper v%s in %s",
-                    __version__,
-                    output)
-        self.assertTrue(f"leetscraper v{__version__}" in output)
+        if output.stderr:
+            log_message("error", "stderr! %s", str(output.stderr))
+        if output.stdout:
+            log_message("warning",
+                        "Checking if leetscraper v%s in %s",
+                        __version__,
+                        str(output.stdout))
+        self.assertTrue(f"leetscraper v{__version__}" in str(output.stdout))
 
 
 if __name__ == "__main__":

@@ -130,7 +130,7 @@ def scrape_problems(
     else:
         log_message(
             "info",
-            "Succsessfully scraped %s %s problems!",
+            "Successfully scraped %s %s problems!",
             scraped,
             website.website_name)
     webdriver_quit(driver, website.website_name)
