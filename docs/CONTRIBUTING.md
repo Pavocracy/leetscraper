@@ -17,8 +17,8 @@ It can be passed flags to automatically run different tools required to enable y
 -m is to run mypy  
 -p is to run pylint  
   
-You can pass in one flag at a time, or multiple flags. An example of how to use this script to run all tools before you submit a PR:
-*note: this script requires you to have python3 installed and have it correctly in your path*
+You can pass in one flag at a time, or multiple flags. An example of how to use this script to run all tools before you submit a PR:  
+*note: this script requires you to have python3 installed and have it correctly in your path*  
 *always open and read scripts before you run them. this is a very basic script and easy to follow and understand*
 ```
 bash contributing.sh -iadmp
