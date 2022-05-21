@@ -16,14 +16,15 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thank you for your contribution!
+              body: `Thank you for your contribution!
               
-                Please make sure you have read our docs on [contributing](https://github.com/Pavocracy/leetscraper/blob/main/docs/CONTRIBUTING.md)'
+                Please make sure you have read our docs on [contributing](https://github.com/Pavocracy/leetscraper/blob/main/docs/CONTRIBUTING.md)`
             })
 
   issue-comment:
@@ -34,12 +35,13 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thank you for your contribution!
+              body: `Thank you for your contribution!
               
-                Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)'
+                Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)``
             })
