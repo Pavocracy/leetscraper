@@ -15,7 +15,7 @@ aggressive = 3
 python_version = 3.7
 warn_unused_ignores = true
 show_error_codes = true
-disable_error_code = ['import', 'arg-type', 'attr-defined', 'union-attr']
+disable_error_code = ['import', 'arg-type', 'attr-defined', 'union-attr', 'call-arg', 'assignment']
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = ['import-error', 'import-outside-toplevel', 'broad-except', 'duplicate-code']

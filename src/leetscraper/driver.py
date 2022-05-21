@@ -130,7 +130,7 @@ def create_webdriver(
                 if user_agent:
                     options.add_argument(f"--user-agent={user_agent}")
                 driver = webdriver.Chrome(
-                    service=service, options=options)  # type: ignore[call-arg]
+                    service=service, options=options)
             if browser == "firefox":
                 from selenium.webdriver.firefox.service import (
                     Service as FirefoxService,
@@ -149,8 +149,8 @@ def create_webdriver(
                         print_first_line=False,
                     ).install(),
                     log_path=devnull,
-                )  # type: ignore[assignment]
-                options = FirefoxOptions()  # type: ignore[assignment]
+                )
+                options = FirefoxOptions()
                 # Firefox does not allow no logging, So set to highest level
                 # instead.
                 options.set_capability(
@@ -162,7 +162,7 @@ def create_webdriver(
                         "general.useragent.override", user_agent)
                 driver = webdriver.Firefox(
                     service=service, options=options
-                )  # type: ignore[call-arg, assignment]
+                )
             driver.implicitly_wait(0)
             log_message(
                 "debug",
