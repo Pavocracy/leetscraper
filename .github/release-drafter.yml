@@ -31,18 +31,3 @@ template: |
   ## Changes
 
   $CHANGES
-
-autolabeler:
-  - label: 'major feature'
-    body:
-      - '/(\[x\]) (Major Feature)/'
-  - label: 'feature'
-    body:
-      - '/(\[x\]) (New Feature)/'
-      - '/(\[x\]) (Code Addition)/'
-  - label: 'bug'
-    body:
-      - '/(\[x\]) (Bug Fix)/'
-  - label: 'documentation'
-    body:
-      - '/(\[x\]) (Documentation)/'

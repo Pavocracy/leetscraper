@@ -8,11 +8,15 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    # This matches the user login in the event context
+    # This seems to be more reliable than github.actor
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          # @dependabot merge allows dependabot to self merge
+          # only when all the PR checks have run and pass
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,

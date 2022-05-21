@@ -10,11 +10,15 @@ on:
 jobs:
 
   PR-comment:
-    if: >- 
+    # Only comment on pull_request from someone not dependabot
+    # This matches the user login in the event context
+    # This seems to be more reliable than github.actor
+    if: ${{ 
       github.event.pull_request &&
-      github.event.pull_request.user.login != 'dependabot[bot]'
+      github.event.pull_request.user.login != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
+      - name: 'Comment on PR'
       - uses: actions/github-script@v6
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,11 +31,15 @@ jobs:
             })
 
   issue-comment:
-    if: >- 
+    # Only comment on issue from someone not dependabot
+    # This matches the user login in the event context
+    # This seems to be more reliable than github.actor
+    if: ${{ 
       github.event.issue &&
-      github.event.issue.user.login != 'dependabot[bot]'
+      github.event.issue.user.login != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
+      - name: 'Comment on Issues'
       - uses: actions/github-script@v6
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -28,6 +28,7 @@ jobs:
       run:
         sed -i 's/[0-9].[0-9].[0-9]/'$VERSION'/' src/leetscraper/cli.py
       env:  
+        # Get the version number from the release tag
         VERSION: ${{ github.event.release.tag_name }}
 
     - name: 'Build New Release'
