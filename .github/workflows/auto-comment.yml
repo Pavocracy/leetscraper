@@ -2,6 +2,7 @@ name: 'Auto Comment'
 
 on:
   pull_request:
+    types: [ opened ]
     branches: [ main ]
   issues:
     types: [ opened ]
