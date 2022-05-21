@@ -18,6 +18,8 @@ on:
 
 jobs:
   analyze:
+    # Only run if the workflows that trigger this are a success
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
