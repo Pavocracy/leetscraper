@@ -5,19 +5,21 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-# Conform to pep8
-[tool.black]
-line_length = 79
-target-version = ['py37']
+[tool.autopep8]
+max_line_length = 79
+ignore = ["W690"]
+in-place = true
+recursive = true
+aggressive = 3
 
 [tool.mypy]
 python_version = 3.7
 warn_unused_ignores = true
 show_error_codes = true
-disable_error_code = []
+disable_error_code = ['import', 'arg-type', 'attr-defined', 'union-attr']
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = []
+disable = ['import-error', 'import-outside-toplevel', 'broad-except', 'duplicate-code']
 
 [tool.pylint.'MASTER']
 fail-under = 9.0

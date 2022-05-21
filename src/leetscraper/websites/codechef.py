@@ -2,8 +2,10 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Codechef class and its methods. Initialisation of the class will set
-attributes required for most of the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Codechef class and its methods.
+
+Initialisation of the class will set attributes required for most of the
+class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
@@ -16,12 +18,15 @@ from ..logger import log_message
 
 
 class Codechef:
-    """This class contains the methods required to scrape problems for codechef.com."""
+    """This class contains the methods required to scrape problems for
+    codechef.com."""
 
     def __init__(self):
-        """These are the attributes specific to URLs and HTML tags for codechef.com."""
+        """These are the attributes specific to URLs and HTML tags for
+        codechef.com."""
         self.website_name = "codechef.com"
-        # Difficulty ratings based on https://blog.codechef.com/2022/02/25/exciting-updates-for-february-2022/
+        # Difficulty ratings based on
+        # https://blog.codechef.com/2022/02/25/exciting-updates-for-february-2022/
         self.difficulty = {
             "BEGINNER": 1000,
             "LEVEL 1": 1400,
@@ -34,7 +39,8 @@ class Codechef:
         }
         self.api_url = "https://www.codechef.com/api/list/problems/"
         self.base_url = "https://www.codechef.com/problems/"
-        # TODO: Handle multiple HTML tags needed for the problems that currently fail?
+        # TODO: Handle multiple HTML tags needed for the problems that
+        # currently fail?
         self.problem_description = {"class": "problem-statement"}
         self.file_split = "-"
         self.need_headers = True
@@ -70,9 +76,11 @@ class Codechef:
         soup: str,
         problem: List[str],
     ) -> tuple:
-        """Filters the soup html down to the problem description using HTML tags.\n
-        Sets the problem_name, and problem_difficulty if needed.\n
-        If an Error happens, it will return the error message instead.
+        """Filters the soup html down to the problem description using HTML
+        tags.
+
+        Sets the problem_name, and problem_difficulty if needed. If an
+        Error happens, it will return the error message instead.
         """
         try:
             filter_problem = (

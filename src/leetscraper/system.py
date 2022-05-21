@@ -2,10 +2,9 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the functions which are responsible for checking if the operating system
-used is supported, if the given path is valid, and looks for a supported browser to use for the
-WebDriver.
-"""
+"""This module contains the functions which are responsible for checking if the
+operating system used is supported, if the given path is valid, and looks for a
+supported browser to use for the WebDriver."""
 
 from os import getcwd, makedirs, path
 from re import sub
@@ -18,6 +17,10 @@ from .logger import log_message
 
 def check_path(scrape_path: str) -> str:
     """Check if the given path can be used to scrape problems to."""
+    log_message(
+        "debug",
+        "Checking if %s can be used for scrape_path",
+        scrape_path)
     if not path.isdir(scrape_path):
         try:
             makedirs(scrape_path)
@@ -41,8 +44,10 @@ def check_path(scrape_path: str) -> str:
 
 def check_platform() -> str:
     """Check which operating system is used for supported browser query.
+
     Raise an exception if the operating system is not supported.
     """
+    log_message("debug", "Checking if %s is a supported OS", platform)
     if platform.startswith("darwin"):
         return "mac"
     if platform.startswith("linux"):
@@ -55,9 +60,15 @@ def check_platform() -> str:
 
 
 def check_supported_browsers(user_platform: str) -> Dict[str, str]:
-    """Looks for supported browsers installed to initialize the correct webdriver version.
-    Raise an exception if no supported browsers found on the callers operating system.
+    """Looks for supported browsers installed to initialize the correct
+    webdriver version.
+
+    Raise an exception if no supported browsers found on the callers
+    operating system.
     """
+    log_message(
+        "debug",
+        "Checking for supported browsers installed on your system")
     # Much of the code in this function mirrors the patterns found in webdriver_manager.
     # https://github.com/SergeyPirogov/webdriver_manager/blob/master/webdriver_manager/utils.py
     avaliable_browsers: dict = {}
