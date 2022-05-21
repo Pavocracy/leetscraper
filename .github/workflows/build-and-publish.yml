@@ -51,7 +51,7 @@ jobs:
     - name: 'Upload dist files to release'
       uses: svenstaro/upload-release-action@v2
       with:
-        repo_token: ${{ secrets.WORKFLOW_PAT }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/*
         tag: ${{ github.ref }}
         file_glob: true
