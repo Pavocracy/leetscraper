@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -43,5 +43,5 @@ jobs:
               repo: context.repo.repo,
               body: `Thank you for your contribution!
               
-                Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)``
+                Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)`
             })
