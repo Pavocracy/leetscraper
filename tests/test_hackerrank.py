@@ -4,9 +4,12 @@ from os import path
 
 from src.leetscraper.leetscraper import Leetscraper
 from src.leetscraper.driver import check_installed_webdrivers, create_webdriver
-from src.leetscraper.scraper import check_problems, needed_problems, scrape_problems
+from src.leetscraper.scraper import (
+    check_problems,
+    needed_problems,
+    scrape_problems,
+)
 from src.leetscraper.system import check_platform, check_supported_browsers
-from src.leetscraper.version import check_version
 
 
 class TestLeetscraper(unittest.TestCase):
@@ -34,9 +37,6 @@ class TestLeetscraper(unittest.TestCase):
         avaliable_browsers = check_supported_browsers(platform)
         self.assertTrue(avaliable_browsers)
 
-        # Check version
-        version = check_version()
-
         # Check needed_problems with scrape_limit
         scraped_problems = []
         get_problems = needed_problems(
@@ -44,10 +44,11 @@ class TestLeetscraper(unittest.TestCase):
             scraped_problems,
             leetscraper.scrape_limit * len(avaliable_browsers),
             avaliable_browsers,
-            version,
+            leetscraper.version,
         )
         self.assertEqual(
-            len(get_problems), (leetscraper.scrape_limit * len(avaliable_browsers))
+            len(get_problems),
+            (leetscraper.scrape_limit * len(avaliable_browsers)),
         )
 
         # Check create_webdriver with all browsers
@@ -60,7 +61,7 @@ class TestLeetscraper(unittest.TestCase):
                 {browser: version},
                 leetscraper.website,
                 installed_webdrivers,
-                version,
+                leetscraper.version,
             )
 
             # Check scrape_problems with scrape_limit

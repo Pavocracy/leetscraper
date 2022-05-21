@@ -1,11 +1,8 @@
 .mypy_cache
-__pychace__
-*/__pycache__
-*/*/__pycache__
-*/*/*/__pycache__
-src/*.egg-info
-unittesting/
-leetscraper.log
-geckodriver.log
+**/__pycache__
+src/*.egg-info/
+dist/
+tests/unittesting/
 .coverage
 coverage.*
+*.log

@@ -2,8 +2,10 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Codewars class and its methods. Initialisation of the class will set
-attributes required for most of the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Codewars class and its methods.
+
+Initialisation of the class will set attributes required for most of the
+class methods. Some Leetscraper attributes will be required.
 """
 
 from typing import List, Optional
@@ -15,10 +17,12 @@ from ..logger import log_message
 
 
 class Codewars:
-    """This class contains the methods required to scrape problems for codewars.com."""
+    """This class contains the methods required to scrape problems for
+    codewars.com."""
 
     def __init__(self):
-        """These are the attributes specific to URLs and HTML tags for codewars.com."""
+        """These are the attributes specific to URLs and HTML tags for
+        codewars.com."""
         self.website_name = "codewars.com"
         self.difficulty = {
             8: "EASY",
@@ -62,7 +66,8 @@ class Codewars:
                     for problem in data:
                         if problem["id"] not in scraped_problems:
                             get_problems.append([problem["id"], None])
-                            if scrape_limit > 0 and len(get_problems) >= scrape_limit:
+                            if scrape_limit > 0 and len(
+                                    get_problems) >= scrape_limit:
                                 return get_problems
                 else:
                     break
@@ -80,9 +85,11 @@ class Codewars:
         soup: str,
         problem: List[str],
     ) -> tuple:
-        """Filters the soup html down to the problem description using HTML tags.\n
-        Sets the problem_name, and problem_difficulty if needed.\n
-        If an Error happens, it will return the error message instead.
+        """Filters the soup html down to the problem description using HTML
+        tags.
+
+        Sets the problem_name, and problem_difficulty if needed. If an
+        Error happens, it will return the error message instead.
         """
         try:
             problem_description = (

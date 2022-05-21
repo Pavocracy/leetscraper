@@ -1,4 +1,48 @@
+name-template: 'Release v$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
+categories:
+  - title: 'New Features'
+    labels:
+      - 'major feature'
+      - 'feature'
+  - title: 'Bug Fixes'
+    labels:
+      - 'bug'
+  - title: 'Maintenance'
+    labels: 
+      - 'dependencies'
+      - 'documentation'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'major feature'
+  minor:
+    labels:
+      - 'feature'
+  patch:
+    labels:
+      - 'bug'
+      - 'documentation'
+  default: patch
+  
 template: |
-  ## What's Changed
+  ## Changes
 
   $CHANGES
+
+autolabeler:
+  - label: 'major feature'
+    body:
+      - '/(\[x\]) (Major Feature)/'
+  - label: 'feature'
+    body:
+      - '/(\[x\]) (New Feature)/'
+      - '/(\[x\]) (Code Addition)/'
+  - label: 'bug'
+    body:
+      - '/(\[x\]) (Bug Fix)/'
+  - label: 'documentation'
+    body:
+      - '/(\[x\]) (Documentation)/'

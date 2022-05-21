@@ -1,19 +1,21 @@
 ## Description
 
-Please include a summary of the changes made in this pull request.  
+Please include a summary of the changes made in this pull request.
 Please delete any options below that are not relevant.
+Also make sure to tick relevent boxes with `[x]`.
 
 ## Type of change
 
-- [ ] Bug fix. Tag the issue with Fixes #(issue_number)
+- [ ] Bug Fix. If this fixes an issue tag it with Fixes #(issue_number)
 - [ ] Major Feature (This is for all breaking changes!)
-- [ ] New feature (non-breaking change which adds functionality or website support)
-- [ ] Code addition (extended unit tests, code cleanup ect that doesnt change functionality)
-- [ ] Documentation update
+- [ ] New Feature (non-breaking change which adds functionality or website support)
+- [ ] Code Addition (extended unit tests, code cleanup ect that doesnt change functionality)
+- [ ] Documentation Update
 
 ## Checklist:
 
-- [ ] I have formatted my code with black
+- [ ] I have formatted my code with autopep8
+- [ ] I have formatted my docstrings with docformatter
 - [ ] I have checked my code with mypy
 - [ ] I have checked my code with pylint
 - [ ] I have ran the unit tests and they all pass

@@ -1,4 +1,4 @@
-name: Dependabot auto-merge
+name: 'Dependabot auto-merge'
 
 on:
   pull_request:
@@ -8,11 +8,11 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.DEPENDABOT_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,

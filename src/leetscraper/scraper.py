@@ -3,7 +3,9 @@
 # Find this project at https://github.com/Pavocracy/leetscraper
 
 """This module contains the functions used to do the actual scraping.
-Each function will call the website methods for website specific filtering.
+
+Each function will call the website methods for website specific
+filtering.
 """
 
 from os import makedirs, path, walk
@@ -23,7 +25,8 @@ from .website import WebsiteType
 
 
 def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
-    """Returns a list of all website problems already scraped in the scrape_path."""
+    """Returns a list of all website problems already scraped in the
+    scrape_path."""
     log_message(
         "debug",
         "Checking %s for existing %s problems",
@@ -56,9 +59,12 @@ def needed_problems(
     browsers: dict,
     leetscraper_version: str,
 ) -> List[List[Optional[str]]]:
-    """Returns a list of scrape_limit website problems missing from the scraped_path."""
+    """Returns a list of scrape_limit website problems missing from the
+    scraped_path."""
     log_message(
-        "info", "Getting the list of %s problems to scrape", website.website_name
+        "info",
+        "Getting the list of %s problems to scrape",
+        website.website_name,
     )
     if website.need_headers:
         browser, browser_version = list(browsers.items())[0]
@@ -88,17 +94,26 @@ def scrape_problems(
     scrape_limit: int,
 ) -> int:
     """Scrapes the list of get_problems by calling the create_problem method.
+
     Returns a count of total problems scraped.
     """
     if not get_problems:
         log_message("warning", "Nothing to scrape! get_problems is empty!")
         return 0
+    log_message(
+        "info",
+        "Attempting to scrape %s %s problems to %s",
+        str(scrape_limit) if scrape_limit > 0 else "all",
+        website.website_name,
+        path.abspath(scrape_path),
+    )
     errors = 0
     start = time()
     for problem in tqdm(get_problems):
         errors += create_problem(website, problem, driver, scrape_path)
     stop = time()
-    scraped = scrape_limit - errors if scrape_limit > 0 else len(get_problems) - errors
+    scraped = scrape_limit - \
+        errors if scrape_limit > 0 else len(get_problems) - errors
     log_message(
         "debug",
         "Scraping %s %s problems took %s seconds",
@@ -106,6 +121,18 @@ def scrape_problems(
         website.website_name,
         int(stop - start),
     )
+    if errors:
+        log_message(
+            "warning",
+            "%s problems scraped, but %s problems failed! See leetscraper.log for details!",
+            scraped,
+            errors)
+    else:
+        log_message(
+            "info",
+            "Successfully scraped %s %s problems!",
+            scraped,
+            website.website_name)
     webdriver_quit(driver, website.website_name)
     return scraped
 
@@ -116,10 +143,13 @@ def create_problem(
     driver: WebdriverType,
     scrape_path: str,
 ) -> int:
-    """Gets the html source of a problem, calls the website function to filter the problem
-    description, and creates a markdown file with the filtered results.\n
-    This function saves the file in scraped_path/website_name/DIFFICULTY/problem.md\n
-    Returns 0 for success and 1 for error.
+    """Gets the html source of a problem, calls the website function to filter
+    the problem description, and creates a markdown file with the filtered
+    results.
+
+    This function saves the file in
+    scraped_path/website_name/DIFFICULTY/problem.md. Returns 0 for
+    success and 1 for error.
     """
     try:
         driver.get(website.base_url + problem[0])
@@ -137,7 +167,8 @@ def create_problem(
         if not path.isdir(
             f"{scrape_path}/PROBLEMS/{website.website_name}/{problem[1]}/"
         ):
-            makedirs(f"{scrape_path}/PROBLEMS/{website.website_name}/{problem[1]}/")
+            makedirs(
+                f"{scrape_path}/PROBLEMS/{website.website_name}/{problem[1]}/")
         with open(
             f"{scrape_path}/PROBLEMS/{website.website_name}/{problem[1]}/{problem_name}.md",
             "w",

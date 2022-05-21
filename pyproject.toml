@@ -5,14 +5,20 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.pylint.'MESSAGES CONTROL']
-disable = ["import-outside-toplevel", "broad-except", "duplicate-code"]
-
-[tool.pylint.'MASTER']
-fail-under = 9.0
+[tool.autopep8]
+max_line_length = 79
+ignore = ["W690"]
+recursive = true
+aggressive = 3
 
 [tool.mypy]
 python_version = 3.7
 warn_unused_ignores = true
 show_error_codes = true
-disable_error_code = ["import", "attr-defined", "union-attr", "arg-type", "assignment", "call-arg"]
+disable_error_code = ['import', 'arg-type', 'attr-defined', 'union-attr', 'call-arg', 'assignment']
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ['import-error', 'import-outside-toplevel', 'broad-except', 'duplicate-code']
+
+[tool.pylint.'MASTER']
+fail-under = 9.0

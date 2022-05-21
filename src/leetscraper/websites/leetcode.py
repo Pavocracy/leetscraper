@@ -2,8 +2,10 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Leetcode class and its methods. Initialisation of the class will set
-attributes required for most of the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Leetcode class and its methods.
+
+Initialisation of the class will set attributes required for most of the
+class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
@@ -15,15 +17,18 @@ from ..logger import log_message
 
 
 class Leetcode:
-    """This class contains the methods required to scrape problems for leetcode.com."""
+    """This class contains the methods required to scrape problems for
+    leetcode.com."""
 
     def __init__(self):
-        """These are the attributes specific to URLs and HTML tags for leetcode.com."""
+        """These are the attributes specific to URLs and HTML tags for
+        leetcode.com."""
         self.website_name = "leetcode.com"
         self.difficulty = {1: "EASY", 2: "MEDIUM", 3: "HARD"}
         self.api_url = "https://leetcode.com/api/problems/all/"
         self.base_url = "https://leetcode.com/problems/"
-        self.problem_description = {"class": "content__u3I1 question-content__JfgR"}
+        self.problem_description = {
+            "class": "content__u3I1 question-content__JfgR"}
         self.file_split = "."
         # leetcode seems to block requests when using custom headers :(
         self.need_headers = False
@@ -37,10 +42,8 @@ class Leetcode:
             request = http.request("GET", self.api_url)
             data = loads(request.data.decode("utf-8"))
             for problem in data["stat_status_pairs"]:
-                if (
-                    problem["stat"]["question__title_slug"] not in scraped_problems
-                    and problem["paid_only"] is not True
-                ):
+                if (problem["stat"]["question__title_slug"]
+                        not in scraped_problems and problem["paid_only"] is not True):
                     get_problems.append(
                         [
                             problem["stat"]["question__title_slug"],
@@ -63,9 +66,11 @@ class Leetcode:
         soup: str,
         problem: List[str],
     ) -> tuple:
-        """Filters the soup html down to the problem description using HTML tags.\n
-        Sets the problem_name, and problem_difficulty if needed.\n
-        If an Error happens, it will return the error message instead.
+        """Filters the soup html down to the problem description using HTML
+        tags.
+
+        Sets the problem_name, and problem_difficulty if needed. If an
+        Error happens, it will return the error message instead.
         """
         try:
             problem_description = (

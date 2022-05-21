@@ -1,12 +1,11 @@
 name: 'Release Drafter'
 
 on:
-  pull_request:
+  pull_request_target:
     types: [ closed ]
-    branches: [ main ]
 
 jobs:
-  update_release_draft:
+  if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:

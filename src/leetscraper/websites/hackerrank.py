@@ -2,8 +2,10 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Hackerrank class and its methods. Initialisation of the class will set
-attributes required for most of the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Hackerrank class and its methods.
+
+Initialisation of the class will set attributes required for most of the
+class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
@@ -15,12 +17,20 @@ from ..logger import log_message
 
 
 class Hackerrank:
-    """This class contains the methods required to scrape problems for hackerrank.com."""
+    """This class contains the methods required to scrape problems for
+    hackerrank.com."""
 
     def __init__(self):
-        """These are the attributes specific to URLs and HTML tags for hackerrank.com."""
+        """These are the attributes specific to URLs and HTML tags for
+        hackerrank.com."""
         self.website_name = "hackerrank.com"
-        self.categories = ["algorithms", "data-structures", "mathematics", "ai", "fp"]
+        self.categories = [
+            "algorithms",
+            "data-structures",
+            "mathematics",
+            "ai",
+            "fp",
+        ]
         self.api_url = "https://www.hackerrank.com/rest/contests/master/tracks/"
         self.base_url = "https://www.hackerrank.com/challenges/"
         self.problem_description = {"class": "problem-statement"}
@@ -39,7 +49,9 @@ class Hackerrank:
                 for i in range(0, 1001, 50):
                     request = http.request(
                         "GET",
-                        self.api_url + category + f"/challenges?offset={i}&limit=50",
+                        self.api_url +
+                        category +
+                        f"/challenges?offset={i}&limit=50",
                         headers=headers,
                     )
                     data = loads(request.data.decode("utf-8"))
@@ -73,9 +85,11 @@ class Hackerrank:
         soup: str,
         problem: List[str],
     ) -> tuple:
-        """Filters the soup html down to the problem description using HTML tags.\n
-        Sets the problem_name, and problem_difficulty if needed.\n
-        If an Error happens, it will return the error message instead.
+        """Filters the soup html down to the problem description using HTML
+        tags.
+
+        Sets the problem_name, and problem_difficulty if needed. If an
+        Error happens, it will return the error message instead.
         """
         try:
             problem_description = (

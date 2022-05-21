@@ -1,0 +1,44 @@
+name: 'Auto Comment'
+
+on:
+  pull_request:
+    types: [ opened ]
+    branches: [ main ]
+  issues:
+    types: [ opened ]
+
+jobs:
+
+  PR-comment:
+    if: >- 
+      github.event.pull_request &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you for your contribution! Please make sure you have read our docs on [contributing](https://github.com/Pavocracy/leetscraper/blob/main/docs/CONTRIBUTING.md)'
+            })
+
+  issue-comment:
+    if: >- 
+      github.event.issue &&
+      github.event.issue.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you for your contribution! Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)'
+            })

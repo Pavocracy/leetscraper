@@ -2,8 +2,10 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the Projecteuler class and its methods. Initialisation of the class will
-set attributes required for most of the class methods. Some Leetscraper attributes will be required.
+"""This module contains the Projecteuler class and its methods.
+
+Initialisation of the class will set attributes required for most of the
+class methods. Some Leetscraper attributes will be required.
 """
 
 from re import sub
@@ -16,10 +18,12 @@ from ..logger import log_message
 
 
 class Projecteuler:
-    """This class contains the methods required to scrape problems for projecteuler.net."""
+    """This class contains the methods required to scrape problems for
+    projecteuler.net."""
 
     def __init__(self):
-        """These are the attributes specific to URLs and HTML tags for projecteuler.net."""
+        """These are the attributes specific to URLs and HTML tags for
+        projecteuler.net."""
         self.website_name = "projecteuler.net"
         self.difficulty = {33: "EASY", 66: "MEDIUM", 100: "HARD"}
         self.api_url = "https://projecteuler.net/recent"
@@ -58,21 +62,26 @@ class Projecteuler:
         soup: str,
         problem: List[str],
     ) -> tuple:
-        """Filters the soup html down to the problem description using HTML tags.\n
-        Sets the problem_name, and problem_difficulty if needed.\n
-        If an Error happens, it will return the error message instead.
+        """Filters the soup html down to the problem description using HTML
+        tags.
+
+        Sets the problem_name, and problem_difficulty if needed. If an
+        Error happens, it will return the error message instead.
         """
         try:
             filter_problem = (
                 soup.find("div", self.problem_description).get_text().strip()
             )
-            get_name = filter_problem.split("Published")[0].strip().replace(" ", "-")
+            get_name = filter_problem.split(
+                "Published")[0].strip().replace(" ", "-")
             problem_name = sub("[^A-Za-z0-9-]+", "", get_name)
             problem_name = problem[0] + f"-{problem_name}"
             problem_description = (
-                soup.find("div", {"class": "problem_content"}).get_text().strip()
-            )
-            difficulty = filter_problem.split("Difficulty rating: ")[1].split("%")[0]
+                soup.find(
+                    "div", {
+                        "class": "problem_content"}).get_text().strip())
+            difficulty = filter_problem.split("Difficulty rating: ")[
+                1].split("%")[0]
             for key, value in self.difficulty.items():
                 if int(difficulty) <= key:
                     problem[1] = value

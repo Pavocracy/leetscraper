@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/Pavocracy/leetscraper/branch/main/graph/badge.svg?token=KUQ6T9TPLO)](https://codecov.io/gh/Pavocracy/leetscraper) &middot; 
 [![CodeQL](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pavocracy/leetscraper/actions/workflows/codeql-analysis.yml)  
   
-leetscraper, a coding challenge webscraper for leetcode, and other websites!  
+leetscraper, a coding challenge scraper for leetcode, and other websites!  
   
 This scraper currently works for 
 [leetcode.com](https://leetcode.com "leetcode website"), 
@@ -49,47 +49,7 @@ auto_scrape: "True", "False" (True set if ignored)
 """
 ```
 
-Example of how to automatically scrape the first 50 problems from [projecteuler.net](https://projecteuler.net "project euler website") to a directory called SOLVE-ME:
-```python
-from leetscraper import Leetscraper
-
-if __name__ == "__main__":
-    Leetscraper(website_name="projecteuler.net", scrape_path="~/SOLVE-ME", scrape_limit=50)
-```
-
-Example of how to scrape all problems from all supported websites:
-```python
-from leetscraper import Leetscraper
-
-if __name__ == "__main__":
-    websites = [
-        "leetcode.com",
-        "projecteuler.net",
-        "codechef.com",
-        "hackerrank.com",
-        "codewars.com",
-    ]
-    for site in websites:
-        Leetscraper(website_name=site)
-```
-
-Example of how to manually scrape 3 specific problems from leetcode.com:
-```python
-from leetscraper import Leetscraper
-
-if __name__ == "__main__":
-    scraper = Leetscraper(
-        website_name="leetcode.com",
-        auto_scrape=False,
-    )
-    scraper.driver, scraper.get_problems = scraper.setup_scraper()
-    scraper.get_problems = [
-        ["number-of-longest-increasing-subsequence", 2],
-        ["partition-equal-subset-sum", 2],
-        ["minimum-possible-integer-after-at-most-k-adjacent-swaps-on-digits", 3],
-    ]
-    scraper.scraped = scraper.start_scraping()
-```
+For further examples on how to use keyword arguments, or manually using class methods, please see [ADVANCED_USAGE.md](https://github.com/Pavocracy/leetscraper/blob/main/docs/ADVANCED_USAGE.md "Advanced usage doc")
 
 ### Information
 

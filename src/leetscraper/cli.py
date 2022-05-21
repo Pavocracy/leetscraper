@@ -6,24 +6,43 @@
 
 """This module contains the command-line interface for leetscraper."""
 
-import argparse
+from argparse import ArgumentParser
+
+
+__version__ = "2.1.1"
+# fmt: off
+leetscraper_logo=(
+f"""
+ __             __
+|  |.----.-----|  |_.-----.----.----.---.-.-----.-----.----.
+|  |  -__|  -__|   _|__ --|  __|   _|  _  |  _  |  -__|   _|
+|__|_____|_____|____|_____|____|__| |___._|   __|_____|__|
+                                          |__|  v{__version__}\n\n"""
+)
+# fmt: on
 
 
 def main():
-    """Leetscrape cli"""
+    """Leetscrape cli."""
     # TODO: impliment cli
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
         prog="leetscraper",
         usage="leetscraper [-flag] [OPTION]",
-        description="Leetscraper cli",
+        description=leetscraper_logo,
         add_help=True,
     )
-    parser.add_argument("-p", "--print", help="Print out given input")
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Print out leetscraper version",
+        action="store_true",
+    )
 
     args = parser.parse_args()
 
-    if args.print:
-        print(f"args given! {args.print}")
+    if args.version:
+        print(f"leetscraper v{__version__}")
+        return
     else:
         print("cli not implemented yet!")
 

@@ -2,23 +2,26 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the functions to ensure all logging is done to the same file."""
+"""This module contains the functions to ensure all logging is done to the same
+file."""
 
 import logging
 from os import path
 
-from .version import check_version
+from .cli import leetscraper_logo
 
 
 def get_logger() -> logging.Logger:
     """Looks for leetscraper logger, otherwise creates a logger.
+
     All messages to leetscraper.log, INFO and above to console.
     """
     # TODO: Change to logging config file?
     logger = logging.getLogger("leetscraper")
     logger.setLevel(logging.DEBUG)
     formatting = logging.Formatter(
-        "%(asctime)s [%(levelname)s]: %(message)s", datefmt="%d %B %Y %I:%M:%S %p"
+        "%(asctime)s [%(levelname)s]: %(message)s",
+        datefmt="%d %B %Y %I:%M:%S %p",
     )
     if not logger.hasHandlers():
         file_handler = logging.FileHandler(
@@ -31,23 +34,17 @@ def get_logger() -> logging.Logger:
         stream_handler.setFormatter(formatting)
         logger.addHandler(file_handler)
         logger.addHandler(stream_handler)
-        version = check_version()
-        # fmt: off
+        print(leetscraper_logo)
         print(
-f""" __             __
-|  .-----.-----|  |_.-----.----.----.---.-.-----.-----.----.
-|  |  -__|  -__|   _|__ --|  __|   _|  _  |  _  |  -__|   _|
-|__|_____|_____|____|_____|____|__| |___._|   __|_____|__|
-                                          |__|    v{version}\n"""
-        )
-        # fmt: on
-        print(f"Logging started! Log file: {path.dirname(__file__)}/leetscraper.log")
+            f"Logging started! Log file: {path.dirname(__file__)}/leetscraper.log")
     return logger
 
 
 def log_message(log_level: str, message: str, *args: object):
-    """Send a message to the leetscraper logger. You must specify a log level, a message and pass
-    any objects required for the message formatting.
+    """Send a message to the leetscraper logger.
+
+    You must specify a log level, a message and pass any objects
+    required for the message formatting.
     """
     logger = get_logger()
     if log_level == "debug":
