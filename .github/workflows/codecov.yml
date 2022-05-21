@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # This is needed to authenticate with githubs API to avoid rate limits
-      GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
     - name: 'Checkout PR' 
