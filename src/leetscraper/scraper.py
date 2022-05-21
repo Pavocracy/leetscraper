@@ -105,7 +105,7 @@ def scrape_problems(
         "Attempting to scrape %s %s problems to %s",
         str(scrape_limit) if scrape_limit > 0 else "all",
         website.website_name,
-        scrape_path,
+        path.abspath(scrape_path),
     )
     errors = 0
     start = time()

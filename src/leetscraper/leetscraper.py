@@ -90,13 +90,6 @@ class Leetscraper:
         It returns a value of scraped problems minus any errors caught
         by exceptions.
         """
-        log_message(
-            "info",
-            "Attempting to start_scraping %s %s problems to %s",
-            str(self.scrape_limit) if self.scrape_limit > 0 else "all",
-            self.website.website_name,
-            self.scrape_path,
-        )
         scraped = scrape_problems(
             self.website,
             self.driver,

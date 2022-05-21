@@ -20,7 +20,7 @@ def check_path(scrape_path: str) -> str:
     log_message(
         "debug",
         "Checking if %s can be used for scrape_path",
-        scrape_path)
+        path.abspath(scrape_path))
     if not path.isdir(scrape_path):
         try:
             makedirs(scrape_path)
@@ -29,7 +29,7 @@ def check_path(scrape_path: str) -> str:
                 log_message(
                     "warning",
                     "Could not use path %s! %s. Trying %s instead!",
-                    scrape_path,
+                    path.abspath(scrape_path),
                     error,
                     getcwd(),
                 )
