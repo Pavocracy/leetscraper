@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Comment on PR'
-      - uses: actions/github-script@v6
+        uses: actions/github-script@v6
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Comment on Issues'
-      - uses: actions/github-script@v6
+        uses: actions/github-script@v6
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
