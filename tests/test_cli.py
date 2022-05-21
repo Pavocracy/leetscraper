@@ -12,7 +12,10 @@ class TestLeetscraper(unittest.TestCase):
         log_message("warning", "trying to run %s", cli_path)
         output = run(["python3", cli_path, "-v"],
                      capture_output=True, check=True, shell=True)
-        log_message("warning", "Checking if leetscraper v%s in %s", __version__, str(output.stdout))
+        if str(output.stderr):
+            log_message("error", "stderr! %s", output.stderr)
+        if str(output.stdout):
+            log_message("warning", "Checking if leetscraper v%s in %s", __version__, str(output.stdout))
         self.assertTrue(f"leetscraper v{__version__}" in str(output.stdout))
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-while getopts 'iadmp' flag; do
+while getopts "iadmp" flag; do
   case "${flag}" in
     i)
         echo "Installing pip requirments"
