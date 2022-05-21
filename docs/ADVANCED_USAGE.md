@@ -11,7 +11,7 @@ Below is some good examples of how to control the automation of leetscraper, or 
 
 ### Examples 
 
-Example of how to automatically scrape the first 50 problems from [projecteuler.net](https://projecteuler.net "project euler website") to a directory called SOLVE-ME:
+Example of how to automatically scrape the first 50 problems from projecteuler.net to a directory called SOLVE-ME:
 ```python
 from leetscraper import Leetscraper
 
@@ -35,8 +35,8 @@ if __name__ == "__main__":
         Leetscraper(website_name=site)
 ```
 
-Example of how to manually scrape 3 specific problems from [leetcode.com](https://leetcode.com "leetcode website"):
-*note: this requires you to know the difficulty of the problem when building get_problems*
+Example of how to manually scrape 3 specific problems from leetcode.com:  
+*note: this requires you to know the difficulty of the problem when building get_problems*  
 *get_problems pattern is a list, of lists of problems, where each problem is [problem name, difficulty]*
 ```python
 from leetscraper import Leetscraper
