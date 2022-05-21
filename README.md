@@ -9,10 +9,12 @@ leetscraper, a coding challenge scraper for leetcode, and other websites!
   
 This scraper currently works for 
 [leetcode.com](https://leetcode.com "leetcode website"), 
-[projecteuler.net](https://projecteuler.net "projecteuler website"), 
 [codechef.com](https://codechef.com "codechef website"), 
-[hackerrank.com](https://hackerrank.com "hackerrank website"),
-[codewars.com](https://codewars.com "codewars website").  
+[codewars.com](https://codewars.com "codewars website"), 
+[hackerrank.com](https://hackerrank.com "hackerrank website"), 
+[projecteuler.net](https://projecteuler.net "projecteuler website"), 
+[hackerrank.com](https://hackerrank.com "hackerrank website").  
+
 It was created as a way to gather coding problems to solve without having to sign up to a website or submit your code to a checker.
 
 ***
@@ -29,7 +31,7 @@ pip install leetscraper
 ### Examples
 
 Import the module and Initialize the class. The class has some kwargs options to control the behaviour of the scraper.
-However, all the default values will start to scrape all problems from [leetcode.com](https://leetcode.com "leetcode website") to the cwd.
+However, all the default values will start to scrape all problems from leetcode.com to the cwd.
   
 The most basic usage looks like this:
 ```python
@@ -82,13 +84,6 @@ again and see if the failures were just timeouts or dropped requests. Your milea
 14/02/2022 11:23:33 PM [DEBUG]: Scraping 9209 codewars.com problems took 20340 seconds
 14/02/2022 11:23:33 PM [INFO]: Successfully scraped 9209 codewars.com problems
 ```
-
-You can pass through different arguments for different websites to control exactly how the scraper behaves.
-You can also disable scraping problems at time of instantiation by using the kwarg `auto_scrape=False`.
-This allows you to call the class functions in different order, or one at a time.
-This will change how the scraper works, as its designed to look in a directory for already scraped problems to avoid duplicates.
-This scraper was built with automation in mind. Run the script and forget, and come back to scraped coding problems.
-I would encourage you to look at the function docstrings if you wish to use this scraper outside of its intended automated use.
 
 ***
 
