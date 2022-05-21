@@ -62,8 +62,6 @@ def check_installed_webdrivers() -> Dict[str, str]:
                             installed_webdrivers[
                                 cached_webdriver
                             ] = cached_webdriver_version
-                        else:
-                            break
                     installed_webdrivers[cached_webdriver] = cached_webdriver_version
     except Exception:
         log_message(
