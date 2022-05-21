@@ -8,7 +8,6 @@ build-backend = "setuptools.build_meta"
 [tool.autopep8]
 max_line_length = 79
 ignore = ["W690"]
-in-place = true
 recursive = true
 aggressive = 3
 
