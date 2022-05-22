@@ -16,7 +16,7 @@ example: `curl https://copy-pasted-url-to/leetscraper-x.x.x.tar.gz -o leetscrape
 
 ## Use gpg to verify the signature
 
-Use gpg to verify the packages are signed by [this key](https://github.com/Pavocracy/leetscraper/blob/main/.github/workflows/build-and-publish.yml#L48)  
+Use gpg to verify the packages are signed by [this key](https://github.com/Pavocracy/leetscraper/blob/main/.github/workflows/build-and-publish.yml#L49)  
 `gpg --verify leetscraper-x.x.x.tar.gz.asc leetscraper-x.x.x.tar.gz`
 
 ***
