@@ -9,11 +9,13 @@ closing the webdriver."""
 from datetime import date
 from json import load
 from os import devnull, environ, path
+from time import perf_counter
 from typing import Dict, Union
 
 from selenium import webdriver
 
 from .logger import log_message
+from .utils import check_exec_time
 from .website import WebsiteType
 
 WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
@@ -34,6 +36,7 @@ def check_installed_webdrivers() -> Dict[str, str]:
         # This is the default path where wdm stores the list of cached
         # webdrivers.
         wdm_drivers = path.join(path.expanduser("~"), ".wdm", "drivers.json")
+        start = perf_counter()
         with open(wdm_drivers, "r", encoding="utf-8") as file:
             cached_webdrivers = load(file)
             for found_webdriver in cached_webdrivers:
@@ -63,15 +66,19 @@ def check_installed_webdrivers() -> Dict[str, str]:
                                 cached_webdriver
                             ] = cached_webdriver_version
                     installed_webdrivers[cached_webdriver] = cached_webdriver_version
-            if not installed_webdrivers:
-                raise Exception
+        stop = perf_counter()
+        exec_time, time_unit = check_exec_time(
+            start, stop, "check_installed_webdrivers")
+        if not installed_webdrivers:
+            raise Exception
     except Exception:
         log_message(
             "debug",
             "Did not find any recent webdrivers! Will download the latest drivers instead.",
         )
         return installed_webdrivers
-    log_message("debug", "Found cached webdrivers! %s", installed_webdrivers)
+    log_message("debug", "Found cached webdrivers %s in %s %s",
+                installed_webdrivers, exec_time, time_unit)
     return installed_webdrivers
 
 
@@ -99,10 +106,11 @@ def create_webdriver(
     for browser, browser_version in avaliable_browsers.items():
         log_message(
             "debug",
-            "Attempting to create a webdriver for %s v%s",
+            "Attempting to initialize the webdriver for %s v%s",
             browser,
             browser_version)
         try:
+            start = perf_counter()
             user_agent: str = ""
             if website.need_headers:
                 user_agent = header_constructor(
@@ -169,11 +177,16 @@ def create_webdriver(
                     service=service, options=options
                 )
             driver.implicitly_wait(0)
+            stop = perf_counter()
+            exec_time, time_unit = check_exec_time(
+                start, stop, "create_webdriver")
             log_message(
                 "debug",
-                "Created %s webdriver for %s",
+                "Initialized %s webdriver %s in %s %s",
                 driver.name,
-                website.website_name,
+                webdriver_version,
+                exec_time,
+                time_unit,
             )
             return driver
         except Exception as error:
@@ -193,9 +206,18 @@ def webdriver_quit(
     website_name: str,
 ):
     """Closes the webdriver."""
-    log_message(
-        "debug",
-        "Closing %s's %s webdriver",
-        website_name,
-        driver.name)
-    driver.quit()
+    try:
+        start = perf_counter()
+        driver.quit()
+        stop = perf_counter()
+        exec_time, time_unit = check_exec_time(start, stop, "webdriver_quit")
+        log_message(
+            "debug",
+            "Closed %s webdriver used for %s in %s %s",
+            driver.name,
+            website_name,
+            exec_time,
+            time_unit,
+        )
+    except Exception as error:
+        log_message("exception", error)

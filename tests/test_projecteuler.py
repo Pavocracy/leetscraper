@@ -9,7 +9,7 @@ from src.leetscraper.scraper import (
     needed_problems,
     scrape_problems,
 )
-from src.leetscraper.system import check_platform, check_supported_browsers
+from src.leetscraper.utils import check_platform, check_supported_browsers
 
 
 class TestLeetscraper(unittest.TestCase):
