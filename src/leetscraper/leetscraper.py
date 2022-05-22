@@ -25,7 +25,7 @@ from .cli import __version__
 from .driver import check_installed_webdrivers, create_webdriver
 from .logger import log_message
 from .scraper import check_problems, needed_problems, scrape_problems
-from .system import check_path, check_platform, check_supported_browsers
+from .utils import check_path, check_platform, check_supported_browsers
 from .website import set_website
 
 
@@ -44,6 +44,7 @@ class Leetscraper:
     def __init__(self, **kwargs):
         """Initialize leetscraper with default values unless kwargs are
         given."""
+        log_message("debug", "Leetscraper called with %s", kwargs)
         self.version = __version__
         self.website = set_website(kwargs.get("website_name", "leetcode.com"))
         self.scrape_path = check_path(kwargs.get("scrape_path", getcwd()))
@@ -63,7 +64,6 @@ class Leetscraper:
     def setup_scraper(self) -> tuple:
         """Calling this method is required to setup the arguments needed to
         scrape."""
-        log_message("debug", "Attempting to setup_scraper!")
         user_platform = check_platform()
         browsers = check_supported_browsers(user_platform)
         scraped_problems = check_problems(self.website, self.scrape_path)

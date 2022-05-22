@@ -9,7 +9,7 @@ filtering.
 """
 
 from os import makedirs, path, walk
-from time import time
+from time import perf_counter
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
@@ -21,6 +21,7 @@ from urllib3 import PoolManager
 
 from .driver import header_constructor, WebdriverType, webdriver_quit
 from .logger import log_message
+from .utils import check_exec_time
 from .website import WebsiteType
 
 
@@ -33,22 +34,28 @@ def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
         scrape_path,
         website.website_name,
     )
-    start = time()
-    scraped_problems = []
-    for (dirpath, dirnames, filenames) in walk(
-        f"{scrape_path}/PROBLEMS/{website.website_name}"
-    ):
-        for file in filenames:
-            if file:
-                scraped_problems.append(file.split(website.file_split)[0])
-    stop = time()
-    log_message(
-        "debug",
-        "Checking for %s scraped_problems in %s took %s seconds",
-        website.website_name,
-        scrape_path,
-        int(stop - start),
-    )
+    scraped_problems: list = []
+    try:
+        start = perf_counter()
+        for (dirpath, dirnames, filenames) in walk(
+            f"{scrape_path}/PROBLEMS/{website.website_name}"
+        ):
+            for file in filenames:
+                if file:
+                    scraped_problems.append(file.split(website.file_split)[0])
+        stop = perf_counter()
+        exec_time, time_unit = check_exec_time(start, stop, "check_problems")
+        log_message(
+            "debug",
+            "Found %s %s scraped_problems from %s in %s %s",
+            len(scraped_problems),
+            website.website_name,
+            scrape_path,
+            exec_time,
+            time_unit,
+        )
+    except Exception as error:
+        log_message("exception", error)
     return scraped_problems
 
 
@@ -63,7 +70,7 @@ def needed_problems(
     scraped_path."""
     log_message(
         "info",
-        "Getting the list of %s problems to scrape",
+        "Requesting the list of %s problems to scrape",
         website.website_name,
     )
     if website.need_headers:
@@ -71,17 +78,24 @@ def needed_problems(
         website.headers = header_constructor(
             leetscraper_version, browser, browser_version
         )
+    get_problems: list = []
     http = PoolManager()
-    start = time()
-    get_problems = website.get_problems(http, scraped_problems, scrape_limit)
-    stop = time()
-    log_message(
-        "debug",
-        "Getting list of %s needed_problems for %s took %s seconds",
-        scrape_limit if scrape_limit > 0 else len(get_problems),
-        website.website_name,
-        int(stop - start),
-    )
+    try:
+        start = perf_counter()
+        get_problems = website.get_problems(
+            http, scraped_problems, scrape_limit)
+        stop = perf_counter()
+        exec_time, time_unit = check_exec_time(start, stop, "needed_problems")
+        log_message(
+            "debug",
+            "Received %s needed_problems for %s in %s %s",
+            scrape_limit if scrape_limit > 0 else len(get_problems),
+            website.website_name,
+            exec_time,
+            time_unit,
+        )
+    except Exception as error:
+        log_message("exception", error)
     http.clear()
     return get_problems
 
@@ -103,36 +117,39 @@ def scrape_problems(
     log_message(
         "info",
         "Attempting to scrape %s %s problems to %s",
-        str(scrape_limit) if scrape_limit > 0 else "all",
+        scrape_limit if scrape_limit > 0 else "all",
         website.website_name,
         path.abspath(scrape_path),
     )
     errors = 0
-    start = time()
-    for problem in tqdm(get_problems):
-        errors += create_problem(website, problem, driver, scrape_path)
-    stop = time()
-    scraped = scrape_limit - \
-        errors if scrape_limit > 0 else len(get_problems) - errors
+    try:
+        start = perf_counter()
+        for problem in tqdm(get_problems):
+            errors += create_problem(website, problem, driver, scrape_path)
+        stop = perf_counter()
+        exec_time, time_unit = check_exec_time(start, stop, "scrape_problems")
+        scraped = scrape_limit - \
+            errors if scrape_limit > 0 else len(get_problems) - errors
+        log_message(
+            "debug",
+            "Scraped %s %s problems in %s %s",
+            len(get_problems),
+            website.website_name,
+            exec_time,
+            time_unit,
+        )
+    except Exception as error:
+        log_message("exception", error)
     log_message(
-        "debug",
-        "Scraping %s %s problems took %s seconds",
+        "info",
+        "Successfully scraped %s %s problems!",
         scraped,
-        website.website_name,
-        int(stop - start),
-    )
+        website.website_name)
     if errors:
         log_message(
             "warning",
-            "%s problems scraped, but %s problems failed! See leetscraper.log for details!",
-            scraped,
+            "%s problems failed! See leetscraper.log for details.",
             errors)
-    else:
-        log_message(
-            "info",
-            "Successfully scraped %s %s problems!",
-            scraped,
-            website.website_name)
     webdriver_quit(driver, website.website_name)
     return scraped
 

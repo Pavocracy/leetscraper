@@ -2,17 +2,51 @@
 # This file is released as part of leetscraper under GPL-2.0 License.
 # Find this project at https://github.com/Pavocracy/leetscraper
 
-"""This module contains the functions which are responsible for checking if the
-operating system used is supported, if the given path is valid, and looks for a
-supported browser to use for the WebDriver."""
+"""This module contains the utility functions to help gather information on the
+system used and its avaliable programs, or other information gathered during
+the scraping process."""
 
 from os import getcwd, makedirs, path
 from re import sub
 from subprocess import run
 from sys import platform
+from time import perf_counter
 from typing import Dict
 
 from .logger import log_message
+
+
+def check_exec_time(
+        start_time: float,
+        stop_time: float,
+        funct_name: str) -> tuple:
+    """Given two perf_counter times, compute the exec_time and return it and
+    its unit of time.
+
+    The funct_name of where this function was called from is also
+    required for logging purposes.
+    """
+    exec_time = stop_time - start_time
+    if int(exec_time) != 0:
+        return int(exec_time), "seconds"
+    exec_time *= 1000
+    if int(exec_time) != 0:
+        return int(exec_time), "milliseconds"
+    exec_time *= 1000
+    if int(exec_time) != 0:
+        return int(exec_time), "microseconds"
+    exec_time *= 1000
+    if int(exec_time) != 0:
+        return int(exec_time), "nanoseconds"
+    exec_time *= 1000
+    if int(exec_time) != 0:
+        return int(exec_time), "picosecond"
+    exec_time *= 1000
+    if int(exec_time) != 0:
+        return int(exec_time), "femtosecond"
+    message = f"Could not compute exec_time of {funct_name}!"
+    log_message("exception", message)
+    raise Exception(message)
 
 
 def check_path(scrape_path: str) -> str:
@@ -21,6 +55,7 @@ def check_path(scrape_path: str) -> str:
         "debug",
         "Checking if %s can be used for scrape_path",
         path.abspath(scrape_path))
+    start = perf_counter()
     if not path.isdir(scrape_path):
         try:
             makedirs(scrape_path)
@@ -39,6 +74,14 @@ def check_path(scrape_path: str) -> str:
                 message = f"{scrape_path} Error!: {error}"
                 log_message("exception", message)
                 raise Exception(message) from error
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(start, stop, "check_path")
+    log_message(
+        "debug",
+        "Confirmed %s can be used in %s %s",
+        scrape_path,
+        exec_time,
+        time_unit)
     return scrape_path
 
 
@@ -48,12 +91,24 @@ def check_platform() -> str:
     Raise an exception if the operating system is not supported.
     """
     log_message("debug", "Checking if %s is a supported OS", platform)
+    user_platform = ""
+    start = perf_counter()
     if platform.startswith("darwin"):
-        return "mac"
+        user_platform = "mac"
     if platform.startswith("linux"):
-        return "linux"
+        user_platform = "linux"
     if platform.startswith("win32"):
-        return "windows"
+        user_platform = "windows"
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(start, stop, "check_platform")
+    if user_platform:
+        log_message(
+            "debug",
+            "Confirmed %s is a supported OS in %s %s",
+            user_platform,
+            exec_time,
+            time_unit)
+        return user_platform
     message = "You are not using a supported OS!"
     log_message("exception", message)
     raise Exception(message)
@@ -68,7 +123,7 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
     """
     log_message(
         "debug",
-        "Checking for supported browsers installed on your system")
+        "Checking for supported browsers installed on this system")
     # Much of the code in this function mirrors the patterns found in webdriver_manager.
     # https://github.com/SergeyPirogov/webdriver_manager/blob/master/webdriver_manager/utils.py
     avaliable_browsers: dict = {}
@@ -84,6 +139,7 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
             "windows": '"C:\\Program Files\\Mozilla Firefox\\firefox.exe" -v | more',
         },
     }
+    start = perf_counter()
     for browser, operating_system in query.items():
         try:
             check_browser_version = run(
@@ -98,7 +154,16 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
         except Exception:
             message = f"Could not find {browser} version! checking for other browsers"
             log_message("warning", message)
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(
+        start, stop, "check_supported_browsers")
     if avaliable_browsers:
+        log_message(
+            "debug",
+            "Found browsers %s in %s %s",
+            avaliable_browsers,
+            exec_time,
+            time_unit)
         return avaliable_browsers
     message = "No supported browser found!"
     log_message("exception", message)
