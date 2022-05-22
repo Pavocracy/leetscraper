@@ -8,7 +8,7 @@ closing the webdriver."""
 
 from datetime import date
 from json import load
-from os import devnull, path
+from os import devnull, environ, path
 from typing import Dict, Union
 
 from selenium import webdriver
@@ -91,6 +91,11 @@ def create_webdriver(
     leetscraper_version: str,
 ) -> WebdriverType:
     """Initializes the webdriver with pre-defined options."""
+    # This is a current workaround for a bug that can cause the webdriver to
+    # stall for 5 minutes during the initial webpage opening.
+    # This is a very well known issue. See the issue card for details.
+    # https://github.com/Pavocracy/leetscraper/issues/67
+    environ["DBUS_SESSION_BUS_ADDRESS"] = devnull
     for browser, browser_version in avaliable_browsers.items():
         log_message(
             "debug",
