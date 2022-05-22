@@ -9,13 +9,10 @@ jobs:
   apply-PR-label:
     runs-on: ubuntu-latest
     steps:
-    
-    - name: 'Check event context'
-      run: echo '${{ toJSON(github.event) }}'
 
     - name: 'Bug Fix Label'
       uses: actions/github-script@v6
-      if: ${{ contains(github.event.body, '[x] Bug Fix') }}
+      if: ${{ contains(github.event.pull_request.body, '[x] Bug Fix') }}
       with:
         script: |
           github.rest.issues.addLabels({
@@ -27,7 +24,7 @@ jobs:
 
     - name: 'Documentation Label'
       uses: actions/github-script@v6
-      if: ${{ contains(github.event.body, '[x] Documentation') }}
+      if: ${{ contains(github.event.pull_request.body, '[x] Documentation') }}
       with:
         script: |
           github.rest.issues.addLabels({
@@ -40,8 +37,8 @@ jobs:
     - name: 'Feature Label'
       uses: actions/github-script@v6
       if: ${{ 
-        contains(github.event.body, '[x] New Feature') ||
-        contains(github.event.body, '[x] Code Addition') }}
+        contains(github.event.pull_request.body, '[x] New Feature') ||
+        contains(github.event.pull_request.body, '[x] Code Addition') }}
       with:
         script: |
           github.rest.issues.addLabels({
@@ -53,7 +50,7 @@ jobs:
 
     - name: 'Major Feature Label'
       uses: actions/github-script@v6
-      if: ${{ contains(github.event.body, '[x] Major Feature') }}
+      if: ${{ contains(github.event.pull_request.body, '[x] Major Feature') }}
       with:
         script: |
           github.rest.issues.addLabels({
