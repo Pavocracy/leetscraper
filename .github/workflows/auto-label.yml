@@ -9,6 +9,9 @@ jobs:
   apply-PR-label:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: 'Check event context'
+      run: echo '${{ toJSON(github.event) }}'
 
     - name: 'Bug Label'
       uses: actions/github-script@v6
