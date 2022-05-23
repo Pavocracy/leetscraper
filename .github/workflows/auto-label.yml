@@ -8,6 +8,8 @@ on:
 jobs:
   apply-PR-label:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     steps:
 
     - name: 'Bug Fix Label'

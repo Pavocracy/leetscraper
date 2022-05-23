@@ -5,11 +5,11 @@ on:
     types: [ closed ]
 
 jobs:
-  if_merged:
+  release-drafter:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     # Only run if the pull request was merged
     if: ${{ github.event.pull_request.merged == true }}
-    runs-on: ubuntu-latest
     steps:
       - uses: release-drafter/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

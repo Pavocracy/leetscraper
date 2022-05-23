@@ -8,45 +8,42 @@ on:
     types: [ opened ]
 
 jobs:
-
-  PR-comment:
-    # Only comment on pull_request from someone not dependabot
-    # This matches the user login in the event context
-    # This seems to be more reliable than github.actor
-    if: ${{ 
-      github.event.pull_request &&
-      github.event.pull_request.user.login != 'dependabot[bot]' }}
+  auto-comment:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     steps:
-      - name: 'Comment on PR'
-        uses: actions/github-script@v6
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Thank you for your contribution! Please make sure you have read our docs on [contributing](https://github.com/Pavocracy/leetscraper/blob/main/docs/CONTRIBUTING.md)'
-            })
+    
+    - name: 'Comment on PR'
+      uses: actions/github-script@v6
+      # Only comment on pull_request from someone not dependabot
+      # This matches the user login in the event context
+      # This seems to be more reliable than github.actor
+      if: ${{ 
+        github.event.pull_request &&
+        github.event.pull_request.user.login != 'dependabot[bot]' }}
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Thank you for your contribution! Please make sure you have read our docs on [contributing](https://github.com/Pavocracy/leetscraper/blob/main/docs/CONTRIBUTING.md)'
+          })
 
-  issue-comment:
-    # Only comment on issue from someone not dependabot
-    # This matches the user login in the event context
-    # This seems to be more reliable than github.actor
-    if: ${{ 
-      github.event.issue &&
-      github.event.issue.user.login != 'dependabot[bot]' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Comment on Issues'
-        uses: actions/github-script@v6
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Thank you for your contribution! Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)'
-            })
+    - name: 'Comment on Issues'
+      uses: actions/github-script@v6
+      # Only comment on issue from someone not dependabot
+      # This matches the user login in the event context
+      # This seems to be more reliable than github.actor
+      if: ${{ 
+        github.event.issue &&
+        github.event.issue.user.login != 'dependabot[bot]' }}
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Thank you for your contribution! Please make sure you have read our docs on [submitting issues](https://github.com/Pavocracy/leetscraper/blob/main/docs/SUBMITTING_ISSUES.md)'
+          })

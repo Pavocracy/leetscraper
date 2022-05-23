@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     steps:
 
     - name: 'Checkout PR' 
@@ -52,7 +54,7 @@ jobs:
     - name: 'Upload dist files to release'
       uses: svenstaro/upload-release-action@v2
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: $GITHUB_TOKEN
         file: dist/*
         tag: ${{ github.ref }}
         file_glob: true
