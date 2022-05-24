@@ -8,14 +8,14 @@ on:
 jobs:
   apply-PR-label:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
 
     - name: 'Bug Fix Label'
       uses: actions/github-script@v6
       if: ${{ contains(github.event.pull_request.body, '[x] Bug Fix') }}
       with:
+        github-token: ${{ secrets.WORKFLOW_PAT }}
         script: |
           github.rest.issues.addLabels({
             issue_number: context.issue.number,
@@ -28,6 +28,7 @@ jobs:
       uses: actions/github-script@v6
       if: ${{ contains(github.event.pull_request.body, '[x] Documentation') }}
       with:
+        github-token: ${{ secrets.WORKFLOW_PAT }}
         script: |
           github.rest.issues.addLabels({
             issue_number: context.issue.number,
@@ -42,6 +43,7 @@ jobs:
         contains(github.event.pull_request.body, '[x] New Feature') ||
         contains(github.event.pull_request.body, '[x] Code Addition') }}
       with:
+        github-token: ${{ secrets.WORKFLOW_PAT }}
         script: |
           github.rest.issues.addLabels({
             issue_number: context.issue.number,
@@ -54,6 +56,7 @@ jobs:
       uses: actions/github-script@v6
       if: ${{ contains(github.event.pull_request.body, '[x] Major Feature') }}
       with:
+        github-token: ${{ secrets.WORKFLOW_PAT }}
         script: |
           github.rest.issues.addLabels({
             issue_number: context.issue.number,

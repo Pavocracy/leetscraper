@@ -1,15 +1,15 @@
 name: 'Release Drafter'
 
 on:
-  pull_request_target:
+  pull_request:
     types: [ closed ]
 
 jobs:
   release-drafter:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     # Only run if the pull request was merged
     if: ${{ github.event.pull_request.merged == true }}
     steps:
       - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

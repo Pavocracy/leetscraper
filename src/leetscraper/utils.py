@@ -39,7 +39,7 @@ def check_exec_time(
             if int(exec_time) != 0:
                 return int(exec_time), time_unit
             exec_time *= 1000
-        raise Exception
+        raise Exception("Reached end of loop without computing exec_time!")
     except Exception as error:
         message = f"Could not compute exec_time of {funct_name}! {error}"
         log_message("debug", message)

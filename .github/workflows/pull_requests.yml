@@ -7,8 +7,6 @@ on:
 jobs:
   run-checks:
     runs-on: ${{ matrix.os }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
@@ -17,6 +15,8 @@ jobs:
     
     - name: 'Checkout PR' 
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.WORKFLOW_PAT }}
 
     - name: 'Setup Python'
       uses: actions/setup-python@v3
@@ -36,5 +36,10 @@ jobs:
         python3 -m pylint src/
 
     - name: 'Run Unit Tests'
+      env:
+          # This is needed to authenticate with githubs API to avoid rate limits
+          # See further details about gh_token from the webdriver_manager repo
+          # https://github.com/SergeyPirogov/webdriver_manager#gh_token
+          GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}
       run:
         python3 -m unittest discover

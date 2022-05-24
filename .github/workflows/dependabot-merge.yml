@@ -8,14 +8,13 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     # This matches the user login in the event context
     # This seems to be more reliable than github.actor
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
       - uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.WORKFLOW_PAT }}
           # @dependabot merge allows dependabot to self merge
           # only when all the PR checks have run and pass
           script: |
