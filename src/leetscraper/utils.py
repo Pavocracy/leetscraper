@@ -26,27 +26,24 @@ def check_exec_time(
     The funct_name of where this function was called from is also
     required for logging purposes.
     """
-    exec_time = stop_time - start_time
-    if int(exec_time) != 0:
-        return int(exec_time), "seconds"
-    exec_time *= 1000
-    if int(exec_time) != 0:
-        return int(exec_time), "milliseconds"
-    exec_time *= 1000
-    if int(exec_time) != 0:
-        return int(exec_time), "microseconds"
-    exec_time *= 1000
-    if int(exec_time) != 0:
-        return int(exec_time), "nanoseconds"
-    exec_time *= 1000
-    if int(exec_time) != 0:
-        return int(exec_time), "picosecond"
-    exec_time *= 1000
-    if int(exec_time) != 0:
-        return int(exec_time), "femtosecond"
-    message = f"Could not compute exec_time of {funct_name}!"
-    log_message("exception", message)
-    raise Exception(message)
+    time_units = [
+        "seconds",
+        "milliseconds",
+        "microseconds",
+        "nanoseconds",
+        "picoseconds",
+        "femtoseconds"]
+    try:
+        exec_time = stop_time - start_time
+        for time_unit in time_units:
+            if int(exec_time) != 0:
+                return int(exec_time), time_unit
+            exec_time *= 1000
+        raise Exception
+    except Exception as error:
+        message = f"Could not compute exec_time of {funct_name}! {error}"
+        log_message("debug", message)
+        return "unknown", "time"
 
 
 def check_path(scrape_path: str) -> str:

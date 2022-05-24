@@ -28,14 +28,14 @@ def set_website(
     start = perf_counter()
     if "leetcode" in website_name.lower():
         website = Leetcode()
-    elif "projecteuler" in website_name.lower():
-        website = Projecteuler()
     elif "codechef" in website_name.lower():
         website = Codechef()
-    elif "hackerrank" in website_name.lower():
-        website = Hackerrank()
     elif "codewars" in website_name.lower():
         website = Codewars()
+    elif "hackerrank" in website_name.lower():
+        website = Hackerrank()
+    elif "projecteuler" in website_name.lower():
+        website = Projecteuler()
     else:
         message = f"{website_name} is not a supported website!"
         log_message("exception", message)

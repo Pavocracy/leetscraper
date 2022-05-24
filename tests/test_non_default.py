@@ -6,7 +6,7 @@ from src.leetscraper.scraper import check_problems
 
 
 class TestLeetscraper(unittest.TestCase):
-    def test_default(self):
+    def test_non_default(self):
         # Manually call the setup_scraper, and pass a user-defined get_problems
         # list to scrape
         leetscraper = Leetscraper(

@@ -9,7 +9,7 @@
 from argparse import ArgumentParser
 
 
-__version__ = "2.1.1"
+__version__ = "2.2.0"
 # fmt: off
 leetscraper_logo=(
 f"""
@@ -17,7 +17,8 @@ f"""
 |  |.----.-----|  |_.-----.----.----.---.-.-----.-----.----.
 |  |  -__|  -__|   _|__ --|  __|   _|  _  |  _  |  -__|   _|
 |__|_____|_____|____|_____|____|__| |___._|   __|_____|__|
-                                          |__|  v{__version__}\n\n"""
+         Copyright (C) 2022 Pavocracy     |__|  v{__version__}
+"""
 )
 # fmt: on
 

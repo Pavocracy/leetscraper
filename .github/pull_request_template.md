@@ -6,11 +6,11 @@ Also make sure to tick relevent boxes with `[x]`.
 
 ## Type of change
 
-- [ ] Bug Fix. If this fixes an issue tag it with Fixes #(issue_number)
-- [ ] Major Feature (This is for all breaking changes!)
-- [ ] New Feature (non-breaking change which adds functionality or website support)
-- [ ] Code Addition (extended unit tests, code cleanup ect that doesnt change functionality)
-- [ ] Documentation Update
+- [ ] Bug Fix (If this fixes an issue tag it in the description with Fixes #issue_number)
+- [ ] Code Addition (Any kind of code addition or cleanup that doesnt change functionality)
+- [ ] New Feature (Non-breaking code change which adds functionality)
+- [ ] Major Feature (This is for all breaking changes to the code!)
+- [ ] Documentation Update (All documentation updates)
 
 ## Checklist:
 

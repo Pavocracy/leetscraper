@@ -58,3 +58,8 @@ jobs:
         file: dist/*
         tag: ${{ github.ref }}
         file_glob: true
+
+    - name: 'Push changed version'
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Update version

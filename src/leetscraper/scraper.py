@@ -35,27 +35,27 @@ def check_problems(website: WebsiteType, scrape_path: str) -> List[str]:
         website.website_name,
     )
     scraped_problems: list = []
+    start = perf_counter()
     try:
-        start = perf_counter()
         for (dirpath, dirnames, filenames) in walk(
             f"{scrape_path}/PROBLEMS/{website.website_name}"
         ):
             for file in filenames:
                 if file:
                     scraped_problems.append(file.split(website.file_split)[0])
-        stop = perf_counter()
-        exec_time, time_unit = check_exec_time(start, stop, "check_problems")
-        log_message(
-            "debug",
-            "Found %s %s scraped_problems from %s in %s %s",
-            len(scraped_problems),
-            website.website_name,
-            scrape_path,
-            exec_time,
-            time_unit,
-        )
     except Exception as error:
         log_message("exception", error)
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(start, stop, "check_problems")
+    log_message(
+        "debug",
+        "Found %s %s scraped_problems from %s in %s %s",
+        len(scraped_problems),
+        website.website_name,
+        scrape_path,
+        exec_time,
+        time_unit,
+    )
     return scraped_problems
 
 
@@ -80,22 +80,22 @@ def needed_problems(
         )
     get_problems: list = []
     http = PoolManager()
+    start = perf_counter()
     try:
-        start = perf_counter()
         get_problems = website.get_problems(
             http, scraped_problems, scrape_limit)
-        stop = perf_counter()
-        exec_time, time_unit = check_exec_time(start, stop, "needed_problems")
-        log_message(
-            "debug",
-            "Received %s needed_problems for %s in %s %s",
-            scrape_limit if scrape_limit > 0 else len(get_problems),
-            website.website_name,
-            exec_time,
-            time_unit,
-        )
     except Exception as error:
         log_message("exception", error)
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(start, stop, "needed_problems")
+    log_message(
+        "debug",
+        "Received %s needed_problems for %s in %s %s",
+        scrape_limit if scrape_limit > 0 else len(get_problems),
+        website.website_name,
+        exec_time,
+        time_unit,
+    )
     http.clear()
     return get_problems
 
@@ -122,24 +122,24 @@ def scrape_problems(
         path.abspath(scrape_path),
     )
     errors = 0
+    start = perf_counter()
     try:
-        start = perf_counter()
         for problem in tqdm(get_problems):
             errors += create_problem(website, problem, driver, scrape_path)
-        stop = perf_counter()
-        exec_time, time_unit = check_exec_time(start, stop, "scrape_problems")
-        scraped = scrape_limit - \
-            errors if scrape_limit > 0 else len(get_problems) - errors
-        log_message(
-            "debug",
-            "Scraped %s %s problems in %s %s",
-            len(get_problems),
-            website.website_name,
-            exec_time,
-            time_unit,
-        )
     except Exception as error:
         log_message("exception", error)
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(start, stop, "scrape_problems")
+    scraped = scrape_limit - \
+        errors if scrape_limit > 0 else len(get_problems) - errors
+    log_message(
+        "debug",
+        "Scraped %s %s problems in %s %s",
+        scraped,
+        website.website_name,
+        exec_time,
+        time_unit,
+    )
     log_message(
         "info",
         "Successfully scraped %s %s problems!",

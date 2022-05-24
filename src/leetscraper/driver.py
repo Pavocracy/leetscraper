@@ -29,14 +29,14 @@ def check_installed_webdrivers() -> Dict[str, str]:
     # Much of the code in this function mirrors the patterns found in webdriver_manager.
     # https://github.com/SergeyPirogov/webdriver_manager/blob/master/webdriver_manager/driver_cache.py
     log_message("debug", "Checking for any cached webdrivers to use")
+    installed_webdrivers: dict = {}
     try:
-        installed_webdrivers: dict = {}
+        start = perf_counter()
         # This is to match the date format wdm uses.
         today = date.today().strftime("%d/%m/%Y")
         # This is the default path where wdm stores the list of cached
         # webdrivers.
         wdm_drivers = path.join(path.expanduser("~"), ".wdm", "drivers.json")
-        start = perf_counter()
         with open(wdm_drivers, "r", encoding="utf-8") as file:
             cached_webdrivers = load(file)
             for found_webdriver in cached_webdrivers:
@@ -66,9 +66,6 @@ def check_installed_webdrivers() -> Dict[str, str]:
                                 cached_webdriver
                             ] = cached_webdriver_version
                     installed_webdrivers[cached_webdriver] = cached_webdriver_version
-        stop = perf_counter()
-        exec_time, time_unit = check_exec_time(
-            start, stop, "check_installed_webdrivers")
         if not installed_webdrivers:
             raise Exception
     except Exception:
@@ -77,6 +74,9 @@ def check_installed_webdrivers() -> Dict[str, str]:
             "Did not find any recent webdrivers! Will download the latest drivers instead.",
         )
         return installed_webdrivers
+    stop = perf_counter()
+    exec_time, time_unit = check_exec_time(
+        start, stop, "check_installed_webdrivers")
     log_message("debug", "Found cached webdrivers %s in %s %s",
                 installed_webdrivers, exec_time, time_unit)
     return installed_webdrivers
@@ -110,12 +110,12 @@ def create_webdriver(
             browser,
             browser_version)
         try:
-            start = perf_counter()
             user_agent: str = ""
             if website.need_headers:
                 user_agent = header_constructor(
                     leetscraper_version, browser, browser_version
                 )
+            start = perf_counter()
             if browser == "chrome":
                 from selenium.webdriver.chrome.service import (
                     Service as ChromeService,
