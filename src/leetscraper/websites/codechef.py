@@ -8,6 +8,7 @@ Initialisation of the class will set attributes required for most of the
 class methods. Some Leetscraper attributes will be required.
 """
 
+from email import header
 from json import loads
 from re import sub
 from typing import List, Optional
@@ -43,7 +44,7 @@ class Codechef:
         # currently fail?
         self.problem_description = {"class": "problem-statement"}
         self.file_split = "-"
-        self.need_headers = False
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -51,10 +52,10 @@ class Codechef:
         """Returns problems to scrape defined by checks in this method."""
         try:
             get_problems: list = []
-            #headers: dict = {}
-            #headers["User-Agent"] = self.headers
+            headers: dict = {}
+            headers["User-Agent"] = self.headers
             request = http.request(
-                "GET", self.api_url + "?limit=99999"
+                "GET", self.api_url + "?limit=99999", headers=headers
             )
             data = loads(request.data.decode("utf-8"))
             for problem in data["data"]:
