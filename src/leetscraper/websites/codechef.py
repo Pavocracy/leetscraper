@@ -8,7 +8,6 @@ Initialisation of the class will set attributes required for most of the
 class methods. Some Leetscraper attributes will be required.
 """
 
-from email import header
 from json import loads
 from re import sub
 from typing import List, Optional
