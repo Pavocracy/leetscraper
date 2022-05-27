@@ -42,7 +42,7 @@ class Leetcode:
         try:
             get_problems: list = []
             request = http.request("GET", self.api_url)
-            if "b'<!DOCTYPE html>" in request and self.retrys <= 3:
+            if "<!DOCTYPE html>" in request and self.retrys <= 3:
                 log_message("warning", "CAPTCHA detected, trying again in 10 seconds")
                 sleep(10)
                 self.retrys += 1
