@@ -40,6 +40,7 @@ class Leetcode:
         try:
             get_problems: list = []
             request = http.request("GET", self.api_url)
+            log_message("warning", "request.data is %s", request.data)
             data = loads(request.data.decode("utf-8"))
             for problem in data["stat_status_pairs"]:
                 if (problem["stat"]["question__title_slug"]
