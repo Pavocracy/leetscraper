@@ -88,7 +88,7 @@ def check_platform() -> str:
     Raise an exception if the operating system is not supported.
     """
     log_message("debug", "Checking if %s is a supported OS", platform)
-    user_platform = ""
+    user_platform: str = ""
     start = perf_counter()
     if platform.startswith("darwin"):
         user_platform = "mac"
@@ -165,3 +165,12 @@ def check_supported_browsers(user_platform: str) -> Dict[str, str]:
     message = "No supported browser found!"
     log_message("exception", message)
     raise Exception(message)
+
+
+def header_constructor(
+    leetscraper_version: str, browser: str, browser_version: str
+) -> str:
+    """Construct custom user-agent header to try and do the right thing by
+    letting these websites know this is a bot making requests to their
+    servers."""
+    return f"Mozilla/5.0 (compatible; Leetscraper/{leetscraper_version}; +https://github.com/Pavocracy/leetscraper) {browser}/{browser_version}"

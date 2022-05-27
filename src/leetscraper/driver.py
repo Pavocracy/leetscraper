@@ -14,9 +14,11 @@ from typing import Dict, Union
 
 from selenium import webdriver
 
+from .drivers import create_chromedriver, create_geckodriver
 from .logger import log_message
-from .utils import check_exec_time
+from .utils import check_exec_time, header_constructor
 from .website import WebsiteType
+
 
 WebdriverType = Union[webdriver.Firefox, webdriver.Chrome]
 
@@ -82,15 +84,6 @@ def check_installed_webdrivers() -> Dict[str, str]:
     return installed_webdrivers
 
 
-def header_constructor(
-    leetscraper_version: str, browser: str, browser_version: str
-) -> str:
-    """Construct custom user-agent header to try and do the right thing by
-    letting these websites know this is a bot making requests to their
-    servers."""
-    return f"Mozilla/5.0 (compatible; Leetscraper/{leetscraper_version}; +https://github.com/Pavocracy/leetscraper) {browser}/{browser_version}"
-
-
 def create_webdriver(
     avaliable_browsers: dict,
     website: WebsiteType,
@@ -99,8 +92,8 @@ def create_webdriver(
 ) -> WebdriverType:
     """Initializes the webdriver with pre-defined options."""
     # This is a current workaround for a bug that can cause the webdriver to
-    # stall for 5 minutes during the initial webpage opening.
-    # This is a very well known issue. See the issue card for details.
+    # stall for 5 minutes during the initial webpage opening. This is a very
+    # well known issue. See the issue card for details.
     # https://github.com/Pavocracy/leetscraper/issues/67
     environ["DBUS_SESSION_BUS_ADDRESS"] = devnull
     for browser, browser_version in avaliable_browsers.items():
@@ -117,65 +110,13 @@ def create_webdriver(
                 )
             start = perf_counter()
             if browser == "chrome":
-                from selenium.webdriver.chrome.service import (
-                    Service as ChromeService,
-                )
-                from selenium.webdriver.chrome.options import (
-                    Options as ChromeOptions,
-                )
-                from webdriver_manager.chrome import ChromeDriverManager
-
                 webdriver_version = installed_webdrivers.get(
                     "chromedriver", "latest")
-                service = ChromeService(
-                    ChromeDriverManager(
-                        version=webdriver_version,
-                        log_level=0,
-                        print_first_line=False,
-                    ).install(),
-                    log_path=devnull,
-                )
-                options = ChromeOptions()
-                options.add_experimental_option(
-                    "excludeSwitches", ["enable-logging"])
-                options.add_argument("--headless")
-                options.add_argument("--disable-gpu")
-                if user_agent:
-                    options.add_argument(f"--user-agent={user_agent}")
-                driver = webdriver.Chrome(
-                    service=service, options=options)
+                driver = create_chromedriver(webdriver_version, user_agent)
             if browser == "firefox":
-                from selenium.webdriver.firefox.service import (
-                    Service as FirefoxService,
-                )
-                from selenium.webdriver.firefox.options import (
-                    Options as FirefoxOptions,
-                )
-                from webdriver_manager.firefox import GeckoDriverManager
-
                 webdriver_version = installed_webdrivers.get(
                     "geckodriver", "latest")
-                service = FirefoxService(
-                    GeckoDriverManager(
-                        version=webdriver_version,
-                        log_level=0,
-                        print_first_line=False,
-                    ).install(),
-                    log_path=devnull,
-                )
-                options = FirefoxOptions()
-                # Firefox does not allow no logging, So set to highest level
-                # instead.
-                options.set_capability(
-                    "moz:firefoxOptions", {"log": {"level": "fatal"}}
-                )
-                options.add_argument("-headless")
-                if user_agent:
-                    options.set_preference(
-                        "general.useragent.override", user_agent)
-                driver = webdriver.Firefox(
-                    service=service, options=options
-                )
+                driver = create_geckodriver(webdriver_version, user_agent)
             driver.implicitly_wait(0)
             stop = perf_counter()
             exec_time, time_unit = check_exec_time(
@@ -191,12 +132,12 @@ def create_webdriver(
             return driver
         except Exception as error:
             log_message(
-                "warning",
-                "Could not initialize %s! %s. Trying another browser!",
+                "debug",
+                "Could not initialize webdriver for %s! %s. Trying another browser!",
                 browser,
                 error,
             )
-    message = "Could not initialize any browsers found!"
+    message = "Could not initialize a webdriver for any browsers!"
     log_message("exception", message)
     raise Exception(message)
 

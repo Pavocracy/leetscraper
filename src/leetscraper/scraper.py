@@ -19,9 +19,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from urllib3 import PoolManager
 
-from .driver import header_constructor, WebdriverType, webdriver_quit
+from .driver import WebdriverType, webdriver_quit
 from .logger import log_message
-from .utils import check_exec_time
+from .utils import check_exec_time, header_constructor
 from .website import WebsiteType
 
 

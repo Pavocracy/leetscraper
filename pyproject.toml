@@ -18,7 +18,7 @@ show_error_codes = true
 disable_error_code = ['import', 'arg-type', 'attr-defined', 'union-attr', 'call-arg', 'assignment']
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = ['import-error', 'import-outside-toplevel', 'broad-except', 'duplicate-code']
+disable = ['import-error', 'broad-except', 'duplicate-code']
 
 [tool.pylint.'MASTER']
 fail-under = 9.0
