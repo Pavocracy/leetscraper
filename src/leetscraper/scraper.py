@@ -117,7 +117,7 @@ def scrape_problems(
     log_message(
         "info",
         "Attempting to scrape %s %s problems to %s",
-        scrape_limit if scrape_limit > 0 else "all",
+        len(get_problems),
         website.website_name,
         path.abspath(scrape_path),
     )
@@ -140,17 +140,19 @@ def scrape_problems(
         exec_time,
         time_unit,
     )
-    log_message(
-        "info",
-        "Successfully scraped %s %s problems!",
-        scraped,
-        website.website_name)
+    if scraped:
+        log_message(
+            "info",
+            "Successfully scraped %s %s problems!",
+            scraped,
+            website.website_name)
     if errors:
         log_message(
             "warning",
             "%s problems failed! See leetscraper.log for details.",
             errors)
     webdriver_quit(driver, website.website_name)
+    log_message("info", "leetscraper execution completed!")
     return scraped
 
 
