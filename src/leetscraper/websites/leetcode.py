@@ -9,6 +9,7 @@ class methods. Some Leetscraper attributes will be required.
 """
 
 from json import loads
+from time import sleep
 from typing import List, Optional
 
 from urllib3 import PoolManager
@@ -32,6 +33,7 @@ class Leetcode:
         self.file_split = "."
         # leetcode seems to block requests when using custom headers :(
         self.need_headers = False
+        self.retrys = 0
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -40,7 +42,11 @@ class Leetcode:
         try:
             get_problems: list = []
             request = http.request("GET", self.api_url)
-            log_message("warning", "request.data is %s", request.data)
+            if "b'<!DOCTYPE html>" in request and self.retrys <= 3:
+                log_message("warning", "CAPTCHA detected, trying again in 10 seconds")
+                sleep(10)
+                self.retrys += 1
+                self.get_problems(http, scraped_problems, scrape_limit)
             data = loads(request.data.decode("utf-8"))
             for problem in data["stat_status_pairs"]:
                 if (problem["stat"]["question__title_slug"]
