@@ -1,0 +1,22 @@
+name: 'Monthly Release'
+
+on:
+  schedule:
+    - cron:  '42 * * * *'
+
+jobs:
+  monthly-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.WORKFLOW_PAT }}
+          script: |
+            let releases = await github.rest.releases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            console.log(releases)
+
+            let draftRelease = releases.find((r) => r.draft)
+            console.log(draftRelease)
