@@ -15,7 +15,7 @@ jobs:
         with:
           github-token: ${{ secrets.WORKFLOW_PAT }}
           script: |
-            let releases = await github.rest.releases({
+            let releases = await github.repos.releases({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
