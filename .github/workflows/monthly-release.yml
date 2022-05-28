@@ -3,6 +3,9 @@ name: 'Monthly Release'
 on:
   schedule:
     - cron: '00 * * * *'
+    - cron: '15 * * * *'
+    - cron: '30 * * * *'
+    - cron: '45 * * * *'
 
 jobs:
   monthly-release:
