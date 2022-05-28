@@ -24,6 +24,6 @@ jobs:
 
             for (var release of releases.data) {
               if (release.draft) {
-                console.log("Found draft release!\n" + release)
+                console.log("Found draft release!\n" + release.name + release.id)
               };
             };
