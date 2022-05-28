@@ -24,7 +24,7 @@ jobs:
             console.log("\nStart looping through data!\n")
 
             for (var release of releases.data) {
-              if (release.draft == true) {
-                console.log("Found draft release! \n" + release)
+              if (release.draft) {
+                console.log("Found draft release!\n" + release)
               };
             };
