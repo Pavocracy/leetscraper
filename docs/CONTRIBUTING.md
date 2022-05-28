@@ -10,7 +10,7 @@ If you have added support for a website and would like to put up a PR, that's ap
 
 ### Automated Process
 
-For your (and mine!) convenience, this repo contains a bash script [contributing.sh](https://github.com/Pavocracy/leetscraper/blob/main/contributing.sh "contributing bash script")  
+For your (and mine!) convenience, this repo contains a bash script [contributing.sh](https://github.com/Pavocracy/leetscraper/blob/main/tools/contributing.sh "contributing bash script") in the tools directory.  
 It can be passed flags to automatically run different tools required to enable your PR to be merged into the main branch.  
 -i is to install requirments.txt  
 -a is to run autopep8  
