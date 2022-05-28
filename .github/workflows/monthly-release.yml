@@ -16,11 +16,16 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            
-            console.log("\nStart looping through data!\n")
 
-            for (var release of releases.data) {
+            for (let release of releases.data) {
               if (release.draft) {
-                console.log("Found draft release!\n" + release.name + release.id)
+                console.log('Publishing ${release.name}');
+                github.rest.repos.updateRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  release_id: release.id,
+                  draft: false
+                });
+                break;
               };
             };
