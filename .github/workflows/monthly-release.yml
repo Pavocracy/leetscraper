@@ -19,7 +19,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            console.log(releases);
             
             console.log("\nStart looping through data!\n")
 
