@@ -19,7 +19,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            console.log(releases)
+            console.log(releases);
 
-            const draftRelease = releases.find((r) => r.draft)
-            console.log(draftRelease)
+            for (var i = 0; i < releases.length; i++) {
+            console.log(releases[i]);
+            };
