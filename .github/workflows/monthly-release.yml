@@ -11,6 +11,12 @@ jobs:
   monthly-release:
     runs-on: ubuntu-latest
     steps:
+
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.WORKFLOW_PAT }}
+        
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.WORKFLOW_PAT }}
