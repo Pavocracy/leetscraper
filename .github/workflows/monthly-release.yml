@@ -20,7 +20,9 @@ jobs:
               repo: context.repo.repo
             });
             console.log(releases);
+            
+            console.log("\nStart looping through data!\n")
 
-            for (var i = 0; i < releases.length; i++) {
-            console.log(releases[i]);
+            for (var i = 0; i < releases.data.length; i++) {
+            console.log(releases.data[i]);
             };
