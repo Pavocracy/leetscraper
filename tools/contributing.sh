@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # This is a helper script to automate the process of preparing for a pull reuqest
 # Each flag will run a specific python module required to conform to coding standards
+# Run this script from the root leetscraper directory and pass desired flags
 
 while getopts "iadmp" flag; do
   case "${flag}" in
