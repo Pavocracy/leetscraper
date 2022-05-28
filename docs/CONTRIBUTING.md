@@ -20,7 +20,7 @@ It can be passed flags to automatically run different tools required to enable y
   
 You can pass in one flag at a time, or multiple flags. An example of how to use this script to run all tools before you submit a PR:  
 *note: this script requires you to have python3 installed and have it correctly in your path*  
-*to use this exact example you must run it from the root of the leetscraper directory*
+*to use this exact example you must run it from the root of the leetscraper directory*  
 *always open and read scripts before you run them. this is a very basic script and easy to follow and understand*
 ```
 bash tools/contributing.sh -iadmp
