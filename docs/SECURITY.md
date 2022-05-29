@@ -7,7 +7,7 @@ But nevertheless, if anything is found, feel free to report it here and reports 
 
 | Version     | Supported          |
 | ----------- | ------------------ |
-| >= 1.x.x    | :white_check_mark: |
+| >= 1.0.0    | :white_check_mark: |
 | < 1.0.0     | :x:                |
 
 ***
