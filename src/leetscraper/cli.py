@@ -9,7 +9,7 @@
 from argparse import ArgumentParser
 
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 # fmt: off
 leetscraper_logo=(
 f"""
