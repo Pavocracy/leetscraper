@@ -152,7 +152,6 @@ def scrape_problems(
             "%s problems failed! See leetscraper.log for details.",
             errors)
     webdriver_quit(driver, website.website_name)
-    log_message("info", "leetscraper execution completed!")
     return scraped
 
 
@@ -199,7 +198,7 @@ def create_problem(
     except Exception as error:
         log_message(
             "debug",
-            "Failed to scrape %s%s! %s",
+            "Failed to scrape %s%s Error: %s",
             website.base_url,
             problem[0],
             error,
