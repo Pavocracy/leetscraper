@@ -37,8 +37,8 @@ def get_logger() -> logging.Logger:
         print(leetscraper_logo)
         print(
             """leetscraper comes with ABSOLUTELY NO WARRANTY;
-This is free software, and you are welcome to redistribute it under
-certain conditions; see GPL-2.0 License for details.\n"""
+This is free software, and you are welcome to redistribute it
+under certain conditions; see GPL-2.0 License for details.\n"""
         )
         print(
             f"Logging started! Log file: {path.dirname(__file__)}/leetscraper.log")
