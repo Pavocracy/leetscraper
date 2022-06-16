@@ -51,8 +51,10 @@ class Projecteuler:
         except Exception as error:
             log_message(
                 "warning",
-                "Failed to get problems for %s. Error: %s",
+                "Failed to get %s problems for %s. Only recieved %s problems! Error: %s",
+                scrape_limit if scrape_limit > 0 else "all",
                 self.website_name,
+                len(get_problems),
                 error,
             )
         return get_problems

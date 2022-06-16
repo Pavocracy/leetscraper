@@ -44,8 +44,8 @@ def main():
     if args.version:
         print(f"leetscraper v{__version__}")
         return
-    else:
-        print("cli not implemented yet!")
+
+    print("cli not implemented yet!")
 
 
 if __name__ == "__main__":

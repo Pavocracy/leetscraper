@@ -19,9 +19,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from urllib3 import PoolManager
 
-from .driver import header_constructor, WebdriverType, webdriver_quit
+from .driver import WebdriverType, webdriver_quit
 from .logger import log_message
-from .utils import check_exec_time
+from .utils import check_exec_time, header_constructor
 from .website import WebsiteType
 
 
@@ -117,7 +117,7 @@ def scrape_problems(
     log_message(
         "info",
         "Attempting to scrape %s %s problems to %s",
-        scrape_limit if scrape_limit > 0 else "all",
+        len(get_problems),
         website.website_name,
         path.abspath(scrape_path),
     )
@@ -140,11 +140,12 @@ def scrape_problems(
         exec_time,
         time_unit,
     )
-    log_message(
-        "info",
-        "Successfully scraped %s %s problems!",
-        scraped,
-        website.website_name)
+    if scraped:
+        log_message(
+            "info",
+            "Successfully scraped %s %s problems!",
+            scraped,
+            website.website_name)
     if errors:
         log_message(
             "warning",
@@ -197,7 +198,7 @@ def create_problem(
     except Exception as error:
         log_message(
             "debug",
-            "Failed to scrape %s%s! %s",
+            "Failed to scrape %s%s Error: %s",
             website.base_url,
             problem[0],
             error,

@@ -30,8 +30,7 @@ class Leetcode:
         self.problem_description = {
             "class": "content__u3I1 question-content__JfgR"}
         self.file_split = "."
-        # leetcode seems to block requests when using custom headers :(
-        self.need_headers = False
+        self.need_headers = True
 
     def get_problems(
         self, http: PoolManager, scraped_problems: List[str], scrape_limit: int
@@ -39,7 +38,9 @@ class Leetcode:
         """Returns problems to scrape defined by checks in this method."""
         try:
             get_problems: list = []
-            request = http.request("GET", self.api_url)
+            headers: dict = {}
+            headers["User-Agent"] = self.headers
+            request = http.request("GET", self.api_url, headers=headers)
             data = loads(request.data.decode("utf-8"))
             for problem in data["stat_status_pairs"]:
                 if (problem["stat"]["question__title_slug"]
@@ -55,8 +56,10 @@ class Leetcode:
         except Exception as error:
             log_message(
                 "warning",
-                "Failed to get problems for %s. Error: %s",
+                "Failed to get %s problems for %s. Only recieved %s problems! Error: %s",
+                scrape_limit if scrape_limit > 0 else "all",
                 self.website_name,
+                len(get_problems),
                 error,
             )
         return get_problems

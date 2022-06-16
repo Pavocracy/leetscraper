@@ -9,4 +9,6 @@ __licence__ = "GPL-2.0"
 __author__ = "Pavocracy"
 __email__ = "pavocracy@pm.me"
 
+__all__ = ["Leetscraper"]
+
 from .leetscraper import Leetscraper
